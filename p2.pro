@@ -28,12 +28,20 @@ SOURCES += \
     ConstantBuilding.cpp \
     LaucherService.cpp \
     LoadSaveService.cpp \
-    TickService.cpp
+    TickService.cpp \
+GraphicService.cpp \
+GameManagementService.cpp
 
 HEADERS += \
     ConstantBuilding.h \
     LauncherService.h \
     LoadSaveService.h \
-    TickService.h
+    TickService.h \
+GameService.h \
+GraphicService.h \
+GameManagementService.h
+
+
+
 
 FORMS +=
