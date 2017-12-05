@@ -17,10 +17,10 @@ private:
 
 public:
     //methods
-    virtual  void addRoad(int x, int y)=0;
-    virtual   void addBuilding(int buildingId,int x,int y)=0;
-    virtual   void removeRoad(int x,int y)=0;
-    virtual   void removeBuilding(int id)=0;
+    virtual void addRoad(int x, int y)=0;
+    virtual void addBuilding(int buildingId,int x,int y)=0;
+    virtual void removeRoad(int x,int y)=0;
+    virtual void removeBuilding(int id)=0;
 
     //getters
 

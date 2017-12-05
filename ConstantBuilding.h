@@ -43,21 +43,23 @@ private:
 	
 	//TODO : Texture...
 
-public:
 //constructors
     ConstantBuilding();
     ConstantBuilding(QString* displayName);
     ConstantBuilding (
         QString* displayName,
-		int category,
-		double price,
-		int tileWidth,
-		int tileHeight,
+        int category,
+        double price,
+        int tileWidth,
+        int tileHeight,
         QList<QPoint>* ignoredTile,
-		bool requirementType,
+        bool requirementType,
         QList<int>* requirements,
         int sumRequirements
-		);
+        );
+
+public:
+
 //destructors
 	~ConstantBuilding();
 //getters
@@ -79,7 +81,6 @@ public:
     QList<int>* getRequirements(){return REQUIREMENTS;}
     int getSumRequirements(){return SUM_REQUIREMENTS;}
 //methods
-    //This function is not a good programming methodology. We have to change it.
     static ConstantBuilding* getBuildingArray();
 };
 
