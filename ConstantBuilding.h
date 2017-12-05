@@ -23,6 +23,7 @@
 class QString;
 #include <QList>
 class QPoint;
+#include <QtMath>
 
 class ConstantBuilding
 {
@@ -43,6 +44,8 @@ private:
 	
 	//TODO : Texture...
 
+    static int nbBuildings;
+
 //constructors
     ConstantBuilding();
     ConstantBuilding(QString* displayName);
@@ -59,7 +62,6 @@ private:
         );
 
 public:
-
 //destructors
 	~ConstantBuilding();
 //getters
@@ -68,10 +70,10 @@ public:
 	
     //These getter have to be updated cf. excel sheet
     double getPrice(){return PRICE;}
-    double getPricePerSeconds(){return PRICE;}
-    double getEfficiancy(){return PRICE;}
-    double getRadius(){return PRICE;}
-    double getRequirementsWeight(){return PRICE;}
+    double getPricePerSeconds(){return PRICE/100.0;}
+    double getEfficiancy(){return roundExcel((qPow(PRICE/10.0,1.4)+10)*4.0, -2)/4.0;}
+    double getRadius(){return roundExcel(log10(getPricePerSeconds()*getEfficiancy()+1)*10*2.0,-1)/2.0;}
+    double getRequirementsWeight(){return getPricePerSeconds();}
 
     int getTileWidth(){return TILE_WIDTH;}
     int getTileHeight(){return TILE_HEIGHT;}
@@ -80,8 +82,10 @@ public:
     bool getRequirementsType(){return REQUIREMENTS_TYPE;}
     QList<int>* getRequirements(){return REQUIREMENTS;}
     int getSumRequirements(){return SUM_REQUIREMENTS;}
-//methods
+//methods statics
     static ConstantBuilding* getBuildingArray();
+    static double roundExcel(double val, int dec) {return round(val*qPow(10,dec))/qPow(10,dec);};
+    static int getNbBuildings() {return nbBuildings;};
 };
 
 namespace bID

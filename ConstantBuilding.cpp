@@ -1,5 +1,7 @@
 #include "ConstantBuilding.h"
 
+int ConstantBuilding::nbBuildings = 0;
+
 //constructors
 ConstantBuilding::ConstantBuilding()
 {
@@ -27,6 +29,8 @@ ConstantBuilding::ConstantBuilding (
     this->REQUIREMENTS_TYPE = requirementType;
     this->REQUIREMENTS = requirements;
     this->SUM_REQUIREMENTS = sumRequirements;
+
+    nbBuildings++;
 }
 
 //destructors
