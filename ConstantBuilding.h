@@ -20,16 +20,17 @@
 #ifndef CONSTANTBUILDING_H
 #define CONSTANTBUILDING_H
 
-class QString;
+#include <QString>
 #include <QList>
-class QPoint;
-#include <QtMath>
+#include <QPoint>
+#include <QDebug>
+#include "oursmaths.h"
 
 class ConstantBuilding
 {
 private:
 //attributs
-    QString* DISPLAY_NAME;
+    QString DISPLAY_NAME;
     int CATEGORY;
 	
     double PRICE;
@@ -45,12 +46,12 @@ private:
 	//TODO : Texture...
 
     static int nbBuildings;
+    static ConstantBuilding* tabGet;
 
 //constructors
     ConstantBuilding();
-    ConstantBuilding(QString* displayName);
     ConstantBuilding (
-        QString* displayName,
+        QString displayName,
         int category,
         double price,
         int tileWidth,
@@ -63,29 +64,32 @@ private:
 
 public:
 //destructors
-	~ConstantBuilding();
+    ~ConstantBuilding();
 //getters
-    QString* getDisplayName(){return DISPLAY_NAME;}
-    int getCategory(){return CATEGORY;}
-	
-    //These getter have to be updated cf. excel sheet
-    double getPrice(){return PRICE;}
-    double getPricePerSeconds(){return PRICE/100.0;}
-    double getEfficiancy(){return roundExcel((qPow(PRICE/10.0,1.4)+10)*4.0, -2)/4.0;}
-    double getRadius(){return roundExcel(log10(getPricePerSeconds()*getEfficiancy()+1)*10*2.0,-1)/2.0;}
-    double getRequirementsWeight(){return getPricePerSeconds();}
+    QString         getDisplayName()        {return DISPLAY_NAME;}
 
-    int getTileWidth(){return TILE_WIDTH;}
-    int getTileHeight(){return TILE_HEIGHT;}
-    QList<QPoint>* getIgnoredTile(){return IGNORED_TILE;}
-	
-    bool getRequirementsType(){return REQUIREMENTS_TYPE;}
-    QList<int>* getRequirements(){return REQUIREMENTS;}
-    int getSumRequirements(){return SUM_REQUIREMENTS;}
+    int             getCategory()           {return CATEGORY;}
+
+    double          getPrice()              {return PRICE;}
+    double          getPricePerSeconds()    {return PRICE/100.0;}
+    double          getEfficiancy()         {return OursMaths::roundExcel((qPow(PRICE/10.0,1.4)+10)*4.0, -2)/4.0;}
+    double          getRadius()             {return OursMaths::roundExcel(log10(getPricePerSeconds()*getEfficiancy()+1)*10*2.0,-1)/2.0;}
+    double          getRequirementsWeight() {return getPricePerSeconds();}
+
+    int             getTileWidth()          {return TILE_WIDTH;}
+    int             getTileHeight()         {return TILE_HEIGHT;}
+    QList<QPoint>*  getIgnoredTile()        {return IGNORED_TILE;}
+
+    bool            getRequirementsType()   {return REQUIREMENTS_TYPE;}
+    QList<int>*     getRequirements()       {return REQUIREMENTS;}
+    int             getSumRequirements()    {return SUM_REQUIREMENTS;}
+
 //methods statics
-    static ConstantBuilding* getBuildingArray();
-    static double roundExcel(double val, int dec) {return round(val*qPow(10,dec))/qPow(10,dec);};
-    static int getNbBuildings() {return nbBuildings;};
+    static void generate();
+    static void printTab();
+
+    static ConstantBuilding get(int i);
+    static int getNbBuildings();
 };
 
 namespace bID

@@ -30,7 +30,8 @@ SOURCES += \
     LoadSaveService.cpp \
     TickService.cpp \
 GraphicService.cpp \
-GameManagementService.cpp
+GameManagementService.cpp \
+    OursMaths.cpp
 
 HEADERS += \
     ConstantBuilding.h \
@@ -39,7 +40,8 @@ HEADERS += \
     TickService.h \
 GameService.h \
 GraphicService.h \
-GameManagementService.h
+GameManagementService.h \
+    OursMaths.h
 
 
 
