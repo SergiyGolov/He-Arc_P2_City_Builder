@@ -1,9 +1,19 @@
 #include <QDebug>
 #include "ConstantBuilding.h"
+#include "LauncherService.h"
+#include "LoadSaveService.h"
+#include "TickService.h"
+#include "GameManagementService.h"
+#include "GraphicService.h"
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {
-    qDebug() << ConstantBuilding::get(bID::Road).getCategory(); //This is the syntaxe to use the class ConstantBuilding
+    // ConstantBuilding* a = ConstantBuilding::getBuildingArray();
+    QApplication a(argc, argv);
 
-    return 0;
+    GraphicService::getGraphicService()->showMap();
+
+    return a.exec();
+
 }

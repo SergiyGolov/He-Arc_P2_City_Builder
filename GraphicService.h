@@ -2,17 +2,20 @@
 #define GRAPHICSERVICE_H
 
 #include <GameService.h>
+#include "MainWidget.h"
 
-class GraphicService: public  GameService
+
+class GraphicService: public GameService
 {
 
 private:
+    //constructor
     GraphicService();
     static GraphicService* graphicServiceInstance;
+    MainWidget *mainWidget;
+
 
 public:
-    //constructor
-
     //destructor
     ~GraphicService();
     //methods
@@ -22,14 +25,14 @@ public:
     static GraphicService* getGraphicService();
 
 
-    virtual  void addRoad(int x, int y);
-    virtual   void addBuilding(int buildingId,int x,int y);
-    virtual   void removeRoad(int x,int y);
-    virtual   void removeBuilding(int id);
+    virtual void addRoad(int x, int y);
+    virtual void addBuilding(int buildingId,int x,int y);
+    virtual void removeRoad(int x,int y);
+    virtual void removeBuilding(int id);
 
     //getters
 
-    virtual  QList<Building>* getBuildingList();
+    virtual QList<Building>* getBuildingList();
     virtual QList<QPoint>* getRoadList();
 
 

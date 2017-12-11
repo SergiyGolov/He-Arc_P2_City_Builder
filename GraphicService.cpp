@@ -4,7 +4,8 @@
 
 
 GraphicService::GraphicService():GameService(){
-
+    mainWidget=MainWidget::getMainWidget();
+    mainWidget->showFullScreen();
 }
 
 GraphicService::~GraphicService(){
@@ -17,6 +18,7 @@ void  GraphicService::addRoad(int x, int y){
 }
 
 void  GraphicService::addBuilding(int buildingId,int x,int y){
+
 }
 
 void  GraphicService::removeRoad(int x,int y){
@@ -37,10 +39,12 @@ QList<QPoint>* GraphicService::getRoadList(){
 
 void GraphicService::showMap(){
 
+
+
 }
 
 void GraphicService::showBuildingPickerMenu(int tabId){
-
+    mainWidget->showBuildingPickerMenu(tabId);
 }
 
 void GraphicService::toggleFilter(int filterId){
