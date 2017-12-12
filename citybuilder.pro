@@ -31,7 +31,10 @@ SOURCES += \
     TickService.cpp \
     GraphicService.cpp \
     GameManagementService.cpp \
-    OursMaths.cpp
+    OursMaths.cpp \
+    Building.cpp \
+    EffectBuilding.cpp \
+    HouseBuilding.cpp
 
 HEADERS += \
     ConstantBuilding.h \
@@ -41,7 +44,10 @@ HEADERS += \
     GameService.h \
     GraphicService.h \
     GameManagementService.h \
-    OursMaths.h
+    OursMaths.h \
+    Building.h \
+    EffectBuilding.h \
+    HouseBuilding.h
 
 
 
