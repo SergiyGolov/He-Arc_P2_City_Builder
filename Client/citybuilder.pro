@@ -41,12 +41,12 @@ HEADERS += ConstantBuilding.h \
            MapTile.h \
            Building.cpp \
            EffectBuilding.cpp \
-           HouseBuilding.cpp
+           HouseBuilding.cpp \
+    launcherservice.h
 SOURCES += ConstantBuilding.cpp \
            GameManagementService.cpp \
            GraphicService.cpp \
            GuiView.cpp \
-           LaucherService.cpp \
            LoadSaveService.cpp \
            main.cpp \
            MainWidget.cpp \
@@ -57,7 +57,8 @@ SOURCES += ConstantBuilding.cpp \
            TickService.cpp \
            Building.h \
            EffectBuilding.h \
-           HouseBuilding.h
+           HouseBuilding.h \
+    LauncherService.cpp
 
 
 
