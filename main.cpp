@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     // ConstantBuilding* a = ConstantBuilding::getBuildingArray();
     QApplication a(argc, argv);
 
-    GraphicService::getGraphicService()->showMap();
+    GraphicService::getGraphicService();
 
     return a.exec();
 

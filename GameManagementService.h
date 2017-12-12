@@ -39,6 +39,10 @@ public:
      static GameManagementService* getGameManagementService();
 
 
+     //setters
+     void setMoney(int newMoney){this->money=newMoney;}
+     void setHappiness(int newHappiness){this->money=newHappiness;}
+
 
      virtual  void addRoad(int x, int y);
      virtual   void addBuilding(int buildingId,int x,int y);
