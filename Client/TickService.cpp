@@ -1,5 +1,8 @@
 #include "TickService.h"
 
+#include "GameManagementService.h"
+#include "BuildingManagementService.h"
+
 //constructors
 TickService::TickService(int tickrate)
 {
@@ -20,28 +23,19 @@ void TickService::updateHappiness()
 
 void TickService::updateMoney()
 {
-    double money = GameManagementService::getGameManagementService()->getMoney();/*
-    int population = GameManagementService::getGameManagementService()->getTotalPopulation();
-
-    int nbbuilding = 10;
-
-    double coef = 9.0;
-    double average = 3000;
-    double multiplierplus = coef * average;
-
-    //double multiplierminus = ;
-*/
-    //for(int i = 0; i < nbbuilding; i++)
-    {
-        money += 2;
-    }
+    double money = GameManagementService::getGameManagementService()->getMoney();
+    money += 1.0; //Default 1$/s
+    money -= BuildingManagementService::getBuildingManagementService()->getSumPricePerSeconds(); //Building price per seconds
+    money += BuildingManagementService::getBuildingManagementService()->getSumPopulation()*1.0 * 1.5 * GameManagementService::getGameManagementService()->getTaxes();
 
     GameManagementService::getGameManagementService()->setMoney(money);
 }
 
 void TickService::updatePopulation()
 {
+    int population = BuildingManagementService::getBuildingManagementService()->getSumPopulation();
 
+    GameManagementService::getGameManagementService()->setTotalPopulation(population);
 }
 
 //methods

@@ -1,15 +1,18 @@
 #include "Building.h"
 
-int Building::buildingsCount=0;
+int Building::uid_cpt=0;
 
-Building::Building(QPoint coordinates, int angle)
+Building::Building(int id, int x, int y, int angle, int population)
 {
-    this->id = buildingsCount++;
-    this->coordinates = coordinates;
+    this->uid = uid_cpt++;
+    this->id = id;
+    this->x = x;
+    this->y = y;
     this->angle = angle;
+    this->population = population;
 }
 
 Building::~Building()
 {
-    buildingsCount--;
+    //Do dot decrease the uid_cpt, because the uid wont be unique anymore !
 }

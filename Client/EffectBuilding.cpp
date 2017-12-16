@@ -1,5 +1,6 @@
 #include "EffectBuilding.h"
 
+/*
 int EffectBuilding::effectBuildingsCount=0;
 
 EffectBuilding::EffectBuilding(QPoint coordinates, int buildingTypeId, int angle) : Building(coordinates, angle)
@@ -20,3 +21,4 @@ void EffectBuilding::remove()
     ///TODO : Supression graphique de l'élément
     delete this;
 }
+*/

@@ -17,7 +17,7 @@ ConstantBuilding::ConstantBuilding (
     int tileHeight,
     QList<QPoint>* ignoredTile,
     bool requirementType,
-    QList<int>* requirements,
+    QSet<int>* requirements,
     int sumRequirements
     )
 {

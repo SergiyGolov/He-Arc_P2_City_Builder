@@ -19,6 +19,7 @@ private:
     int money;
     int totalPopulation;
     int happiness;
+    double taxes;
     TickService *ts;
 public:
     static GameManagementService* getGameManagementService();
@@ -26,16 +27,14 @@ public:
     ~GameManagementService();
     //methods
     void exitGame();
-    void addRoad(int x, int y);
-    void addBuilding(int buildingId,int x,int y);
-    void removeRoad(int x,int y);
-    void removeBuilding(int id);
     //getters
     int getMoney(){return money;}
-    int getTotalPopulation(){return totalPopulation;}
     int getHappiness(){return happiness;}
+    int getTaxes(){return taxes;}
     //setters
     void setHappiness(int newHappiness);
     void setMoney(int newMoney);
+    void setTotalPopulation(int newTotalPopulation);
+    void setTaxes(double newTaxes);
 };
 #endif // GAMEMANAGEMENTSERVICE_H

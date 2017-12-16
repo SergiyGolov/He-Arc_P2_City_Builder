@@ -40,25 +40,13 @@ void GameManagementService::setMoney(int newMoney)
     TopView::getTopView()->setMoney(money);
 }
 
-//methods
-void GameManagementService::addBuilding(int buildingId,int x,int y)
+void GameManagementService::setTotalPopulation(int newTotalPopulation)
 {
-    setMoney(getMoney()-(int)ConstantBuilding::get(buildingId).getPrice());
-    qDebug()<<(int)ConstantBuilding::get(buildingId).getPrice();
-    GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(buildingId).getCategory()-1);
+    this->totalPopulation=newTotalPopulation;
+    TopView::getTopView()->setPopulation(totalPopulation);
 }
 
-void GameManagementService::addRoad(int x, int y)
+void GameManagementService::setTaxes(double newTaxes)
 {
-
-}
-
-void GameManagementService::removeRoad(int x, int y)
-{
-
-}
-
-void GameManagementService::removeBuilding(int id)
-{
-
+    this->taxes=newTaxes;
 }

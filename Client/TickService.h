@@ -2,7 +2,9 @@
 #define TICKSERVICE_H
 
 #include <QTimer>
-#include "GameManagementService.h"
+
+class GameManagementService;
+class BuildingManagementService;
 
 class TickService : QTimer
 {

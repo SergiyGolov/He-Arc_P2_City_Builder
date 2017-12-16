@@ -3,7 +3,7 @@
 #include "Building.h"
 
 //Last updated : 21.11.2017 by DP
-
+/*
 class EffectBuilding : public Building
 {
 private:
@@ -29,10 +29,9 @@ public:
     int geteffectId(){return effectId;}
 
     //setters
-    /*
     void setEffectId(int value){this->effectId = value;}
     void setEffectRadius(int value){this->effectRadius = value;}
-    */
+    /
 };
-
+*/
 #endif // EFFECTBUILDING_H

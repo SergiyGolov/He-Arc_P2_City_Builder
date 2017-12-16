@@ -1,5 +1,5 @@
 #include "HouseBuilding.h"
-
+/*
 int HouseBuilding::globalPopulation=0;
 int HouseBuilding::globalPopulationMax=0;
 int HouseBuilding::houseBuildingsCount=0;
@@ -35,3 +35,4 @@ int HouseBuilding::getMaximumPopulationFromBuilding(int buildingTypeId)
     ///TODO
     return 1;
 }
+*/

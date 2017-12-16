@@ -24,6 +24,7 @@
 #include <QList>
 #include <QPoint>
 #include <QDebug>
+#include <QSet>
 #include "OursMaths.h"
 
 class ConstantBuilding
@@ -39,8 +40,8 @@ private:
     int TILE_HEIGHT;
     QList<QPoint>* IGNORED_TILE;
 	
-    bool REQUIREMENTS_TYPE; //True : AND, False : OR
-    QList<int>* REQUIREMENTS;
+    bool REQUIREMENTS_TYPE; //True : OR, False : AND
+    QSet<int>* REQUIREMENTS;
     int SUM_REQUIREMENTS;
 	
 	//TODO : Texture...
@@ -58,7 +59,7 @@ private:
         int tileHeight,
         QList<QPoint>* ignoredTile,
         bool requirementType,
-        QList<int>* requirements,
+        QSet<int>* requirements,
         int sumRequirements
         );
 
@@ -81,7 +82,7 @@ public:
     QList<QPoint>*  getIgnoredTile()        {return IGNORED_TILE;}
 
     bool            getRequirementsType()   {return REQUIREMENTS_TYPE;}
-    QList<int>*     getRequirements()       {return REQUIREMENTS;}
+    QSet<int>*      getRequirements()       {return REQUIREMENTS;}
     int             getSumRequirements()    {return SUM_REQUIREMENTS;}
 
 //methods statics

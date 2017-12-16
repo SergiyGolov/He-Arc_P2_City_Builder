@@ -12,9 +12,10 @@
 #include <QKeyEvent>
 #include <QPointF>
 #include <GuiView.h>
-#include <ConstantBuilding.h>
 #include <QTimer>
-#include <GameManagementService.h>
+#include "ConstantBuilding.h"
+#include "GameManagementService.h"
+#include "BuildingManagementService.h"
 
 //singleton
 MapView* MapView::mapViewInstance=nullptr;
@@ -563,7 +564,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
                                 tiles[rect->getX()+i][rect->getY()+j]->setLargeurBat(largeurBat);
                                 tiles[rect->getX()+i][rect->getY()+j]->setHauteurBat(hauteurBat);
                                 tiles[rect->getX()+i][rect->getY()+j]->setUniqueBId(buildingCount);
-                                GameManagementService::getGameManagementService()->addBuilding(pickerBId,mainTileX,mainTileY);
+                                BuildingManagementService::getBuildingManagementService()->addBuilding(pickerBId,mainTileX,mainTileY, 0); //TODO : set 0 to 3 angles
                             }
                         }
                         }
