@@ -19,11 +19,13 @@ GuiView::GuiView(QWidget *parent)
 {
 
 
-
+    this->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+    this->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
 
 
     this->setBackgroundBrush(QBrush(Qt::lightGray));
     scene=new QGraphicsScene(this);
+    PickerElement::setScene(this->scene); //mdr magouille pas possible
     this->setScene(scene);
 
     this->setMouseTracking(true);
@@ -31,7 +33,8 @@ GuiView::GuiView(QWidget *parent)
     screenHeight=QApplication::desktop()->screenGeometry().height();
 
     this->setGeometry(0,screenHeight-screenHeight/10,screenWidth,screenHeight/10);
-    tab=this->scene->addRect(0,0,screenWidth,screenHeight,QPen(Qt::transparent),QBrush(Qt::yellow));
+    tab=this->scene->addRect(0,0,screenWidth,screenHeight/6,QPen(Qt::transparent),QBrush(Qt::yellow));
+    tab->setZValue(0);
 
     text=new QGraphicsSimpleTextItem("Category 0");
     this->scene->addItem(text);
@@ -54,22 +57,35 @@ GuiView::GuiView(QWidget *parent)
         }
         if(cpt>cptMaxCat)cptMaxCat=cpt;
     }
-  tabText=new std::vector<PickerElement*>(cptMaxCat,nullptr);
-   //tabText(cptMaxCat);
+
+    tabText=new std::vector<PickerElement*>(cptMaxCat,nullptr);
+    //tabText(cptMaxCat);
     for(int i=0;i<cptMaxCat;i++){
-       tabText->at(i)=new PickerElement();
+        tabText->at(i)=new PickerElement();
         this->scene->addItem(tabText->at(i));
+        tabText->at(i)->setZValue(1);
     }
 
 
-    //TODO: add "remove Building/road" pickerelement en bas à droite
-    PickerElement* road=new PickerElement();
+
+    road=new PickerElement();
     road->setText("Road");
     road->setBId(0);
 
-    road->moveBy(0,150);
+    road->bouger(3,150);
     road->setRect(0,0,50,20);
+
     this->scene->addItem(road);
+
+
+    remove=new PickerElement();
+
+    remove->setText("Remove");
+    remove->bouger(screenWidth-80,150);
+    remove->setRect(0,0,50,20);
+    remove->setBId(-1);
+    this->scene->addItem(remove);
+
     showBuildingPickerMenu(0);
 
 }
@@ -108,7 +124,7 @@ void GuiView::showBuildingPickerMenu(int tabId){
         activeTabId=2;
         break;
     case 3:
-        tab->setBrush(QBrush(Qt::blue));
+        tab->setBrush(QBrush(Qt::darkRed));
         text->setText("Category 3");
         activeTabId=3;
         break;
@@ -153,14 +169,16 @@ void GuiView::showBuildingPickerMenu(int tabId){
         for(int i=0;i<ConstantBuilding::getNbBuildings();i++){
             if(ConstantBuilding::get(i).getCategory()==activeTabId+1) {
 
-               tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName());
-               tabText->at(ptrElem)->setPos(screenWidth/(nbElem+1)*ptrElem,50);
+                tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName());
+                tabText->at(ptrElem)->bouger(screenWidth/(nbElem+1)*ptrElem+3,50);
 
 
-               tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*7.5,20);
-               tabText->at(ptrElem)->setBrush(QBrush(Qt::transparent));
-               tabText->at(ptrElem)->setPen(QPen(Qt::black));
-               tabText->at(ptrElem)->setBId(i);
+                tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*7.5,20);
+                tabText->at(ptrElem)->setBrush(QBrush(Qt::transparent));
+
+                tabText->at(ptrElem)->setPen(QPen(Qt::black));
+                tabText->at(ptrElem)->setBId(i);
+
                 ptrElem++;
             }
         }
@@ -175,10 +193,20 @@ void GuiView::showBuildingPickerMenu(int tabId){
 
 
 void GuiView::mousePressEvent(QMouseEvent *event){
-    //QGraphicsRectItem *rect=( QGraphicsRectItem *)itemAt(event->pos());
-    MapView::getMapView()->picker(activeTabId);
+    //qDebug()<<event->pos().x()<<";"<<event->pos().y();
 
+        if(PickerElement *pick=dynamic_cast<PickerElement*>(itemAt(event->pos()))){
+            MapView::getMapView()->picker(pick->getBId());
 
+          //  qDebug()<<pick->getText();
+        }
+
+//    try{
+//        PickerElement *pick=(PickerElement*)itemAt(event->pos());
+//        if(pick!=nullptr)qDebug()<<pick->getText();
+//    }catch(int e){
+//        qDebug()<<"fallait pas cliquer au mauvais endroit";
+//    }
 }
 
 

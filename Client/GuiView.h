@@ -31,7 +31,8 @@ private:
     std::vector<PickerElement*> *tabText;
     int screenWidth;
     int screenHeight;
-
+    PickerElement* road;
+    PickerElement* remove;
     int cptMaxCat;
 
 protected:

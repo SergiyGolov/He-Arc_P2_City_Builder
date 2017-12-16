@@ -3,6 +3,8 @@
 
 #include <QGraphicsView>
 #include <MapTile.h>
+#include <QList>
+class QTimer;
 
 #define nbcases 256
 
@@ -11,7 +13,7 @@ class GuiView;
 
 class QGraphicsScene;
 
-//la mettre en singleton pour pouvoir l'appeller avec un getMap depuis n'importe où !
+//clic droit => annule posage de bâtiment !!!
 
 class MapView : public QGraphicsView
 {
@@ -37,8 +39,35 @@ private:
     QColor prevColor;
     MapTile *prevRect;
     int pixelParCase;
-    bool tiles[nbcases][nbcases];
+    bool tilesBool[nbcases][nbcases];
+    MapTile* tiles[nbcases][nbcases];
+    int largeurBat;
+    int hauteurBat;
+    int rayonBat;
+    bool road;
+    QList<MapTile*> *rayonTile;
+    QList<MapTile*> *tempRoad;
+    QList<MapTile*> *tempRemove;
+    QColor prevRemoveColor;
 
+    int roadStartX;
+    int roadStartY;
+    bool grille;
+    int buildingCount;
+    int roadDir;
+
+    bool checkIfNearRoad(MapTile* tile);
+
+    void blinkTileRed(MapTile* tile);
+
+    QTimer *timer;
+    MapTile* blinkRedTile;
+
+    bool timeTick;
+    int nbTimeTick;
+
+public slots:
+    void blinkRedTileSlot();
 
 protected:
 
