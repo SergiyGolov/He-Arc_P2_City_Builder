@@ -24,7 +24,7 @@
 #include <QList>
 #include <QPoint>
 #include <QDebug>
-#include "oursmaths.h"
+#include "OursMaths.h"
 
 class ConstantBuilding
 {
