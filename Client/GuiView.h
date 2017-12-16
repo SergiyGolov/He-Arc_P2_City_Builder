@@ -20,7 +20,6 @@ public:
     ~GuiView();
     void showBuildingPickerMenu(int tabId);
 
-
 private:
     static GuiView* guiViewInstance;
     GuiView(QWidget *parent = 0);
@@ -36,7 +35,6 @@ private:
     int cptMaxCat;
 
 protected:
-
     void mousePressEvent(QMouseEvent *event);
 };
 

@@ -17,7 +17,7 @@ public:
 //destructors
 	~TickService();
 //methods
-	void timerEvent();
+    void timerEvent(QTimerEvent *);
 //getters
 
 //setters

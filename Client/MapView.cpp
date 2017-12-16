@@ -16,8 +16,17 @@
 #include <QTimer>
 #include <GameManagementService.h>
 
-MapView::MapView(QWidget *parent)
-    : QGraphicsView(parent)
+//singleton
+MapView* MapView::mapViewInstance=nullptr;
+
+MapView* MapView::getMapView()
+{
+    if(mapViewInstance == nullptr)
+        mapViewInstance = new MapView();
+    return mapViewInstance;
+}
+
+MapView::MapView(QWidget *parent): QGraphicsView(parent)
 {
     nbTimeTick=0;
     timeTick=false;
@@ -54,33 +63,31 @@ MapView::MapView(QWidget *parent)
 
     // scene->addRect(0,0,screenWidth,screenHeight,QPen(Qt::white),QBrush(Qt::white));
 
-
     rayonTile=new QList<MapTile*>();
     tempRoad=new QList<MapTile*>();
     tempRemove=new QList<MapTile*>();
 
-    int nbCases=nbcases;
-
-
+    int nbCases = nbcases;
 
     pixelParCase=((screenHeight-screenHeight/10)/nbCases); //*qSqrt(2)
     QColor color;
 
-    //    QTransform transform;
-    //    transform.setMatrix(0.707,0.409, -0.707, 0.409, 0, -0.816);
-    //    transform="matrix(0.707 0.409 -0.707 0.409 0 -0.816)"
+    //QTransform transform;
+    //transform.setMatrix(0.707,0.409, -0.707, 0.409, 0, -0.816);
+    //transform="matrix(0.707 0.409 -0.707 0.409 0 -0.816)"
 
-    //    this->setTransform(transform);
+    //this->setTransform(transform);
     // transform.shear(0,0.6);
     setTransformationAnchor ( QGraphicsView::NoAnchor );
     srand(time(NULL));
-    for(int i=0;i<nbCases;i++){
-        for(int j=0;j<nbCases;j++){
+    for(int i=0;i<nbCases;i++)
+    {
+        for(int j=0;j<nbCases;j++)
+        {
+            int random = (rand() % (6));
 
-
-            int random = (rand() % (6)) ;
-
-            switch(random){
+            switch(random)
+            {
             case 0:
             case 1:
             case 2:
@@ -130,7 +137,6 @@ MapView::MapView(QWidget *parent)
             //tile->setScale(0.5);
             // rect->setScale(0.925);
             tile->setRotation(45);
-
         }
 
     }
@@ -138,12 +144,7 @@ MapView::MapView(QWidget *parent)
 
     //this->setTransform(transform);
     scale(1,0.5);
-
-
 }
-
-MapView* MapView::mapViewInstance=nullptr;
-
 
 MapView::~MapView()
 {
@@ -153,38 +154,38 @@ MapView::~MapView()
 void MapView::picker(int bId){
     bPicker=true;
     pickerBId=bId;
-    if(pickerBId != -1){
+    if(pickerBId != -1)
+    {
         largeurBat=ConstantBuilding::get(pickerBId).getTileWidth();
         hauteurBat=ConstantBuilding::get(pickerBId).getTileHeight();
         rayonBat=ConstantBuilding::get(pickerBId).getRadius();
     }
     // qDebug()<<bId;
-
 }
 
-void MapView::wheelEvent(QWheelEvent * event){
-
-
-    if(event->angleDelta().y()>0){
+void MapView::wheelEvent(QWheelEvent * event)
+{
+    if(event->angleDelta().y()>0)
+    {
         //zoom
-        if(zoom<1.25){
+        if(zoom<1.25)
+        {
             zoom+=0.05;
             this->scale(2,2);
         }
-
     }
-    else{
-
-        if(zoom>1){zoom-=0.05;
+    else
+    {
+        if(zoom>1)
+        {
+            zoom-=0.05;
             this->scale(0.5,0.5);
         }
     }
-
-
 }
 
-void MapView::mouseMoveEvent(QMouseEvent *event){
-
+void MapView::mouseMoveEvent(QMouseEvent *event)
+{
     /* if(event->pos().x()<20){
         this->translate(50,0);
 
@@ -201,56 +202,64 @@ void MapView::mouseMoveEvent(QMouseEvent *event){
         this->translate(0,-50);
 
     }
-*/
-    if(bPicker){
-
-        if(pickerBId!=-1){
-            if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){ //we, faut utiliser les dynamic_cast pour eviter de caster du chenil qui n'est pas sensé être downcastable
+    */
+    if(bPicker)
+    {
+        if(pickerBId!=-1)
+        {
+            if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
+            {
+                //we, faut utiliser les dynamic_cast pour eviter de caster du chenil qui n'est pas sensé être downcastable
                 bool caseOccupe=false;
 
-                foreach(MapTile* tile,*rayonTile){
+                foreach(MapTile* tile,*rayonTile)
+                {
                     if(!grille)tile->setPen(QPen(Qt::transparent));
                     else tile->setPen(QPen(Qt::black));
                 }
 
                 rayonTile->clear();
 
-
-
-
-                for(int i=0;i<largeurBat;i++){
-                    for(int j=0;j<hauteurBat;j++){
-                        if(tilesBool[rect->getX()+i][rect->getY()+j]==true)caseOccupe=true;
+                for(int i=0;i<largeurBat;i++)
+                {
+                    for(int j=0;j<hauteurBat;j++)
+                    {
+                        if(tilesBool[rect->getX()+i][rect->getY()+j]==true)
+                            caseOccupe=true;
                     }
                 }
-                if(rect!=prevRect && prevRect!=nullptr){ //faire un test pour ne pas pouvoir passer au dessus d'un bâtiment déjà construit, donc we faut implementer addbuilding avec la sdd contenant les batiments et tester s'il n'y a pas deja un batiment sur cette case
+                if(rect!=prevRect && prevRect!=nullptr)
+                {
+                    //faire un test pour ne pas pouvoir passer au dessus d'un bâtiment déjà construit, donc we faut implementer addbuilding avec la sdd contenant les batiments et tester s'il n'y a pas deja un batiment sur cette case
                     // + implementer un systeme de coordonnée des cases simple à gérer pour pouvoir dire quelle case est occupée par un bâtiment/route
                     //prevRect->setBrush(QBrush(Qt::darkGreen));
-                    for(int i=0;i<largeurBat;i++){
-                        for(int j=0;j<hauteurBat;j++){
-                            if(prevRect->getX()+i<nbcases && prevRect->getY()+j<nbcases){
+                    for(int i=0;i<largeurBat;i++)
+                    {
+                        for(int j=0;j<hauteurBat;j++)
+                        {
+                            if(prevRect->getX()+i<nbcases && prevRect->getY()+j<nbcases)
+                            {
                                 tiles[prevRect->getX()+i][prevRect->getY()+j]->setBrush(QBrush(Qt::darkGreen));
-                                //                             if(!grille)tiles[prevRect->getX()+i][prevRect->getY()+j]->setPen(QPen(Qt::transparent));
-                                //                             else tiles[prevRect->getX()+i][prevRect->getY()+j]->setPen(QPen(Qt::black));
+                                //if(!grille)tiles[prevRect->getX()+i][prevRect->getY()+j]->setPen(QPen(Qt::transparent));
+                                //else tiles[prevRect->getX()+i][prevRect->getY()+j]->setPen(QPen(Qt::black));
                             }
                         }
                     }
                 }
-                if(rect->getX()+largeurBat<nbcases && rect->getX()+hauteurBat<nbcases && caseOccupe==false){
-
-
+                if(rect->getX()+largeurBat<nbcases && rect->getX()+hauteurBat<nbcases && caseOccupe==false)
+                {
                     //if(prevColor!=rect->brush().color())prevColor=rect->brush().color();
-
-
-
-
-
-                    if(caseOccupe==false){
+                    if(caseOccupe==false)
+                    {
                         QColor color;
-                        if(pickerBId==-1){
+                        if(pickerBId==-1)
+                        {
 
-                        }else{
-                            switch(ConstantBuilding::get(pickerBId).getCategory()-1){
+                        }
+                        else
+                        {
+                            switch(ConstantBuilding::get(pickerBId).getCategory()-1)
+                            {
                             case -1:
                                 color=Qt::darkGray;
                                 break;
@@ -284,17 +293,22 @@ void MapView::mouseMoveEvent(QMouseEvent *event){
 
                             }
 
-                            for(int i=0;i<largeurBat;i++){
-                                for(int j=0;j<hauteurBat;j++){
+                            for(int i=0;i<largeurBat;i++)
+                            {
+                                for(int j=0;j<hauteurBat;j++)
+                                {
                                     tiles[rect->getX()+i][rect->getY()+j]->setBrush(color);
-
                                 }
                             }
 
-                            if(rayonBat>0){
-                                for(int i=-rayonBat;i<rayonBat+largeurBat;i++){
-                                    for(int j=-rayonBat;j<rayonBat+hauteurBat;j++){
-                                        if(rect->getX()+i>=0 && rect->getY()+j>=0 && rect->getX()+i<nbcases && rect->getY()+j<nbcases){
+                            if(rayonBat>0)
+                            {
+                                for(int i=-rayonBat;i<rayonBat+largeurBat;i++)
+                                {
+                                    for(int j=-rayonBat;j<rayonBat+hauteurBat;j++)
+                                    {
+                                        if(rect->getX()+i>=0 && rect->getY()+j>=0 && rect->getX()+i<nbcases && rect->getY()+j<nbcases)
+                                        {
                                             tiles[rect->getX()+i][rect->getY()+j]->setPen(color);
                                             rayonTile->append(tiles[rect->getX()+i][rect->getY()+j]);
                                         }
@@ -302,34 +316,34 @@ void MapView::mouseMoveEvent(QMouseEvent *event){
                                 }
                             }
 
-
-                            if(prevRect!=rect)prevRect=rect;
+                            if(prevRect!=rect)
+                                prevRect=rect;
                         }
-
-
                     }
                     //faire en sorte que le bâtiment déposé reste + utiliser addBuilding()
                 }
-
             }
-        }else if(bPicker || road){
-
+        }
+        else if(bPicker || road)
+        {
             //mode remove
-            foreach(MapTile* tile,*tempRemove){
+            foreach(MapTile* tile,*tempRemove)
+            {
                 tile->setBrush(QBrush(prevRemoveColor));
-
             }
             tempRemove->clear();
 
-            if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){
-                if(rect->getBId()!=-10){
-
+            if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
+            {
+                if(rect->getBId()!=-10)
+                {
                     prevRemoveColor=rect->brush().color();
-                    for(int i=0;i<rect->getLargeurBat();i++){
-                        for(int j=0;j<rect->getHauteurBat();j++){
+                    for(int i=0;i<rect->getLargeurBat();i++)
+                    {
+                        for(int j=0;j<rect->getHauteurBat();j++)
+                        {
                             tempRemove->append(tiles[rect->getMainTileX()+i][ rect->getMainTileY()+j]);
                             tiles[rect->getMainTileX()+i][ rect->getMainTileY()+j]->setBrush(QBrush(Qt::black));
-
                         }
                     }
                 }
@@ -337,42 +351,50 @@ void MapView::mouseMoveEvent(QMouseEvent *event){
         }
     }
 
-    if(road==true){
-
-        if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){
-            if(rect->getX()==roadStartX || rect->getY()==roadStartY){
-                if(roadDir==0){
-                    if(rect->getX()>roadStartX){
+    if(road==true)
+    {
+        if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
+        {
+            if(rect->getX()==roadStartX || rect->getY()==roadStartY)
+            {
+                if(roadDir==0)
+                {
+                    if(rect->getX()>roadStartX)
+                    {
                         roadDir=1;// pour fixer la direction a partir du premier carré depuis le debut de la route pour ne pouvoir aller que dans une direction jusqu'à que la route soit construite
                     }
-                    else if(rect->getX()<roadStartX){
+                    else if(rect->getX()<roadStartX)
+                    {
                         roadDir=-1;
-                    }else if(rect->getY()>roadStartY){
+                    }
+                    else if(rect->getY()>roadStartY)
+                    {
                         roadDir=2;
-                    }else if(rect->getY()<roadStartY){
+                    }
+                    else if(rect->getY()<roadStartY)
+                    {
                         roadDir=-2;
                     }
                 }
 
-                if(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX){
+                if(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX)
+                {
                     tempRoad->append(rect);
-
                     rect->setBrush(QBrush(Qt::darkGray));
                 }
-
             }
         }
     }
 }
 
-
-
-void MapView::mousePressEvent(QMouseEvent *event){
-
-    if (event->button()==Qt::RightButton && bPicker || event->button()==Qt::RightButton&&road){
+void MapView::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button()==Qt::RightButton && bPicker || event->button()==Qt::RightButton&&road)
+    {
         road=false;
         bPicker=false;
-        foreach(MapTile* tile,*tempRoad){
+        foreach(MapTile* tile,*tempRoad)
+        {
             if(!grille)tile->setPen(QPen(Qt::transparent));
             else tile->setPen(QPen(Qt::black));
             tile->setBrush(QBrush(Qt::darkGreen));
@@ -383,30 +405,34 @@ void MapView::mousePressEvent(QMouseEvent *event){
         }
 
         tempRoad->clear();
-        foreach(MapTile* tile,*rayonTile){
-            if(!grille)tile->setPen(QPen(Qt::transparent));
-            else tile->setPen(QPen(Qt::black));
+        foreach(MapTile* tile,*rayonTile)
+        {
+            if(!grille)
+                tile->setPen(QPen(Qt::transparent));
+            else
+                tile->setPen(QPen(Qt::black));
         }
 
         rayonTile->clear();
 
-        if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){
+        if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
+        {
             rect->setBrush(QBrush(Qt::darkGreen));
-            for(int i=0;i<largeurBat;i++){
-                for(int j=0;j<hauteurBat;j++){
-                    if(rect->getX()+i<nbcases && rect->getY()+j<nbcases){
+            for(int i=0;i<largeurBat;i++)
+            {
+                for(int j=0;j<hauteurBat;j++)
+                {
+                    if(rect->getX()+i<nbcases && rect->getY()+j<nbcases)
+                    {
                         tiles[rect->getX()+i][rect->getY()+j]->setBrush(QBrush(Qt::darkGreen));
-
                     }
                 }
             }
         }
-
-
-
     }
 
-    if( road==true){
+    if( road==true)
+    {
         road=false;
         if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){
             if(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX){
@@ -665,26 +691,18 @@ void MapView::keyPressEvent(QKeyEvent *event){
     }
 }
 
-
-MapView* MapView::getMapView(){
-    if(MapView::mapViewInstance==nullptr){
-        MapView::mapViewInstance=new MapView();
-    }
-
-    return MapView::mapViewInstance;
-
-}
-
 void MapView::zoomMeth(bool plusMinus)
 {
 
 }
 
 
-bool MapView::checkIfNearRoad(MapTile* tile){
-
-    for(int i=0;i<largeurBat;i++){
-        for(int j=0;j<hauteurBat;j++){
+bool MapView::checkIfNearRoad(MapTile* tile)
+{
+    for(int i=0; i < largeurBat; i++)
+    {
+        for(int j=0; j < hauteurBat; j++)
+        {
             if(tile->getX()-1+i>=0 && tiles[tile->getX()-1+i][tile->getY()+j]->getBId()==0)return true;
             if(tile->getX()+1+i<nbcases && tiles[tile->getX()+1+i][tile->getY()+j]->getBId()==0)return true;
             if(tile->getY()-1+j>=0 && tiles[tile->getX()+i][tile->getY()-1+j]->getBId()==0)return true;
@@ -692,36 +710,50 @@ bool MapView::checkIfNearRoad(MapTile* tile){
         }
     }
     return false;
-
 }
 
-void MapView::blinkTileRed(MapTile* tile){
-    blinkRedTile=tile;
+void MapView::blinkTileRed(MapTile* tile)
+{
+    blinkRedTile = tile;
     timer->start();
 }
 
-void MapView::blinkRedTileSlot(){
-    if(nbTimeTick<6){
+void MapView::blinkRedTileSlot()
+{
+    if(nbTimeTick<6)
+    {
         nbTimeTick++;
-        for(int i=0;i<largeurBat;i++){
-            for(int j=0;j<hauteurBat;j++){
-                if(timeTick){
+        for(int i=0;i<largeurBat;i++)
+        {
+            for(int j=0;j<hauteurBat;j++)
+            {
+                if(timeTick)
+                {
                     tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::red));
-
-                }else{
-                    if(grille)tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::black));
-                    else tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::transparent));
+                }
+                else
+                {
+                    if(grille)
+                        tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::black));
+                    else
+                        tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::transparent));
                 }
             }
         }
         timeTick=!timeTick;
-    }else{
+    }
+    else
+    {
         nbTimeTick=0;
         timer->stop();
-        for(int i=0;i<largeurBat;i++){
-            for(int j=0;j<hauteurBat;j++){
-                if(grille)tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::black));
-                else tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::transparent));
+        for(int i=0;i<largeurBat;i++)
+        {
+            for(int j=0;j<hauteurBat;j++)
+            {
+                if(grille)
+                    tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::black));
+                else
+                    tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::transparent));
             }
         }
     }

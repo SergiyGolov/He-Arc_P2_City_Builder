@@ -1,60 +1,64 @@
 #include "GameManagementService.h"
 #include "ConstantBuilding.h"
+#include "TickService.h"
 #include "TopView.h"
 #include <QDebug>
 #include "GuiView.h"
 
-GameManagementService::GameManagementService(){
-    this->money=1000;
-    this->happiness=0;
-}
-
-GameManagementService::~GameManagementService(){
-
-
-}
-
 GameManagementService* GameManagementService::gameManagementServiceInstance=nullptr;
 
-void  GameManagementService::addRoad(int x, int y){
+GameManagementService* GameManagementService::getGameManagementService()
+{
+    if(gameManagementServiceInstance==nullptr)
+        gameManagementServiceInstance=new GameManagementService();
+    return gameManagementServiceInstance;
 }
 
-void  GameManagementService::addBuilding(int buildingId,int x,int y){
-    this->money-=(int)ConstantBuilding::get(buildingId).getPrice();
-    qDebug()<<(int)ConstantBuilding::get(buildingId).getPrice();
+GameManagementService::GameManagementService()
+{
+    this->money=1000;
+    this->happiness=0;
+    ts = new TickService(1000);
+}
+
+GameManagementService::~GameManagementService()
+{
+
+
+}
+
+//setters
+void GameManagementService::setHappiness(int newHappiness)
+{
+    this->happiness=newHappiness;
+    TopView::getTopView()->setHappiness(happiness);
+}
+
+void GameManagementService::setMoney(int newMoney)
+{
+    this->money=newMoney;
     TopView::getTopView()->setMoney(money);
+}
+
+//methods
+void GameManagementService::addBuilding(int buildingId,int x,int y)
+{
+    setMoney(getMoney()-(int)ConstantBuilding::get(buildingId).getPrice());
+    qDebug()<<(int)ConstantBuilding::get(buildingId).getPrice();
     GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(buildingId).getCategory()-1);
 }
 
-void  GameManagementService::removeRoad(int x,int y){
-}
-
-void  GameManagementService::removeBuilding(int id){
-
-}
-
-QList<Building>* GameManagementService::getBuildingList()
+void GameManagementService::addRoad(int x, int y)
 {
 
 }
-QList<QPoint>* GameManagementService::getRoadList(){
+
+void GameManagementService::removeRoad(int x, int y)
+{
 
 }
 
-void GameManagementService::exitGame(){
-
-}
-
-void GameManagementService::getValueFromConstantWithFormula(){
-
-}
-
-
-GameManagementService* GameManagementService::getGameManagementService(){
-    if(gameManagementServiceInstance==nullptr){
-        gameManagementServiceInstance=new GameManagementService();
-    }
-    return gameManagementServiceInstance;
-
+void GameManagementService::removeBuilding(int id)
+{
 
 }

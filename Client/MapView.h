@@ -4,13 +4,11 @@
 #include <QGraphicsView>
 #include <MapTile.h>
 #include <QList>
-class QTimer;
 
 #define nbcases 256
 
+class QTimer;
 class GuiView;
-
-
 class QGraphicsScene;
 
 //clic droit => annule posage de bâtiment !!!
@@ -20,10 +18,9 @@ class MapView : public QGraphicsView
     Q_OBJECT
 
 public:
-
+    static MapView* getMapView();
     ~MapView();
     void picker(int bId);
-    static MapView* getMapView();
     void zoomMeth(bool plusMinus); //TODO
 private:
     static MapView* mapViewInstance;
@@ -65,10 +62,8 @@ private:
 
     bool timeTick;
     int nbTimeTick;
-
 public slots:
     void blinkRedTileSlot();
-
 protected:
 
     void wheelEvent(QWheelEvent * event);

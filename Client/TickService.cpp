@@ -3,8 +3,7 @@
 //constructors
 TickService::TickService(int tickrate)
 {
-    this->setInterval(tickrate);
-    this->start();
+    this->start(tickrate);
 }
 
 //destructors
@@ -21,20 +20,20 @@ void TickService::updateHappiness()
 
 void TickService::updateMoney()
 {
-    double money = GameManagementService::getGameManagementService()->getMoney();
+    double money = GameManagementService::getGameManagementService()->getMoney();/*
     int population = GameManagementService::getGameManagementService()->getTotalPopulation();
-    int nbbuilding;
+
+    int nbbuilding = 10;
 
     double coef = 9.0;
     double average = 3000;
     double multiplierplus = coef * average;
 
     //double multiplierminus = ;
-
-    for(int i = 0; i < nbbuilding; i++)
+*/
+    //for(int i = 0; i < nbbuilding; i++)
     {
-        money += multiplierplus * population * 50/100;
-        //money += multiplierminus * population * 50/100 ;
+        money += 2;
     }
 
     GameManagementService::getGameManagementService()->setMoney(money);
@@ -46,7 +45,7 @@ void TickService::updatePopulation()
 }
 
 //methods
-void TickService::timerEvent()
+void TickService::timerEvent(QTimerEvent *tevent)
 {
     updateHappiness();
     updateMoney();

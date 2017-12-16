@@ -44,8 +44,9 @@ this->scene=new QGraphicsScene(this);
     QObject::connect(quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
 }
 
-void TopView::setMoney(int money){
-       this->money->setText(QString("Money: %1").arg(money));
+void TopView::setMoney(int money)
+{
+    this->money->setText(QString("Money: %1").arg(money));
 }
 
 void TopView::setHappiness(int happiness){

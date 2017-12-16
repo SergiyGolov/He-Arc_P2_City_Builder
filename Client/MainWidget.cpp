@@ -1,18 +1,25 @@
-#include "MainWidget.h"
+#include <QDebug>
 #include <QVBoxLayout>
 #include <QKeyEvent>
-#include "QDebug"
+
+#include "MainWidget.h"
 #include "TopView.h"
 
+//variables statics
+MainWidget* MainWidget::mainWidgetInstance=nullptr;
 
-MainWidget::MainWidget(QWidget *parent)
-    : QWidget(parent)
+MainWidget* MainWidget::getMainWidget()
 {
+    if(mainWidgetInstance == nullptr)
+        mainWidgetInstance = new MainWidget();
+    return mainWidgetInstance;
+}
 
+MainWidget::MainWidget(QWidget *parent): QWidget(parent)
+{
     QPalette pal = palette();
     pal.setColor(QPalette::Background, Qt::black);
     this->setPalette(pal);
-
 
     gui=GuiView::getGuiView();
     map=MapView::getMapView();
@@ -21,24 +28,22 @@ MainWidget::MainWidget(QWidget *parent)
     vbox->addWidget(TopView::getTopView(),1);
     vbox->addWidget(map,50);
     vbox->addWidget(gui,12);
-
-
 }
-
-MainWidget* MainWidget::mainWidgetInstance=nullptr;
 
 MainWidget::~MainWidget()
 {
 
 }
 
-void MainWidget::showBuildingPickerMenu(int tabId){
+void MainWidget::showBuildingPickerMenu(int tabId)
+{
     gui->showBuildingPickerMenu(tabId);
 }
 
-
-void MainWidget::keyPressEvent(QKeyEvent *event){
-    switch(event->key()){
+void MainWidget::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
     case Qt::Key_1:
         showBuildingPickerMenu(0);
         break;
@@ -67,14 +72,4 @@ void MainWidget::keyPressEvent(QKeyEvent *event){
         showBuildingPickerMenu(8);
         break;
     }
-}
-
-
-MainWidget* MainWidget::getMainWidget(){
-    if(MainWidget::mainWidgetInstance==nullptr){
-        MainWidget::mainWidgetInstance=new MainWidget();
-    }
-
-    return MainWidget::mainWidgetInstance;
-
 }
