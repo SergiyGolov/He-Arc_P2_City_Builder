@@ -2,6 +2,7 @@
 #include <QVBoxLayout>
 #include <QKeyEvent>
 #include "QDebug"
+#include "TopView.h"
 
 
 MainWidget::MainWidget(QWidget *parent)
@@ -17,8 +18,10 @@ MainWidget::MainWidget(QWidget *parent)
     map=MapView::getMapView();
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
-    vbox->addWidget(map,9);
-    vbox->addWidget(gui,2);
+    vbox->addWidget(TopView::getTopView(),1);
+    vbox->addWidget(map,50);
+    vbox->addWidget(gui,12);
+
 
 }
 

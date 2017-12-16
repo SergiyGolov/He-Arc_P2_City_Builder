@@ -1,14 +1,15 @@
 #ifndef GAMEMANAGEMENTSERVICE_H
 #define GAMEMANAGEMENTSERVICE_H
 
-#include <GameService.h>
+#include <QList>
+#include <Building.h>
 
 
 
 class ConstantBuilding;
 
 
-class GameManagementService: public  GameService
+class GameManagementService
 {
 
 
@@ -44,14 +45,14 @@ public:
      void setHappiness(int newHappiness){this->money=newHappiness;}
 
 
-     virtual  void addRoad(int x, int y);
-     virtual   void addBuilding(int buildingId,int x,int y);
-     virtual   void removeRoad(int x,int y);
-     virtual   void removeBuilding(int id);
+       void addRoad(int x, int y);
+        void addBuilding(int buildingId,int x,int y);
+        void removeRoad(int x,int y);
+        void removeBuilding(int id);
 
 
-     virtual  QList<Building>* getBuildingList();
-      virtual QList<QPoint>* getRoadList();
+       QList<Building>* getBuildingList();
+       QList<QPoint>* getRoadList();
 
 
 

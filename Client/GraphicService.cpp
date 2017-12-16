@@ -3,7 +3,7 @@
 
 
 
-GraphicService::GraphicService():GameService(){
+GraphicService::GraphicService(){
     mainWidget=MainWidget::getMainWidget();
     mainWidget->showFullScreen();
 }

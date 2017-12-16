@@ -1,7 +1,12 @@
 #include "GameManagementService.h"
+#include "ConstantBuilding.h"
+#include "TopView.h"
+#include <QDebug>
+#include "GuiView.h"
 
-GameManagementService::GameManagementService():GameService(){
-
+GameManagementService::GameManagementService(){
+    this->money=1000;
+    this->happiness=0;
 }
 
 GameManagementService::~GameManagementService(){
@@ -15,6 +20,10 @@ void  GameManagementService::addRoad(int x, int y){
 }
 
 void  GameManagementService::addBuilding(int buildingId,int x,int y){
+    this->money-=(int)ConstantBuilding::get(buildingId).getPrice();
+    qDebug()<<(int)ConstantBuilding::get(buildingId).getPrice();
+    TopView::getTopView()->setMoney(money);
+    GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(buildingId).getCategory()-1);
 }
 
 void  GameManagementService::removeRoad(int x,int y){

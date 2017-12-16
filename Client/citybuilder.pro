@@ -26,7 +26,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Input
 HEADERS += ConstantBuilding.h \
            GameManagementService.h \
-           GameService.h \
            GraphicService.h \
            GuiView.h \
            LauncherService.h \
@@ -37,11 +36,11 @@ HEADERS += ConstantBuilding.h \
            OursMaths.h \
            PickerElement.h \
            TickService.h \
-           GameService.h \
            MapTile.h \
-           Building.cpp \
-           EffectBuilding.cpp \
-           HouseBuilding.cpp
+           Building.h \
+           EffectBuilding.h \
+           HouseBuilding.h \
+    TopView.h
 SOURCES += ConstantBuilding.cpp \
            GameManagementService.cpp \
            GraphicService.cpp \
@@ -54,10 +53,11 @@ SOURCES += ConstantBuilding.cpp \
            OursMaths.cpp \
            PickerElement.cpp \
            TickService.cpp \
-           Building.h \
-           EffectBuilding.h \
-           HouseBuilding.h \
-    LauncherService.cpp
+    LauncherService.cpp \
+           Building.cpp \
+           EffectBuilding.cpp \
+           HouseBuilding.cpp \
+    TopView.cpp
 
 
 

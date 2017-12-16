@@ -24,7 +24,7 @@ public:
 //methods
     void remove();
     void increasePopulation(int i); //TODO : test max
-    static getMaximumPopulationFromBuilding(int buildingTypeId);
+    static int getMaximumPopulationFromBuilding(int buildingTypeId);
 
     //getters
     static int getHouseBuildingCount(){return houseBuildingsCount;}

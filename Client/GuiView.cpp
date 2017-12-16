@@ -13,6 +13,7 @@
 #include <QPointF>
 #include <ConstantBuilding.h>
 #include <QDebug>
+#include <GameManagementService.h>
 
 GuiView::GuiView(QWidget *parent)
     : QGraphicsView(parent)
@@ -173,11 +174,18 @@ void GuiView::showBuildingPickerMenu(int tabId){
                 tabText->at(ptrElem)->bouger(screenWidth/(nbElem+1)*ptrElem+3,50);
 
 
-                tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*7.5,20);
+                tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*7.6,20);
                 tabText->at(ptrElem)->setBrush(QBrush(Qt::transparent));
 
                 tabText->at(ptrElem)->setPen(QPen(Qt::black));
                 tabText->at(ptrElem)->setBId(i);
+
+
+                if(GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(i).getPrice()<0 && ConstantBuilding::get(i).getCategory()>2){
+                    tabText->at(ptrElem)->changeTextColor(Qt::red);
+                }else{
+                      tabText->at(ptrElem)->changeTextColor(Qt::black);
+                }
 
                 ptrElem++;
             }
@@ -196,7 +204,11 @@ void GuiView::mousePressEvent(QMouseEvent *event){
     //qDebug()<<event->pos().x()<<";"<<event->pos().y();
 
         if(PickerElement *pick=dynamic_cast<PickerElement*>(itemAt(event->pos()))){
+            if(pick->getBId()==-1 || GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2 ){ //test si on a assez de thune pour ajouter le batiment
+                //idee: colorier les batiment dont on a pas assez de thunes en rouge (en tout cas le texte)
             MapView::getMapView()->picker(pick->getBId());
+
+            }
 
           //  qDebug()<<pick->getText();
         }

@@ -14,7 +14,7 @@
 #include <GuiView.h>
 #include <ConstantBuilding.h>
 #include <QTimer>
-
+#include <GameManagementService.h>
 
 MapView::MapView(QWidget *parent)
     : QGraphicsView(parent)
@@ -411,7 +411,7 @@ void MapView::mousePressEvent(QMouseEvent *event){
         if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){
             if(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX){
                 tempRoad->append(rect);
-                qDebug()<<"tu t'es chié dessus";
+
                 rect->setBrush(QBrush(Qt::darkGray));
 
 
@@ -527,6 +527,7 @@ void MapView::mousePressEvent(QMouseEvent *event){
                         }
                         int mainTileX=rect->getX();
                         int mainTileY=rect->getY();
+                        if(pickerBId!=0){
                         buildingCount++;
                         for(int i=0;i<largeurBat;i++){
                             for(int j=0;j<hauteurBat;j++){
@@ -536,7 +537,9 @@ void MapView::mousePressEvent(QMouseEvent *event){
                                 tiles[rect->getX()+i][rect->getY()+j]->setLargeurBat(largeurBat);
                                 tiles[rect->getX()+i][rect->getY()+j]->setHauteurBat(hauteurBat);
                                 tiles[rect->getX()+i][rect->getY()+j]->setUniqueBId(buildingCount);
+                                GameManagementService::getGameManagementService()->addBuilding(pickerBId,mainTileX,mainTileY);
                             }
+                        }
                         }
                     }else if(road==false){
 

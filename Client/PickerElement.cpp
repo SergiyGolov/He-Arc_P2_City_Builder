@@ -15,6 +15,8 @@ PickerElement::PickerElement(int bId,QString textStr, int left, int top, int wid
 
 }
 
+
+
 QGraphicsScene* PickerElement::scene=nullptr;
 
 

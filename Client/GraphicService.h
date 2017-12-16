@@ -1,11 +1,12 @@
 #ifndef GRAPHICSERVICE_H
 #define GRAPHICSERVICE_H
 
-#include <GameService.h>
+#include "Building.h"
 #include "MainWidget.h"
+#include <QList>
 
 
-class GraphicService: public GameService
+class GraphicService
 {
 
 private:
@@ -25,15 +26,15 @@ public:
     static GraphicService* getGraphicService();
 
 
-    virtual void addRoad(int x, int y);
-    virtual void addBuilding(int buildingId,int x,int y);
-    virtual void removeRoad(int x,int y);
-    virtual void removeBuilding(int id);
+     void addRoad(int x, int y);
+     void addBuilding(int buildingId,int x,int y);
+     void removeRoad(int x,int y);
+     void removeBuilding(int id);
 
     //getters
 
-    virtual QList<Building>* getBuildingList();
-    virtual QList<QPoint>* getRoadList();
+     QList<Building>* getBuildingList();
+     QList<QPoint>* getRoadList();
 
 
 

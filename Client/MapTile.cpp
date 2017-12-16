@@ -26,6 +26,8 @@ MapTile::MapTile(int x, int y, int left, int top, int width, int height,QGraphic
 
    // this->text->setPen(QPen(Qt::white));
     this->setZValue(1);
+
+
     //this->text->setZValue(2);
 
 //   if(MapTile::scene!=nullptr)MapTile::scene->addItem(this->text);

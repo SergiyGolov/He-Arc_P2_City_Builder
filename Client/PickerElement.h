@@ -5,6 +5,8 @@
 #include <QGraphicsRectItem>
 #include <QDebug>
 #include <QGraphicsScene>
+#include <QColor>
+
 
 class QGraphicsSimpleTextItem;
 
@@ -24,6 +26,7 @@ public:
 
      static void setScene(QGraphicsScene *scene);
     void bouger(qreal x, qreal y);
+    void changeTextColor(QColor c){this->text->setPen(QPen(c));}
 private:
     int bId;
     static QGraphicsScene *scene;
