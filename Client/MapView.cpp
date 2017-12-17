@@ -70,7 +70,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
 
     int nbCases = nbcases;
 
-    pixelParCase=((screenHeight-screenHeight/10)/nbCases); //*qSqrt(2)
+    pixelParCase=((screenHeight-screenHeight/10)/nbCases)*2; //*qSqrt(2)
     QColor color;
 
     //QTransform transform;
@@ -189,22 +189,22 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 {
 
     //1: right -1: left 2: up -2: down
-//     if(event->pos().x()<20 && event->pos().x()>0){
-//       translateMeth(-1);
+    //     if(event->pos().x()<20 && event->pos().x()>0){
+    //       translateMeth(-1);
 
 
-//    }else if(event->pos().x()>width()-20 && event->pos().x()<width()){
-//       translateMeth(1);
+    //    }else if(event->pos().x()>width()-20 && event->pos().x()<width()){
+    //       translateMeth(1);
 
 
-//    }else if(event->pos().y()<20 && event->pos().y()>0){
-//          translateMeth(2);
+    //    }else if(event->pos().y()<20 && event->pos().y()>0){
+    //          translateMeth(2);
 
-//    }
-//    else if(event->pos().y()>height()-20 && event->pos().y()<height()){
-//          translateMeth(-2);
+    //    }
+    //    else if(event->pos().y()>height()-20 && event->pos().y()<height()){
+    //          translateMeth(-2);
 
-//    }
+    //    }
 
     if(bPicker)
     {
@@ -625,6 +625,12 @@ void MapView::mousePressEvent(QMouseEvent *event)
 void MapView::keyPressEvent(QKeyEvent *event){
     //le pas de translation devrait dependre du niveau de zoom: plus on zoom moins on fait de pas
     switch(event->key()){
+    case Qt::Key_Q:
+        //addRoadMode();
+        break;
+    case Qt::Key_R:
+        removeBuildingMode();
+        break;
     case Qt::Key_1:
         gui->showBuildingPickerMenu(0);
         break;
@@ -654,11 +660,11 @@ void MapView::keyPressEvent(QKeyEvent *event){
         break;
     case Qt::Key_Down:
     case Qt::Key_S:
-       translateMeth(-2);
+        translateMeth(-2);
         break;
     case Qt::Key_Up:
     case Qt::Key_W:
-       translateMeth(2);
+        translateMeth(2);
         break;
     case Qt::Key_Right:
     case Qt::Key_D:
@@ -710,12 +716,32 @@ void MapView::zoomMeth(bool plusMinus)
     }
 }
 
+
+void MapView::removeBuildingMode(){
+    if(bPicker==false){
+        bPicker=true;
+        pickerBId=-1;
+    }
+}
+
+void MapView::addRoadMode(){
+    if(road==false && bPicker==false){
+        bPicker=true;
+        pickerBId=0;
+    }else if(bPicker==false){
+        road=false;
+        bPicker=true;
+        pickerBId=0;
+    }
+}
+
+
 //1: right -1: left 2: up -2: down
 void MapView::translateMeth(int direction){
- if(direction==-2)this->translate(0,-15-35/(zoom*2));
-  if(direction==2) this->translate(0,15+35/(zoom*2));
-  if(direction==1)this->translate(-15-35/(zoom*2),0);
-  if(direction==-1)this->translate(15+35/(zoom*2),0);
+    if(direction==-2)this->translate(0,-15-35/(zoom*2));
+    if(direction==2) this->translate(0,15+35/(zoom*2));
+    if(direction==1)this->translate(-15-35/(zoom*2),0);
+    if(direction==-1)this->translate(15+35/(zoom*2),0);
 }
 
 

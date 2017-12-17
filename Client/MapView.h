@@ -23,6 +23,8 @@ public:
     void picker(int bId);
     void zoomMeth(bool plusMinus);
     void translateMeth(int direction);
+    void removeBuildingMode();
+    void addRoadMode();
 private:
     static MapView* mapViewInstance;
     MapView(QWidget *parent = 0);

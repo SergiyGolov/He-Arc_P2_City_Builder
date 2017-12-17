@@ -45,6 +45,7 @@ this->scene=new QGraphicsScene(this);
     quit->move(screenWidth-120,20);
 
     population=new QLabel("Population: 0",this);
+    population->setFixedSize(200,15);
     population->move(275,20);
     QLabel *labelTaxes=new QLabel("Taxes: ",this);
     labelTaxes->move(400,20);

@@ -91,6 +91,8 @@ public:
 
     static ConstantBuilding get(int i);
     static int getNbBuildings();
+
+    static int getPopulationFromHouseType(int i);
 };
 
 namespace bID
