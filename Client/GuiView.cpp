@@ -170,11 +170,11 @@ void GuiView::showBuildingPickerMenu(int tabId){
         for(int i=0;i<ConstantBuilding::getNbBuildings();i++){
             if(ConstantBuilding::get(i).getCategory()==activeTabId+1) {
 
-                tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName());
+                tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+"\n"+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
                 tabText->at(ptrElem)->bouger(screenWidth/(nbElem+1)*ptrElem+3,50);
 
 
-                tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*7.6,20);
+                tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*7.6,60);
                 tabText->at(ptrElem)->setBrush(QBrush(Qt::transparent));
 
                 tabText->at(ptrElem)->setPen(QPen(Qt::black));

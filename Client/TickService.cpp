@@ -1,5 +1,5 @@
 #include "TickService.h"
-
+#include "GuiView.h"
 #include "GameManagementService.h"
 #include "BuildingManagementService.h"
 
@@ -44,5 +44,7 @@ void TickService::timerEvent(QTimerEvent *tevent)
     updatePopulation();
     updateHappiness();
     updateMoney();
+    GuiView::getGuiView()->showBuildingPickerMenu(GuiView::getGuiView()->getCurrentTabId()); // to update building that we can afford (if they are too expensive their names become red)
+
 
 }
