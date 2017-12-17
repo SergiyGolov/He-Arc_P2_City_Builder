@@ -22,7 +22,7 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
 {
     if(isBuildingAddable(id))
     {
-        qDebug() << "Adding building " << id << "(" << x << ";" << y << ")";
+        //qDebug() << "Adding building " << id << "(" << x << ";" << y << ")";
 
         GameManagementService::getGameManagementService()->setMoney(GameManagementService::getGameManagementService()->getMoney()-(int)ConstantBuilding::get(id).getPrice());
        GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
@@ -32,7 +32,7 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
 
 void BuildingManagementService::removeBuilding(int uid)
 {
-    qDebug() << "Removing building " << uid;
+    //qDebug() << "Removing building " << uid;
     int idInVector=-1;
     for(int i = 0; i < vectorBuildings->size(); i++)
     {

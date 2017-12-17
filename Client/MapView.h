@@ -21,7 +21,8 @@ public:
     static MapView* getMapView();
     ~MapView();
     void picker(int bId);
-    void zoomMeth(bool plusMinus); //TODO
+    void zoomMeth(bool plusMinus);
+    void translateMeth(int direction);
 private:
     static MapView* mapViewInstance;
     MapView(QWidget *parent = 0);
