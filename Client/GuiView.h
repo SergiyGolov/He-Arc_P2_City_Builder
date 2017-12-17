@@ -19,6 +19,7 @@ public:
     static GuiView* getGuiView();
     ~GuiView();
     void showBuildingPickerMenu(int tabId);
+    int getCurrentTabId(){return activeTabId;}
 
 private:
     static GuiView* guiViewInstance;

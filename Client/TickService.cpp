@@ -41,7 +41,8 @@ void TickService::updatePopulation()
 //methods
 void TickService::timerEvent(QTimerEvent *tevent)
 {
+    updatePopulation();
     updateHappiness();
     updateMoney();
-    updatePopulation();
+
 }

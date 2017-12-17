@@ -1,6 +1,7 @@
 #include "ConstantBuilding.h"
 #include "GameManagementService.h"
 #include "BuildingManagementService.h"
+#include "GuiView.h"
 
 BuildingManagementService* BuildingManagementService::buildingManagementService = nullptr;
 
@@ -22,20 +23,36 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
     if(isBuildingAddable(id))
     {
         qDebug() << "Adding building " << id << "(" << x << ";" << y << ")";
+
         GameManagementService::getGameManagementService()->setMoney(GameManagementService::getGameManagementService()->getMoney()-(int)ConstantBuilding::get(id).getPrice());
-        //GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(buildingId).getCategory()-1);
-        vectorBuildings->append(new Building(id, x, y, angle));
+       GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
+        vectorBuildings->append(new Building(id, x, y, angle,ConstantBuilding::get(id).getCategory()==1)); //if a house (category==1), starts with 1 population
     }
 }
 
 void BuildingManagementService::removeBuilding(int uid)
 {
     qDebug() << "Removing building " << uid;
+    int idInVector=-1;
     for(int i = 0; i < vectorBuildings->size(); i++)
     {
         int iuid = vectorBuildings->at(i)->getUid();
-        if(iuid == uid)
-            vectorBuildings->remove(iuid);
+        if(iuid == uid){
+            idInVector=i;
+
+
+
+
+        }
+    }
+
+    if(idInVector!=-1){
+        //75% refund of building price
+    GameManagementService::getGameManagementService()->setMoney( GameManagementService::getGameManagementService()->getMoney()+ (int)ConstantBuilding::get(vectorBuildings->at(idInVector)->getId()).getPrice()*0.75);
+    GuiView::getGuiView()->showBuildingPickerMenu(GuiView::getGuiView()->getCurrentTabId()); // to update building that we can afford (if they are too expensive their names become red)
+
+
+    vectorBuildings->removeAt(idInVector);
     }
 }
 

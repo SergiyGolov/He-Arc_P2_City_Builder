@@ -46,13 +46,16 @@ this->scene=new QGraphicsScene(this);
 
     population=new QLabel("Population: 0",this);
     population->move(275,20);
-
+    QLabel *labelTaxes=new QLabel("Taxes: ",this);
+    labelTaxes->move(400,20);
     taxes = new QDoubleSpinBox(this);
-    taxes->move(400, 20);
+    taxes->move(450, 20);
     taxes->setValue(7.0);
 
     //TODO : syntaxe...
-    //connect(taxes, &QDoubleSpinBox::valueChanged, this, &TopView::taxesChanged);
+     QObject::connect(taxes, SIGNAL(valueChanged(double)), this, SLOT(taxesChanged(void)));
+
+     taxesChanged(); //we must call it the first time before the user changes the taxes
 
     QObject::connect(quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
 }

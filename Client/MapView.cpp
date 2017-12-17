@@ -442,14 +442,14 @@ void MapView::mousePressEvent(QMouseEvent *event)
                 rect->setBrush(QBrush(Qt::darkGray));
 
 
-                buildingCount++;
+              //  buildingCount++;
 
 
                 foreach(MapTile* tile, *tempRoad){
 
                     tilesBool[tile->getX()][tile->getY()]=true;
                     tiles[tile->getX()][tile->getY()]->setBId(0);
-                    tiles[tile->getX()][tile->getY()]->setUniqueBId(buildingCount);
+                    //tiles[tile->getX()][tile->getY()]->setUniqueBId(buildingCount);
                     tiles[tile->getX()][tile->getY()]->setMainTile(roadStartX,roadStartY);
                    if(roadDir==1){
 
@@ -564,9 +564,10 @@ void MapView::mousePressEvent(QMouseEvent *event)
                                 tiles[rect->getX()+i][rect->getY()+j]->setLargeurBat(largeurBat);
                                 tiles[rect->getX()+i][rect->getY()+j]->setHauteurBat(hauteurBat);
                                 tiles[rect->getX()+i][rect->getY()+j]->setUniqueBId(buildingCount);
-                                BuildingManagementService::getBuildingManagementService()->addBuilding(pickerBId,mainTileX,mainTileY, 0); //TODO : set 0 to 3 angles
+
                             }
                         }
+                        BuildingManagementService::getBuildingManagementService()->addBuilding(pickerBId,mainTileX,mainTileY, 0); //TODO : set 0 to 3 angles
                         }
                     }else if(road==false){
 
@@ -597,13 +598,17 @@ void MapView::mousePressEvent(QMouseEvent *event)
             //SI ON EST EN MODE REMOVE
             if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){
                 if(rect->getBId()!=-10){ //donc si ce n'est pas une case de base
+                    if(rect->getUniqueBId()!=-10)BuildingManagementService::getBuildingManagementService()->removeBuilding(rect->getUniqueBId());
                     for(int i=0;i<rect->getLargeurBat();i++){
                         for(int j=0;j<rect->getHauteurBat();j++){
+
                             tilesBool[rect->getMainTileX()+i][rect->getMainTileY()+j]=false;
                             tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setBId(-10);
 
                              tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setUniqueBId(-10);
                              tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setBrush(QBrush(Qt::darkGreen));
+
+
                         }
                     }
                     tempRemove->clear();
