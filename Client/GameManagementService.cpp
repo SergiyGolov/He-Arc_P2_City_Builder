@@ -4,6 +4,7 @@
 #include "TopView.h"
 #include <QDebug>
 #include "GuiView.h"
+#include "LoadSaveService.h"
 
 GameManagementService* GameManagementService::gameManagementServiceInstance=nullptr;
 
@@ -19,11 +20,11 @@ GameManagementService::GameManagementService()
     this->money=1000;
     this->happiness=0;
     ts = new TickService(1000);
+    //LoadSaveService::saveGame(QString("C:/test.cbsave"));
 }
 
 GameManagementService::~GameManagementService()
 {
-
 
 }
 

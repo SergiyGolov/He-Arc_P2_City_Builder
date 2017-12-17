@@ -3,6 +3,8 @@
 #include "BuildingManagementService.h"
 #include "GuiView.h"
 
+#include <QJsonObject>
+
 BuildingManagementService* BuildingManagementService::buildingManagementService = nullptr;
 
 BuildingManagementService* BuildingManagementService::getBuildingManagementService()
@@ -129,3 +131,18 @@ double BuildingManagementService::getSumPopulation()
     return sumPopulation;
 }
 
+QJsonObject BuildingManagementService::getJsonBuildings()
+{
+    QJsonObject obj;
+    for(int i = 0; i < vectorBuildings->size(); i++)
+    {
+        QJsonObject obji;
+        obji.insert(QString("id"), QJsonValue(vectorBuildings->at(i)->getId()));
+        obji.insert(QString("x"), QJsonValue(vectorBuildings->at(i)->getX()));
+        obji.insert(QString("y"), QJsonValue(vectorBuildings->at(i)->getY()));
+        obji.insert(QString("population"), QJsonValue(vectorBuildings->at(i)->getPopulation()));
+        obji.insert(QString("angle"), QJsonValue(vectorBuildings->at(i)->getAngle()));
+        obj.insert(QString::number(vectorBuildings->at(i)->getUid()), obji);
+    }
+    return obj;
+}

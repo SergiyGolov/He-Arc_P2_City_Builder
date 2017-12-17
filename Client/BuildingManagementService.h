@@ -2,6 +2,7 @@
 #define BUILDINGMANAGEMENTSERVICE_H
 
 class ConstantBuilding;
+class QJsonObject;
 #include "Building.h"
 #include <QVector>
 
@@ -16,6 +17,7 @@ public:
 
     double getSumPricePerSeconds();
     double getSumPopulation();
+    QJsonObject getJsonBuildings();
 private:
     static BuildingManagementService* buildingManagementService;
     BuildingManagementService();
