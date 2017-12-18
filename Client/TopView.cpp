@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QDoubleSpinBox>
-
+#include "GraphicService.h"
 #include "GameManagementService.h"
 
 TopView* TopView::topViewInstance=nullptr;
@@ -84,4 +84,10 @@ void TopView::setPopulation(int population)
 void TopView::taxesChanged()
 {
     GameManagementService::getGameManagementService()->setTaxes(taxes->value());
+}
+
+void TopView::keyPressEvent(QKeyEvent *event){
+    GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
+
+
 }

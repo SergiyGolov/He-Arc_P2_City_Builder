@@ -30,7 +30,8 @@ private:
     QLabel *happiness;
     QDoubleSpinBox *taxes;
     QPushButton *quit;
-
+protected:
+    void keyPressEvent(QKeyEvent *event);
 private slots:
     void taxesChanged();
 };

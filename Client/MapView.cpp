@@ -16,6 +16,7 @@
 #include "ConstantBuilding.h"
 #include "GameManagementService.h"
 #include "BuildingManagementService.h"
+#include "GraphicService.h"
 
 //singleton
 MapView* MapView::mapViewInstance=nullptr;
@@ -623,80 +624,26 @@ void MapView::mousePressEvent(QMouseEvent *event)
 }
 
 void MapView::keyPressEvent(QKeyEvent *event){
-    //le pas de translation devrait dependre du niveau de zoom: plus on zoom moins on fait de pas
-    switch(event->key()){
-    case Qt::Key_Q:
-        //addRoadMode();
-        break;
-    case Qt::Key_R:
-        removeBuildingMode();
-        break;
-    case Qt::Key_1:
-        gui->showBuildingPickerMenu(0);
-        break;
-    case Qt::Key_2:
-        gui->showBuildingPickerMenu(1);
-        break;
-    case Qt::Key_3:
-        gui->showBuildingPickerMenu(2);
-        break;
-    case Qt::Key_4:
-        gui->showBuildingPickerMenu(3);
-        break;
-    case Qt::Key_5:
-        gui->showBuildingPickerMenu(4);
-        break;
-    case Qt::Key_6:
-        gui->showBuildingPickerMenu(5);
-        break;
-    case Qt::Key_7:
-        gui->showBuildingPickerMenu(6);
-        break;
-    case Qt::Key_8:
-        gui->showBuildingPickerMenu(7);
-        break;
-    case Qt::Key_9:
-        gui->showBuildingPickerMenu(8);
-        break;
-    case Qt::Key_Down:
-    case Qt::Key_S:
-        translateMeth(-2);
-        break;
-    case Qt::Key_Up:
-    case Qt::Key_W:
-        translateMeth(2);
-        break;
-    case Qt::Key_Right:
-    case Qt::Key_D:
-        translateMeth(1);
-        break;
-    case Qt::Key_Left:
-    case Qt::Key_A:
-        translateMeth(-1);
-        break;
-    case Qt::Key_Plus:
-        zoomMeth(true);
-        break;
-    case Qt::Key_Minus:
-        zoomMeth(false);
-        break;
-    case Qt::Key_G:
-        for(int i=0;i<nbcases;i++){
-            for(int j=0;j<nbcases;j++){
-                if(grille){
-                    tiles[i][j]->setPen(QPen(Qt::transparent));
+    GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
 
 
-                }else if(!grille){
-                    tiles[i][j]->setPen(QPen(Qt::black));
+}
+
+void MapView::toggleGrid(){
+    for(int i=0;i<nbcases;i++){
+        for(int j=0;j<nbcases;j++){
+            if(grille){
+                tiles[i][j]->setPen(QPen(Qt::transparent));
 
 
-                }
+            }else if(!grille){
+                tiles[i][j]->setPen(QPen(Qt::black));
+
+
             }
         }
-        grille=!grille;
-        break;
     }
+    grille=!grille;
 }
 
 
@@ -709,7 +656,7 @@ void MapView::zoomMeth(bool plusMinus)
             this->scale(2,2);
         }
     }else{
-        if(zoom>1){
+        if(zoom>0.95){
             zoom-=0.05;
             this->scale(0.5,0.5);
         }
@@ -719,19 +666,13 @@ void MapView::zoomMeth(bool plusMinus)
 
 void MapView::removeBuildingMode(){
     if(bPicker==false){
-        bPicker=true;
-        pickerBId=-1;
+          MapView::getMapView()->picker(-1);
     }
 }
 
 void MapView::addRoadMode(){
-    if(road==false && bPicker==false){
-        bPicker=true;
-        pickerBId=0;
-    }else if(bPicker==false){
-        road=false;
-        bPicker=true;
-        pickerBId=0;
+    if(bPicker==false){
+         MapView::getMapView()->picker(0);
     }
 }
 

@@ -14,6 +14,7 @@
 #include <ConstantBuilding.h>
 #include <QDebug>
 #include <GameManagementService.h>
+#include "GraphicService.h"
 
 GuiView::GuiView(QWidget *parent)
     : QGraphicsView(parent)
@@ -184,7 +185,7 @@ void GuiView::showBuildingPickerMenu(int tabId){
                 if(GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(i).getPrice()<0 && ConstantBuilding::get(i).getCategory()>2){
                     tabText->at(ptrElem)->changeTextColor(Qt::red);
                 }else{
-                      tabText->at(ptrElem)->changeTextColor(Qt::black);
+                    tabText->at(ptrElem)->changeTextColor(Qt::black);
                 }
 
                 ptrElem++;
@@ -197,30 +198,38 @@ void GuiView::showBuildingPickerMenu(int tabId){
     }
 }
 
-
+void GuiView::selectBuilding(int n){
+    if(tabText->at(n)->getText()!=""){
+        MapView::getMapView()->picker(tabText->at(n)->getBId());
+    }
+}
 
 
 void GuiView::mousePressEvent(QMouseEvent *event){
     //qDebug()<<event->pos().x()<<";"<<event->pos().y();
 
-        if(PickerElement *pick=dynamic_cast<PickerElement*>(itemAt(event->pos()))){
-            if(pick->getBId()==-1 || GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2 ){ //test si on a assez de thune pour ajouter le batiment
-                //idee: colorier les batiment dont on a pas assez de thunes en rouge (en tout cas le texte)
+    if(PickerElement *pick=dynamic_cast<PickerElement*>(itemAt(event->pos()))){
+        if(pick->getBId()==-1 || GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2 ){ //test si on a assez de thune pour ajouter le batiment
+            //idee: colorier les batiment dont on a pas assez de thunes en rouge (en tout cas le texte)
             MapView::getMapView()->picker(pick->getBId());
 
-            }
-
-          //  qDebug()<<pick->getText();
         }
 
-//    try{
-//        PickerElement *pick=(PickerElement*)itemAt(event->pos());
-//        if(pick!=nullptr)qDebug()<<pick->getText();
-//    }catch(int e){
-//        qDebug()<<"fallait pas cliquer au mauvais endroit";
-//    }
-}
+        //  qDebug()<<pick->getText();
+    }
 
+    //    try{
+    //        PickerElement *pick=(PickerElement*)itemAt(event->pos());
+    //        if(pick!=nullptr)qDebug()<<pick->getText();
+    //    }catch(int e){
+    //        qDebug()<<"fallait pas cliquer au mauvais endroit";
+    //    }
+}
+void GuiView::keyPressEvent(QKeyEvent *event){
+    GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
+
+
+}
 
 GuiView* GuiView::getGuiView(){
     if(GuiView::guiViewInstance==nullptr){

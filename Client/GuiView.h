@@ -20,6 +20,7 @@ public:
     ~GuiView();
     void showBuildingPickerMenu(int tabId);
     int getCurrentTabId(){return activeTabId;}
+    void selectBuilding(int n);
 
 private:
     static GuiView* guiViewInstance;
@@ -37,6 +38,7 @@ private:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
+   void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // GUI_H
