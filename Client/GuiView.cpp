@@ -74,29 +74,29 @@ GuiView::GuiView(QWidget *parent)
     tabCat=new std::vector<PickerElement*>(9,nullptr);
     for(int i=0;i<9;i++){
          tabCat->at(i)= new PickerElement();
-         tabCat->at(i)->setText(QString("Category %1").arg(i+1));
+         tabCat->at(i)->setText(QString("Category %1 [F%2]").arg(i+1).arg(i+1));
          tabCat->at(i)->bouger(screenWidth/10*i,3);
-         tabCat->at(i)->setRect(0,0,100,20);
+         tabCat->at(i)->setRect(0,0,105,20);
          tabCat->at(i)->setBId(-10-i*10);
 
          this->scene->addItem(tabCat->at(i));
     }
 
     road=new PickerElement();
-    road->setText("Road");
+    road->setText("Road[Q]");
     road->setBId(0);
 
     road->bouger(3,150);
-    road->setRect(0,0,50,20);
+    road->setRect(0,0,55,20);
 
     this->scene->addItem(road);
 
 
     remove=new PickerElement();
 
-    remove->setText("Remove");
-    remove->bouger(screenWidth-80,150);
-    remove->setRect(0,0,50,20);
+    remove->setText("Remove[R]");
+    remove->bouger(screenWidth-100,150);
+    remove->setRect(0,0,70,20);
     remove->setBId(-1);
     this->scene->addItem(remove);
 
@@ -187,11 +187,13 @@ void GuiView::showBuildingPickerMenu(int tabId){
         for(int i=0;i<ConstantBuilding::getNbBuildings();i++){
             if(ConstantBuilding::get(i).getCategory()==activeTabId+1) {
 
-                tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+"\n"+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
-                tabText->at(ptrElem)->bouger(screenWidth/(nbElem+1)*ptrElem+3,50);
+                if(ptrElem<9)tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+QString("[%1]\n").arg(ptrElem+1)+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
+                else if(ptrElem==9)tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+"[0]\n"+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
+                else tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+"\n"+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
+                if(nbElem==0)tabText->at(ptrElem)->bouger(screenWidth/(nbElem+1)*ptrElem+3,50);
+                else tabText->at(ptrElem)->bouger(screenWidth/(nbElem)*ptrElem+3,50);
 
-
-                tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*7.6,60);
+                tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*8+6,60);
                 tabText->at(ptrElem)->setBrush(QBrush(Qt::transparent));
 
                 tabText->at(ptrElem)->setPen(QPen(Qt::black));
