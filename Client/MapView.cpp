@@ -214,7 +214,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
             if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
             {
                 //we, faut utiliser les dynamic_cast pour eviter de caster du chenil qui n'est pas sensé être downcastable
-                bool caseOccupe=false;
+
 
                 foreach(MapTile* tile,*rayonTile)
                 {
@@ -223,7 +223,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                 }
 
                 rayonTile->clear();
-
+                bool caseOccupe=false;
                 for(int i=0;i<largeurBat;i++)
                 {
                     for(int j=0;j<hauteurBat;j++)
@@ -395,40 +395,54 @@ void MapView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button()==Qt::RightButton && bPicker || event->button()==Qt::RightButton&&road)
     {
-        road=false;
-        bPicker=false;
-        foreach(MapTile* tile,*tempRoad)
-        {
-            if(!grille)tile->setPen(QPen(Qt::transparent));
-            else tile->setPen(QPen(Qt::black));
-            tile->setBrush(QBrush(Qt::darkGreen));
-            tilesBool[tile->getX()][tile->getY()]=false;
-            tile->setLargeurBat(-10);
-            tile->setHauteurBat(-10);
-            tile->setMainTile(-10,-10);
-        }
-
-        tempRoad->clear();
-        foreach(MapTile* tile,*rayonTile)
-        {
-            if(!grille)
-                tile->setPen(QPen(Qt::transparent));
-            else
-                tile->setPen(QPen(Qt::black));
-        }
-
-        rayonTile->clear();
-
         if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
         {
-            rect->setBrush(QBrush(Qt::darkGreen));
+            bool caseOccupe=false;
             for(int i=0;i<largeurBat;i++)
             {
                 for(int j=0;j<hauteurBat;j++)
                 {
-                    if(rect->getX()+i<nbcases && rect->getY()+j<nbcases)
+                    if(tilesBool[rect->getX()+i][rect->getY()+j]==true)
+                        caseOccupe=true;
+                }
+            }
+            if(caseOccupe==false){
+                road=false;
+                bPicker=false;
+                foreach(MapTile* tile,*tempRoad)
+                {
+                    if(!grille)tile->setPen(QPen(Qt::transparent));
+                    else tile->setPen(QPen(Qt::black));
+                    tile->setBrush(QBrush(Qt::darkGreen));
+                    tilesBool[tile->getX()][tile->getY()]=false;
+                    tile->setLargeurBat(-10);
+                    tile->setHauteurBat(-10);
+                    tile->setMainTile(-10,-10);
+                }
+
+                tempRoad->clear();
+                foreach(MapTile* tile,*rayonTile)
+                {
+                    if(!grille)
+                        tile->setPen(QPen(Qt::transparent));
+                    else
+                        tile->setPen(QPen(Qt::black));
+                }
+
+                rayonTile->clear();
+
+                if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
+                {
+                    rect->setBrush(QBrush(Qt::darkGreen));
+                    for(int i=0;i<largeurBat;i++)
                     {
-                        tiles[rect->getX()+i][rect->getY()+j]->setBrush(QBrush(Qt::darkGreen));
+                        for(int j=0;j<hauteurBat;j++)
+                        {
+                            if(rect->getX()+i<nbcases && rect->getY()+j<nbcases)
+                            {
+                                tiles[rect->getX()+i][rect->getY()+j]->setBrush(QBrush(Qt::darkGreen));
+                            }
+                        }
                     }
                 }
             }
@@ -666,13 +680,13 @@ void MapView::zoomMeth(bool plusMinus)
 
 void MapView::removeBuildingMode(){
     if(bPicker==false){
-          MapView::getMapView()->picker(-1);
+        MapView::getMapView()->picker(-1);
     }
 }
 
 void MapView::addRoadMode(){
     if(bPicker==false){
-         MapView::getMapView()->picker(0);
+        MapView::getMapView()->picker(0);
     }
 }
 

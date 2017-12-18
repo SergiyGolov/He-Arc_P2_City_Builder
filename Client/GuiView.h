@@ -30,6 +30,7 @@ private:
     QGraphicsRectItem *tab;
     QGraphicsSimpleTextItem *text;
     std::vector<PickerElement*> *tabText;
+    std::vector<PickerElement*> *tabCat;
     int screenWidth;
     int screenHeight;
     PickerElement* road;

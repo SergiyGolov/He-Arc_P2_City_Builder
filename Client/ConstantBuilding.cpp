@@ -68,7 +68,7 @@ int ConstantBuilding::getPopulationFromHouseType(int i){
     case bID::HouseHighDensityPoorClass:
     case bID::HouseHighDensityMiddleClass:
     case bID::HouseHighDensityWealthyClass:
-            return 3;
+            return 4;
     default:
             return 0;
     }
