@@ -15,11 +15,20 @@ public:
     int countBuildings() {return vectorBuildings->count();}
 
     double getSumPricePerSeconds();
-    double getSumPopulation();
+    int getSumPopulation();
+    double getAverageHappiness();
 private:
     static BuildingManagementService* buildingManagementService;
     BuildingManagementService();
     QVector<Building*>* vectorBuildings;
+
+    bool bSumPricePerSeconds;
+    bool bSumPopulation;
+    bool bAverageHappiness;
+
+    double pricePerSeconds;
+    int sumPopulation;
+    double averageHappiness;
 };
 
 #endif // BUILDINGMANAGEMENTSERVICE_H

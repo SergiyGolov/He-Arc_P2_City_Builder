@@ -18,3 +18,8 @@ Building::~Building()
 {
     //Do dot decrease the uid_cpt, because the uid wont be unique anymore !
 }
+
+double Building::getHappiness()
+{
+    return 100.0;
+}

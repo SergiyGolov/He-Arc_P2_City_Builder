@@ -14,6 +14,10 @@ BuildingManagementService* BuildingManagementService::getBuildingManagementServi
 
 BuildingManagementService::BuildingManagementService()
 {
+    bSumPricePerSeconds = true;
+    bSumPopulation = true;
+    bAverageHappiness = true;
+
     vectorBuildings = new QVector<Building*>();
 }
 
@@ -25,8 +29,12 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
         //qDebug() << "Adding building " << id << "(" << x << ";" << y << ")";
 
         GameManagementService::getGameManagementService()->setMoney(GameManagementService::getGameManagementService()->getMoney()-(int)ConstantBuilding::get(id).getPrice());
-       GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
+        GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
         vectorBuildings->append(new Building(id, x, y, angle,ConstantBuilding::getPopulationFromHouseType(id))); //if a house (category==1), starts with 1 population
+
+        bSumPricePerSeconds = true;
+        bSumPopulation = true;
+        bAverageHappiness = true;
     }
 }
 
@@ -53,6 +61,10 @@ void BuildingManagementService::removeBuilding(int uid)
 
 
     vectorBuildings->removeAt(idInVector);
+
+    bSumPricePerSeconds = true;
+    bSumPopulation = true;
+    bAverageHappiness = true;
     }
 }
 
@@ -115,17 +127,39 @@ bool BuildingManagementService::isBuildingAddable(int id) //TODO : we have to te
 
 double BuildingManagementService::getSumPricePerSeconds()
 {
-    double pricePerSeconds = 0.0;
-    for(int i = 0; i < vectorBuildings->size(); i++)
-        pricePerSeconds += ConstantBuilding::get(vectorBuildings->at(i)->getId()).getPricePerSeconds();
+    if(bSumPricePerSeconds)
+    {
+        pricePerSeconds = 0.0;
+        for(int i = 0; i < vectorBuildings->size(); i++)
+            pricePerSeconds += ConstantBuilding::get(vectorBuildings->at(i)->getId()).getPricePerSeconds();
+        bSumPricePerSeconds = !bSumPricePerSeconds;
+    }
     return pricePerSeconds;
 }
 
-double BuildingManagementService::getSumPopulation()
+int BuildingManagementService::getSumPopulation()
 {
-    int sumPopulation = 0;
-    for(int i = 0; i < vectorBuildings->size(); i++)
-        sumPopulation += vectorBuildings->at(i)->getPopulation();
+    if(bSumPopulation)
+    {
+        sumPopulation = 0;
+        for(int i = 0; i < vectorBuildings->size(); i++)
+            sumPopulation += vectorBuildings->at(i)->getPopulation();
+        bSumPopulation = !bSumPopulation;
+    }
     return sumPopulation;
 }
 
+double BuildingManagementService::getAverageHappiness()
+{
+    if(bAverageHappiness)
+    {
+        averageHappiness = 0.0;
+        for(int i = 0; i < vectorBuildings->size(); i++)
+            averageHappiness += vectorBuildings->at(i)->getHappiness();
+
+        if(vectorBuildings->size() != 0)
+            averageHappiness /= vectorBuildings->size();
+        bAverageHappiness = !bAverageHappiness;
+    }
+    return averageHappiness;
+}

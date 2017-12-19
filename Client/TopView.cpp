@@ -73,7 +73,7 @@ void TopView::setMoney(int money)
 
 void TopView::setHappiness(int happiness)
 {
-    this->happiness->setText("Happiness: "+happiness);
+    this->happiness->setText(QString("Happiness: %1").arg(happiness));
 }
 
 void TopView::setPopulation(int population)

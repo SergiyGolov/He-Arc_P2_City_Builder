@@ -72,10 +72,10 @@ public:
     int             getCategory()           {return CATEGORY;}
 
     double          getPrice()              {return PRICE;}
-    double          getPricePerSeconds()    {return PRICE/100.0;}
+    double          getPricePerSeconds()    {return PRICE/4.0;}
     double          getEfficiancy()         {return OursMaths::roundExcel((qPow(PRICE/10.0,1.4)+10)*4.0, -2)/4.0;}
     double          getRadius()             {return OursMaths::roundExcel(log10(getPricePerSeconds()*getEfficiancy()+1)*10*2.0,-1)/2.0;}
-    double          getRequirementsWeight() {return getPricePerSeconds();}
+    double          getRequirementsWeight() {return PRICE/10.0;}
 
     int             getTileWidth()          {return TILE_WIDTH;}
     int             getTileHeight()         {return TILE_HEIGHT;}
