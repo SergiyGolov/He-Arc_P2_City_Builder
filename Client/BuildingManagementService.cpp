@@ -41,19 +41,8 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
 void BuildingManagementService::removeBuilding(int uid)
 {
     //qDebug() << "Removing building " << uid;
-    int idInVector=-1;
-    for(int i = 0; i < vectorBuildings->size(); i++)
-    {
-        int iuid = vectorBuildings->at(i)->getUid();
-        if(iuid == uid){
-            idInVector=i;
 
-
-
-
-        }
-    }
-
+    int idInVector=getVectorId(uid,vectorBuildings);
     if(idInVector!=-1){
         //75% refund of building price
     GameManagementService::getGameManagementService()->setMoney( GameManagementService::getGameManagementService()->getMoney()+ (int)ConstantBuilding::get(vectorBuildings->at(idInVector)->getId()).getPrice()*0.75);
@@ -162,4 +151,19 @@ double BuildingManagementService::getAverageHappiness()
         bAverageHappiness = !bAverageHappiness;
     }
     return averageHappiness;
+}
+
+int BuildingManagementService::getVectorId(int uid,QVector<Building*> *v){
+    int idInVector=-1;
+    for(int i = 0; i < v->size() && idInVector==-1; i++)
+    {
+        int iuid = v->at(i)->getUid();
+        if(iuid == uid){
+            idInVector=i;
+
+        }
+    }
+
+    return idInVector;
+
 }

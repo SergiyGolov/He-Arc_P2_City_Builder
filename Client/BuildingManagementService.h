@@ -17,6 +17,9 @@ public:
     double getSumPricePerSeconds();
     int getSumPopulation();
     double getAverageHappiness();
+
+
+    int getVectorId(int uid,QVector<Building*> *v);
 private:
     static BuildingManagementService* buildingManagementService;
     BuildingManagementService();
