@@ -20,7 +20,6 @@ private:
     int totalPopulation;
     int happiness;
     double taxes;
-    TickService *ts;
 public:
     static GameManagementService* getGameManagementService();
     //destructor

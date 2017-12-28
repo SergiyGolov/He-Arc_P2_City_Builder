@@ -1,12 +1,15 @@
 #include "TopView.h"
+
+#include "TickService.h"
+#include "GraphicService.h"
+#include "GameManagementService.h"
+
 #include <QGraphicsScene>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLabel>
 #include <QPushButton>
 #include <QDoubleSpinBox>
-#include "GraphicService.h"
-#include "GameManagementService.h"
 
 TopView* TopView::topViewInstance=nullptr;
 
@@ -108,13 +111,21 @@ void TopView::setMoneyDelta(double delta)
     this->moneyDelta->setText(deltaFormat(delta));
 }
 
+void TopView::update()
+{
+    setMoney(GameManagementService::getGameManagementService()->getMoney());
+    setHappiness(GameManagementService::getGameManagementService()->getHappiness());
+    setPopulation(GameManagementService::getGameManagementService()->getTotalPopulation());
+    setPopulationDelta(TickService::getTickService()->getPopulationDelta());
+    setHappinessDelta(TickService::getTickService()->getHappinessDelta());
+    setMoneyDelta(TickService::getTickService()->getMoneyDelta());
+}
+
 QString TopView::deltaFormat(double delta)
 {
     QString s;
     if(delta >= 0)
         s.append('+');
-    else
-        s.append('-');
     s.append(QString("%1").arg(delta));
     return s;
 }

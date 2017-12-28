@@ -1,3 +1,21 @@
+/*
+ * ************************************* Project *************************************
+ * School              : Haute Ecole Arc
+ * Module              : Projet P2
+ * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
+ *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
+ * Group               : CityBuilder
+ * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
+ *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
+ *                       - Petroff Damian <damian.petroff@he-arc.ch>
+ * ************************************ File spec ************************************
+ * Workpackage manager : Margueron Raphael
+ * Description         :
+ * This class is used to manage the global array of Building objects it contains
+ * specifics function to handle the array and have so calculus with it
+ * ***********************************************************************************
+ */
+
 #ifndef BUILDINGMANAGEMENTSERVICE_H
 #define BUILDINGMANAGEMENTSERVICE_H
 

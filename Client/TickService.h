@@ -8,8 +8,18 @@ class BuildingManagementService;
 
 class TickService : QTimer
 {
+public:
+    static TickService* getTickService();
+    int getPopulationDelta() {return newPopulation - oldPopulation;}
+    int getHappinessDelta() {return newHappiness - oldHappiness;}
+    int getMoneyDelta() {return newMoney - oldMoney;}
 private:
-//methods
+    static TickService *tickService;
+    TickService();
+    ~TickService();
+
+    void timerEvent(QTimerEvent *);
+
     int updatePopulation();
     double updateHappiness();
     double updateMoney();
@@ -21,19 +31,6 @@ private:
     int newPopulation;
     double newHappiness;
     double newMoney;
-public:
-//constructors
-	TickService(int tickrate);
-//destructors
-	~TickService();
-//methods
-    void timerEvent(QTimerEvent *);
-    int getPopulationDelta() {return newPopulation - oldPopulation;}
-    int getHappinessDelta() {return newHappiness - oldHappiness;}
-    int getMoneyDelta() {return newMoney - oldMoney;}
-//getters
-
-//setters
 };
 
 #endif

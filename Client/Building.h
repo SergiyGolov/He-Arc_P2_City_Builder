@@ -1,3 +1,21 @@
+/*
+ * ************************************* Project *************************************
+ * School              : Haute Ecole Arc
+ * Module              : Projet P2
+ * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
+ *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
+ * Group               : CityBuilder
+ * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
+ *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
+ *                       - Petroff Damian <damian.petroff@he-arc.ch>
+ * ************************************ File spec ************************************
+ * Workpackage manager : Margueron Raphael
+ * Description         :
+ * This class is used to create a single Buidling with his properties and is mainly
+ * mainly used in the BuildingManagmentService
+ * ***********************************************************************************
+ */
+
 #ifndef BUILDING_H
 #define BUILDING_H
 #include <QWidget>
@@ -33,7 +51,5 @@ public:
     int getPopulation(){return population;}
     double getHappiness();
 };
-
-
 
 #endif // BUILDING_H

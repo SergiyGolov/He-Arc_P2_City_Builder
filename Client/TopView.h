@@ -12,22 +12,18 @@ class TopView: public QGraphicsView
     Q_OBJECT
 
 public:
-
     ~TopView();
      static TopView* getTopView();
-     void setMoney(int money);
-     void setHappiness(int happiness);
-     void setPopulation(int population);
-
-     void setMoneyDelta(double delta);
-     void setHappinessDelta(double delta);
-     void setPopulationDelta(int delta);
+     void update();
 private:
-    TopView(QWidget *parent=0);
-    QGraphicsScene *scene;
+    TopView(QWidget *parent = 0);
     static TopView* topViewInstance;
+
+    QGraphicsScene *scene;
+
     int screenWidth;
     int screenHeight;
+
     QLabel *money;
     QLabel *moneyDelta;
     QLabel *population;
@@ -39,6 +35,14 @@ private:
     QPushButton *quit;
 
     QString deltaFormat(double delta);
+
+    void setMoney(int money);
+    void setHappiness(int happiness);
+    void setPopulation(int population);
+
+    void setMoneyDelta(double delta);
+    void setHappinessDelta(double delta);
+    void setPopulationDelta(int delta);
 protected:
     void keyPressEvent(QKeyEvent *event);
 private slots:

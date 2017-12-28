@@ -18,8 +18,8 @@ GameManagementService* GameManagementService::getGameManagementService()
 GameManagementService::GameManagementService()
 {
     this->money=1000;
-    this->happiness=0;
-    ts = new TickService(1000);
+    this->happiness=100;
+    TickService::getTickService();
     //LoadSaveService::saveGame(QString("C:/test.cbsave"));
 }
 
@@ -32,19 +32,16 @@ GameManagementService::~GameManagementService()
 void GameManagementService::setHappiness(int newHappiness)
 {
     this->happiness=newHappiness;
-    TopView::getTopView()->setHappiness(happiness);
 }
 
 void GameManagementService::setMoney(int newMoney)
 {
     this->money=newMoney;
-    TopView::getTopView()->setMoney(money);
 }
 
 void GameManagementService::setTotalPopulation(int newTotalPopulation)
 {
     this->totalPopulation=newTotalPopulation;
-    TopView::getTopView()->setPopulation(totalPopulation);
 }
 
 void GameManagementService::setTaxes(double newTaxes)

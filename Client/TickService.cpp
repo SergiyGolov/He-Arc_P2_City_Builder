@@ -4,8 +4,17 @@
 #include "GameManagementService.h"
 #include "BuildingManagementService.h"
 
+TickService* TickService::tickService = nullptr;
+
+TickService* TickService::getTickService()
+{
+    if(tickService == nullptr)
+        tickService = new TickService();
+    return tickService;
+}
+
 //constructors
-TickService::TickService(int tickrate)
+TickService::TickService()
 {
     oldPopulation = 0;
     oldHappiness = 100;
@@ -13,19 +22,19 @@ TickService::TickService(int tickrate)
     newPopulation = 0;
     newHappiness = 100;
     newMoney = 0;
-    this->start(tickrate);
+    this->start(1000);
 }
 
 //destructors
 TickService::~TickService()
 {
+
 }
 
 //methods
 int TickService::updatePopulation()
 {
     int population = BuildingManagementService::getBuildingManagementService()->getSumPopulation();
-
 
     return population;
 }
@@ -35,7 +44,7 @@ double TickService::updateHappiness()
     double happiness = GameManagementService::getGameManagementService()->getHappiness();
 
     //Smoothing of the happiness
-    happiness = (happiness * 40 + BuildingManagementService::getBuildingManagementService()->getAverageHappiness() * 60) / 100;
+    happiness = (happiness * 20 + BuildingManagementService::getBuildingManagementService()->getAverageHappiness() * 80) / 100;
 
     //Barriere of happiness
     happiness = (happiness * 50 + 100 * 50) / 100;
@@ -58,8 +67,7 @@ double TickService::updateMoney()
     diff += BuildingManagementService::getBuildingManagementService()->getSumPopulation()*1.0 * 1.5 * GameManagementService::getGameManagementService()->getTaxes();
 
     //Happiness scale
-    //diff *= newHappiness / 100.0;
-
+    diff *= newHappiness / 100.0;
 
     money += diff;
 
@@ -81,9 +89,7 @@ void TickService::timerEvent(QTimerEvent *tevent)
     GameManagementService::getGameManagementService()->setHappiness(newHappiness);
     GameManagementService::getGameManagementService()->setMoney(newMoney);
 
-    TopView::getTopView()->setPopulationDelta(getPopulationDelta());
-    TopView::getTopView()->setHappinessDelta(getHappinessDelta());
-    TopView::getTopView()->setMoneyDelta(getMoneyDelta());
+    TopView::getTopView()->update();
 
     GuiView::getGuiView()->showBuildingPickerMenu(GuiView::getGuiView()->getCurrentTabId()); // to update building that we can afford (if they are too expensive their names become red)
 }

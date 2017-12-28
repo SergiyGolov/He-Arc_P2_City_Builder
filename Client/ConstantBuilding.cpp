@@ -18,7 +18,7 @@ ConstantBuilding::ConstantBuilding (
     QList<QPoint>* ignoredTile,
     bool requirementType,
     QSet<int>* requirements,
-    int sumRequirements
+    double sumRequirements
     )
 {
     this->DISPLAY_NAME = displayName;
@@ -93,6 +93,19 @@ void ConstantBuilding::printTab()
     }
 }
 
+void ConstantBuilding::addRequirements(QSet<int>* requirements, int r1, int r2, int r3, int r4, int r5)
+{
+    requirements->insert(r1);
+    if(r2 != -1)
+        requirements->insert(r2);
+    if(r3 != -1)
+        requirements->insert(r3);
+    if(r4 != -1)
+        requirements->insert(r4);
+    if(r5 != -1)
+        requirements->insert(r5);
+}
+
 /*
  * Generate the whole 'object array of constants'
  */
@@ -101,65 +114,716 @@ void ConstantBuilding::generate()
     if(tabGet == nullptr) //Singleton
     {
         tabGet = new ConstantBuilding[bID::Fountains+1]; //Last element of the enum plus one
-        //Only prices, categories and sizes are implemented
 
-        tabGet[bID::Road] = ConstantBuilding(QString("Road"),0,10,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseLowDensityPoorClass] = ConstantBuilding(QString("House Low Density $"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseLowDensityMiddleClass] = ConstantBuilding(QString("House Low Density $$"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseLowDensityWealthyClass] = ConstantBuilding(QString("House Low Density $$$"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseAverageDensityPoorClass] = ConstantBuilding(QString("House Average Density $"),1,0,2,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseAverageDensityMiddleClass] = ConstantBuilding(QString("House Average Density $$"),1,0,2,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseAverageDensityWealthyClass] = ConstantBuilding(QString("House Average Density $$$"),1,0,2,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseHighDensityPoorClass] = ConstantBuilding(QString("House High Density $"),1,0,2,2, NULL, false, NULL, 0);
-        tabGet[bID::HouseHighDensityMiddleClass] = ConstantBuilding(QString("House High Density $$"),1,0,2,2, NULL, false, NULL, 0);
-        tabGet[bID::HouseHighDensityWealthyClass] = ConstantBuilding(QString("House High Density $$$"),1,0,2,2, NULL, false, NULL, 0);
-        tabGet[bID::TownHall] = ConstantBuilding(QString("Town Hall"),2,0,2,1, NULL, false, NULL, 0);
-        tabGet[bID::Clinic] = ConstantBuilding(QString("Clinic"),3,100,1,1, NULL, false, NULL, 0);
-        tabGet[bID::Hospital] = ConstantBuilding(QString("Hospital"),3,500,2,2, NULL, false, NULL, 0);
-        tabGet[bID::Graveyards] = ConstantBuilding(QString("Graveyard"),3,200,1,1, NULL, false, NULL, 0);
-        tabGet[bID::Crematory] = ConstantBuilding(QString("Crematory"),3,50,1,1, NULL, false, NULL, 0);
-        tabGet[bID::Sauna] = ConstantBuilding(QString("Sauna"),3,50,1,1, NULL, false, NULL, 0);
-        tabGet[bID::MedicalLaboratory] = ConstantBuilding(QString("Medical Laboratory"),3,200,1,1, NULL, false, NULL, 0);
-        tabGet[bID::MedicalHelicopterAirport] = ConstantBuilding(QString("Medical Helicopter Airport"),3,300,2,2, NULL, false, NULL, 0);
-        tabGet[bID::Firehouse] = ConstantBuilding(QString("Firehouse"),4,150,2,2, NULL, false, NULL, 0);
-        tabGet[bID::FirehouseHelicopterAirport] = ConstantBuilding(QString("Firehouse Helicopter Airport"),4,300,2,2, NULL, false, NULL, 0);
-        tabGet[bID::FirehouseTower] = ConstantBuilding(QString("Firehouse Tower"),4,50,1,1, NULL, false, NULL, 0);
-        tabGet[bID::CatastropheTeam] = ConstantBuilding(QString("Catastrophe Team"),4,50,1,1, NULL, false, NULL, 0);
-        tabGet[bID::Bunker] = ConstantBuilding(QString("Bunker"),4,100,1,1, NULL, false, NULL, 0);
-        tabGet[bID::RadioAntenna] = ConstantBuilding(QString("Radio Antenna"),4,50,1,1, NULL, false, NULL, 0);
-        tabGet[bID::PoliceOffice] = ConstantBuilding(QString("Police Office"),5,100,1,1, NULL, false, NULL, 0);
-        tabGet[bID::PoliceHeadquarter] = ConstantBuilding(QString("Police Headquarters"),5,500,2,2, NULL, false, NULL, 0);
-        tabGet[bID::Jail] = ConstantBuilding(QString("Jail"),5,200,2,1, NULL, false, NULL, 0);
-        tabGet[bID::PoliceHelicopterAirport] = ConstantBuilding(QString("Police Helicopter Airport"),5,300,2,2, NULL, false, NULL, 0);
-        tabGet[bID::SecurityAgency] = ConstantBuilding(QString("Security Agency"),5,50,1,1, NULL, false, NULL, 0);
-        tabGet[bID::ElementarySchool] = ConstantBuilding(QString("Elementary School"),6,100,1,1, NULL, false, NULL, 0);
-        tabGet[bID::MiddleSchool] = ConstantBuilding(QString("Middle School"),6,200,1,1, NULL, false, NULL, 0);
-        tabGet[bID::TechnicalCollege] = ConstantBuilding(QString("Technical College"),6,300,2,2, NULL, false, NULL, 0);
-        tabGet[bID::HighSchool] = ConstantBuilding(QString("High School"),6,400,3,1, NULL, false, NULL, 0);
-        tabGet[bID::College] = ConstantBuilding(QString("College"),6,500,2,2, NULL, false, NULL, 0);
-        tabGet[bID::Faculty] = ConstantBuilding(QString("Faculty"),6,500,2,2, NULL, false, NULL, 0);
-        tabGet[bID::TaxiStation] = ConstantBuilding(QString("Taxi Station"),7,100,1,1, NULL, false, NULL, 0);
-        tabGet[bID::BusDepot] = ConstantBuilding(QString("Bus Depot"),7,200,2,2, NULL, false, NULL, 0);
-        tabGet[bID::BusStation] = ConstantBuilding(QString("Bus Station"),7,500,1,1, NULL, false, NULL, 0);
-        tabGet[bID::BusStop] = ConstantBuilding(QString("Bus Stop"),7,20,1,1, NULL, false, NULL, 0);
-        tabGet[bID::Restaurant] = ConstantBuilding(QString("Restaurant"),8,100,1,1, NULL, false, NULL, 0);
-        tabGet[bID::Mall] = ConstantBuilding(QString("Mall"),8,300,3,3, NULL, false, NULL, 0);
-        tabGet[bID::Library] = ConstantBuilding(QString("Library"),8,200,1,2, NULL, false, NULL, 0);
-        tabGet[bID::Park] = ConstantBuilding(QString("Park"),8,100,4,4, NULL, false, NULL, 0);
-        tabGet[bID::PlayArea] = ConstantBuilding(QString("Play Area"),8,200,1,2, NULL, false, NULL, 0);
-        tabGet[bID::BotanicalGarden] = ConstantBuilding(QString("Botanical Garden"),8,300,2,1, NULL, false, NULL, 0);
-        tabGet[bID::AmusementPark] = ConstantBuilding(QString("Amusement Park"),8,2000,5,7, NULL, false, NULL, 0);
-        tabGet[bID::BasketField] = ConstantBuilding(QString("Basket Field"),8,200,1,2, NULL, false, NULL, 0);
-        tabGet[bID::BeachVolleyField] = ConstantBuilding(QString("Beach Volleyball Field"),8,200,2,1, NULL, false, NULL, 0);
-        tabGet[bID::FootballField] = ConstantBuilding(QString("Football Field"),8,200,3,2, NULL, false, NULL, 0);
-        tabGet[bID::FishingField] = ConstantBuilding(QString("Fishing Field"),8,100,1,1, NULL, false, NULL, 0);
-        tabGet[bID::Barn] = ConstantBuilding(QString("Barn"),8,50,1,1, NULL, false, NULL, 0);
-        tabGet[bID::Skatepark] = ConstantBuilding(QString("Skatepark"),8,200,1,2, NULL, false, NULL, 0);
-        tabGet[bID::FootballStadium] = ConstantBuilding(QString("Football Stadium"),9,2000,4,3, NULL, false, NULL, 0);
-        tabGet[bID::OlympiqueStatium] = ConstantBuilding(QString("Olympic Statium"),9,2000,3,4, NULL, false, NULL, 0);
-        tabGet[bID::EiffelTower] = ConstantBuilding(QString("Eiffel Tower"),9,2000,5,5, NULL, false, NULL, 0);
-        tabGet[bID::Statue] = ConstantBuilding(QString("Statue"),9,1000,4,4, NULL, false, NULL, 0);
-        tabGet[bID::Memorial] = ConstantBuilding(QString("Memorial"),9,2000,5,5, NULL, false, NULL, 0);
-        tabGet[bID::Fountains] = ConstantBuilding(QString("Fountains"),9,1000,4,4, NULL, false, NULL, 0);
+        QString displayName;
+        int category;
+        double price;
+        int tileWidth;
+        int tileHeight;
+        QList<QPoint>* ignoredTile;
+        bool requirementType;
+        QSet<int>* requirements;
+        double sumRequirements;
+
+        /*
+         * Categories are set on the top of the block
+         * The array is filled just after declaring each properties of the building,
+         * it allows us to reuse the same variables names,
+         * for the pointer it also works
+         * there is an exception for the displayname the QString object is passed by copy, w/e
+        */
+
+        category = 0;
+        {
+            /// Road ///
+            displayName     = QString("Road");
+            price           = 10;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Road] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 1;
+        {
+            /// HouseLowDensityPoorClass ///
+            displayName     = QString("House Low Density $");
+            price           = 0;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseLowDensityPoorClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HouseLowDensityMiddleClass ///
+            displayName     = QString("House Low Density $$");
+            price           = 0;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseLowDensityMiddleClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HouseLowDensityWealthyClass ///
+            displayName     = QString("House Low Density $$$");
+            price           = 0;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseLowDensityWealthyClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HouseAverageDensityPoorClass ///
+            displayName     = QString("House Average Density $");
+            price           = 0;
+            tileWidth       = 2;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseAverageDensityPoorClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HouseAverageDensityMiddleClass ///
+            displayName     = QString("House Average Density $$");
+            price           = 0;
+            tileWidth       = 2;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseAverageDensityMiddleClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HouseAverageDensityWealthyClass ///
+            displayName     = QString("House Average Density $$$");
+            price           = 0;
+            tileWidth       = 2;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseAverageDensityWealthyClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HouseHighDensityPoorClass ///
+            displayName     = QString("House High Density $");
+            price           = 0;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseHighDensityPoorClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HouseHighDensityMiddleClass ///
+            displayName     = QString("House High Density $$");
+            price           = 0;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseHighDensityMiddleClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HouseHighDensityWealthyClass ///
+            displayName     = QString("House High Density $$$");
+            price           = 0;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::HouseHighDensityWealthyClass] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 2;
+        {
+            /// TownHall ///
+            displayName     = QString("Town Hall");
+            price           = 0;
+            tileWidth       = 2;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::TownHall] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 3;
+        {
+            /// Clinic ///
+            displayName     = QString("Clinic");
+            price           = 100;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Clinic] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Hospital ///
+            displayName     = QString("Hospital");
+            price           = 500;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Hospital] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Graveyards ///
+            displayName     = QString("Graveyards");
+            price           = 200;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Graveyards] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Crematory ///
+            displayName     = QString("Crematory");
+            price           = 50;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Graveyards);
+            sumRequirements = tabGet[bID::Graveyards].getRequirementsWeight();
+            tabGet[bID::Crematory] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Sauna ///
+            displayName     = QString("Sauna");
+            price           = 50;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Sauna] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// MedicalLaboratory ///
+            displayName     = QString("Medical Laboratory");
+            price           = 200;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Clinic, bID::Hospital);
+            sumRequirements = 1 * tabGet[bID::Clinic].getRequirementsWeight() + 1 * tabGet[bID::Hospital].getRequirementsWeight();;
+            tabGet[bID::MedicalLaboratory] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// MedicalHelicopterAirport ///
+            displayName     = QString("Medical Helicopter Airport");
+            price           = 300;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Hospital);
+            sumRequirements = 5;
+            tabGet[bID::MedicalHelicopterAirport] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 4;
+        {
+            /// Firehouse ///
+            displayName     = QString("Firehouse");
+            price           = 150;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Firehouse] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// FirehouseHelicopterAirport ///
+            displayName     = QString("Firehouse Helicopter Airport");
+            price           = 300;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Firehouse);
+            sumRequirements = 1 * tabGet[bID::Firehouse].getRequirementsWeight();
+            tabGet[bID::FirehouseHelicopterAirport] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// FirehouseTower ///
+            displayName     = QString("Firehouse Tower");
+            price           = 50;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Firehouse);
+            sumRequirements = 1 * tabGet[bID::Firehouse].getRequirementsWeight();
+            tabGet[bID::FirehouseTower] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// CatastropheTeam ///
+            displayName     = QString("Catastrophe Team");
+            price           = 50;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Firehouse, bID::FirehouseHelicopterAirport, bID::FirehouseTower, bID::Bunker);
+            sumRequirements = 3;
+            tabGet[bID::CatastropheTeam] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Bunker ///
+            displayName     = QString("Bunker");
+            price           = 100;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Firehouse, bID::FirehouseHelicopterAirport, bID::FirehouseTower, bID::CatastropheTeam);
+            sumRequirements = 3;
+            tabGet[bID::Bunker] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// RadioAntenna ///
+            displayName     = QString("Radio Antenna");
+            price           = 50;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Firehouse);
+            sumRequirements = tabGet[bID::Firehouse].getRequirementsWeight();
+            tabGet[bID::RadioAntenna] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 5;
+        {
+            /// PoliceOffice ///
+            displayName     = QString("Police Office");
+            price           = 100;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::PoliceOffice] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// PoliceHeadquarter ///
+            displayName     = QString("Police Headquarters");
+            price           = 500;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::PoliceHeadquarter] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Jail ///
+            displayName     = QString("Jail");
+            price           = 200;
+            tileWidth       = 2;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::PoliceOffice, bID::PoliceHeadquarter);
+            sumRequirements = tabGet[bID::PoliceOffice].getRequirementsWeight() + tabGet[bID::PoliceHeadquarter].getRequirementsWeight();
+            tabGet[bID::Jail] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// PoliceHelicopterAirport ///
+            displayName     = QString("Police Helicopter Airport");
+            price           = 300;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::PoliceHeadquarter);
+            sumRequirements = tabGet[bID::PoliceHeadquarter].getRequirementsWeight();
+            tabGet[bID::PoliceHelicopterAirport] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// SecurityAgency ///
+            displayName     = QString("Security Agency");
+            price           = 50;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Jail, bID::PoliceHelicopterAirport);
+            sumRequirements = tabGet[bID::Jail].getRequirementsWeight() + tabGet[bID::PoliceHelicopterAirport].getRequirementsWeight();
+            tabGet[bID::SecurityAgency] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 6;
+        {
+            /// ElementarySchool ///
+            displayName     = QString("Elementary School");
+            price           = 100;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::ElementarySchool] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// MiddleSchool ///
+            displayName     = QString("Middle School");
+            price           = 200;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::ElementarySchool);
+            sumRequirements = tabGet[bID::ElementarySchool].getRequirementsWeight();
+            tabGet[bID::MiddleSchool] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// TechnicalCollege ///
+            displayName     = QString("Technical College");
+            price           = 300;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::MiddleSchool);
+            sumRequirements = tabGet[bID::MiddleSchool].getRequirementsWeight();
+            tabGet[bID::TechnicalCollege] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// HighSchool ///
+            displayName     = QString("High School");
+            price           = 400;
+            tileWidth       = 3;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::TechnicalCollege);
+            sumRequirements = tabGet[bID::TechnicalCollege].getRequirementsWeight();
+            tabGet[bID::HighSchool] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// College ///
+            displayName     = QString("College");
+            price           = 500;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::HighSchool);
+            sumRequirements = tabGet[bID::HighSchool].getRequirementsWeight();
+            tabGet[bID::College] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Faculty ///
+            displayName     = QString("Faculty");
+            price           = 500;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::HighSchool);
+            sumRequirements = tabGet[bID::HighSchool].getRequirementsWeight();
+            tabGet[bID::Faculty] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 7;
+        {
+            /// TaxiStation ///
+            displayName     = QString("Taxi Station");
+            price           = 100;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::TaxiStation] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// BusDepot ///
+            displayName     = QString("Bus Depot");
+            price           = 200;
+            tileWidth       = 2;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::BusDepot] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// BusStation ///
+            displayName     = QString("Bus Station");
+            price           = 500;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::BusStation] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// BusStop ///
+            displayName     = QString("Bus Stop");
+            price           = 20;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::BusDepot, bID::BusStation);
+            sumRequirements = tabGet[bID::BusDepot].getRequirementsWeight() + tabGet[bID::BusStation].getRequirementsWeight();
+            tabGet[bID::BusStop] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 8;
+        {
+            /// Restaurant ///
+            displayName     = QString("Restaurant");
+            price           = 100;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Restaurant] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Mall ///
+            displayName     = QString("Mall");
+            price           = 300;
+            tileWidth       = 3;
+            tileHeight      = 3;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Mall] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Library ///
+            displayName     = QString("Library");
+            price           = 200;
+            tileWidth       = 1;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Library] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Park ///
+            displayName     = QString("Park");
+            price           = 100;
+            tileWidth       = 4;
+            tileHeight      = 4;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Park] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// PlayArea ///
+            displayName     = QString("Play Area");
+            price           = 200;
+            tileWidth       = 1;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::PlayArea] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// BotanicalGarden ///
+            displayName     = QString("Botanical Garden");
+            price           = 300;
+            tileWidth       = 2;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Park);
+            sumRequirements = 3 * tabGet[bID::Park].getRequirementsWeight();
+            tabGet[bID::BotanicalGarden] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// AmusementPark ///
+            displayName     = QString("Amusement Park");
+            price           = 2000;
+            tileWidth       = 5;
+            tileHeight      = 7;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::PlayArea);
+            sumRequirements = 3 * tabGet[bID::PlayArea].getRequirementsWeight();
+            tabGet[bID::AmusementPark] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// BasketField ///
+            displayName     = QString("Basket Field");
+            price           = 200;
+            tileWidth       = 1;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::BasketField] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// BeachVolleyField ///
+            displayName     = QString("Beach Volley Field");
+            price           = 200;
+            tileWidth       = 2;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::BeachVolleyField] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// FootballField ///
+            displayName     = QString("Football Field");
+            price           = 200;
+            tileWidth       = 3;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::FootballField] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// FishingField ///
+            displayName     = QString("Fishing Field");
+            price           = 100;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::FishingField] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Barn ///
+            displayName     = QString("Barn");
+            price           = 50;
+            tileWidth       = 1;
+            tileHeight      = 1;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Barn] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Skatepark ///
+            displayName     = QString("Skatepark");
+            price           = 200;
+            tileWidth       = 1;
+            tileHeight      = 2;
+            ignoredTile     = nullptr;
+            requirementType = false;
+            requirements    = nullptr;
+            sumRequirements = 0;
+            tabGet[bID::Skatepark] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
+
+        category = 9;
+        {
+            /// FootballStadium ///
+            displayName     = QString("Football Stadium");
+            price           = 2000;
+            tileWidth       = 4;
+            tileHeight      = 3;
+            ignoredTile     = nullptr;
+            requirementType = true;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::BasketField, bID::BeachVolleyField, bID::FootballField);
+            sumRequirements = tabGet[bID::BasketField].getRequirementsWeight() + tabGet[bID::BeachVolleyField].getRequirementsWeight() + tabGet[bID::FootballField].getRequirementsWeight();
+            tabGet[bID::FootballStadium] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// OlympiqueStatium ///
+            displayName     = QString("Olympique Statium");
+            price           = 2000;
+            tileWidth       = 3;
+            tileHeight      = 4;
+            ignoredTile     = nullptr;
+            requirementType = true;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::BasketField, bID::BeachVolleyField, bID::FootballField);
+            sumRequirements = tabGet[bID::BasketField].getRequirementsWeight() + tabGet[bID::BeachVolleyField].getRequirementsWeight() + tabGet[bID::FootballField].getRequirementsWeight();
+            tabGet[bID::OlympiqueStatium] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// EiffelTower ///
+            displayName     = QString("Eiffel Tower");
+            price           = 2000;
+            tileWidth       = 5;
+            tileHeight      = 5;
+            ignoredTile     = nullptr;
+            requirementType = true;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::Hospital, bID::Firehouse, bID::PoliceHeadquarter);
+            sumRequirements = tabGet[bID::Hospital].getRequirementsWeight() + tabGet[bID::Firehouse].getRequirementsWeight() + tabGet[bID::PoliceHeadquarter].getRequirementsWeight();
+            tabGet[bID::EiffelTower] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Statue ///
+            displayName     = QString("Statue");
+            price           = 1000;
+            tileWidth       = 4;
+            tileHeight      = 4;
+            ignoredTile     = nullptr;
+            requirementType = true;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::College, bID::BusStation, bID::Park);
+            sumRequirements = tabGet[bID::College].getRequirementsWeight() + tabGet[bID::BusStation].getRequirementsWeight() + tabGet[bID::Park].getRequirementsWeight();
+            tabGet[bID::Statue] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Memorial ///
+            displayName     = QString("Memorial");
+            price           = 2000;
+            tileWidth       = 5;
+            tileHeight      = 5;
+            ignoredTile     = nullptr;
+            requirementType = true;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::College, bID::BusStation, bID::Park);
+            sumRequirements = tabGet[bID::College].getRequirementsWeight() + tabGet[bID::BusStation].getRequirementsWeight() + tabGet[bID::Park].getRequirementsWeight();
+            tabGet[bID::Memorial] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+
+            /// Fountains ///
+            displayName     = QString("Fountains");
+            price           = 1000;
+            tileWidth       = 4;
+            tileHeight      = 4;
+            ignoredTile     = nullptr;
+            requirementType = true;
+            requirements    = new QSet<int>();
+            addRequirements(requirements, bID::MedicalHelicopterAirport, bID::FirehouseHelicopterAirport, bID::PoliceHelicopterAirport);
+            sumRequirements = tabGet[bID::MedicalHelicopterAirport].getRequirementsWeight() + tabGet[bID::FirehouseHelicopterAirport].getRequirementsWeight() + tabGet[bID::PoliceHelicopterAirport].getRequirementsWeight();
+            tabGet[bID::Fountains] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
+        }
     }
 }

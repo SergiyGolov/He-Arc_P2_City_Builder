@@ -42,9 +42,11 @@ private:
 	
     bool REQUIREMENTS_TYPE; //True : OR, False : AND
     QSet<int>* REQUIREMENTS;
-    int SUM_REQUIREMENTS;
+    double SUM_REQUIREMENTS;
 	
 	//TODO : Texture...
+
+    static void addRequirements(QSet<int>* requirements, int r1, int r2 = -1, int r3 = -1, int r4 = -1, int r5 = -1);
 
     static int nbBuildings;
     static ConstantBuilding* tabGet;
@@ -60,7 +62,7 @@ private:
         QList<QPoint>* ignoredTile,
         bool requirementType,
         QSet<int>* requirements,
-        int sumRequirements
+        double sumRequirements
         );
 
 public:
@@ -83,7 +85,7 @@ public:
 
     bool            getRequirementsType()   {return REQUIREMENTS_TYPE;}
     QSet<int>*      getRequirements()       {return REQUIREMENTS;}
-    int             getSumRequirements()    {return SUM_REQUIREMENTS;}
+    double          getSumRequirements()    {return SUM_REQUIREMENTS;}
 
 //methods statics
     static void generate();
