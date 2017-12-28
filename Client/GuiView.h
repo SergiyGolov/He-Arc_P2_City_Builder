@@ -20,6 +20,7 @@ public:
     ~GuiView();
     void showBuildingPickerMenu(int tabId);
     int getCurrentTabId(){return activeTabId;}
+    void selectBuilding(int n);
 
 private:
     static GuiView* guiViewInstance;
@@ -29,6 +30,7 @@ private:
     QGraphicsRectItem *tab;
     QGraphicsSimpleTextItem *text;
     std::vector<PickerElement*> *tabText;
+    std::vector<PickerElement*> *tabCat;
     int screenWidth;
     int screenHeight;
     PickerElement* road;
@@ -37,6 +39,7 @@ private:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
+   void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // GUI_H

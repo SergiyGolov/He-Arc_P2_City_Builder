@@ -30,6 +30,7 @@ public:
     //getters
     int getMoney(){return money;}
     int getHappiness(){return happiness;}
+    int getTotalPopulation(){return totalPopulation;}
     int getTaxes(){return taxes;}
     //setters
     void setHappiness(int newHappiness);

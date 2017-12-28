@@ -19,6 +19,9 @@ public:
      void setHappiness(int happiness);
      void setPopulation(int population);
 
+     void setMoneyDelta(double delta);
+     void setHappinessDelta(double delta);
+     void setPopulationDelta(int delta);
 private:
     TopView(QWidget *parent=0);
     QGraphicsScene *scene;
@@ -26,11 +29,18 @@ private:
     int screenWidth;
     int screenHeight;
     QLabel *money;
+    QLabel *moneyDelta;
     QLabel *population;
+    QLabel *populationDelta;
     QLabel *happiness;
+    QLabel *happinessDelta;
+    QLabel *labelTaxes;
     QDoubleSpinBox *taxes;
     QPushButton *quit;
 
+    QString deltaFormat(double delta);
+protected:
+    void keyPressEvent(QKeyEvent *event);
 private slots:
     void taxesChanged();
 };

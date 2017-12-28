@@ -24,7 +24,7 @@ public:
     void showBuildingPickerMenu(int tabId);
     void toggleFilter(int filterId);
     static GraphicService* getGraphicService();
-
+    void setKeyboardShortcuts(int key);
 
      void addRoad(int x, int y);
      void addBuilding(int buildingId,int x,int y);

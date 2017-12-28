@@ -11,7 +11,7 @@ class QTimer;
 class GuiView;
 class QGraphicsScene;
 
-//clic droit => annule posage de bâtiment !!!
+//TO-DO: REFACTOR FRENCH NAMES INTO ENGLISH
 
 class MapView : public QGraphicsView
 {
@@ -21,7 +21,11 @@ public:
     static MapView* getMapView();
     ~MapView();
     void picker(int bId);
-    void zoomMeth(bool plusMinus); //TODO
+    void zoomMeth(bool plusMinus);
+    void translateMeth(int direction);
+    void removeBuildingMode();
+    void addRoadMode();
+    void toggleGrid();
 private:
     static MapView* mapViewInstance;
     MapView(QWidget *parent = 0);

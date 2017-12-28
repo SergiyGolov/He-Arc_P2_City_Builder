@@ -53,6 +53,28 @@ int ConstantBuilding::getNbBuildings()
     return nbBuildings;
 }
 
+
+int ConstantBuilding::getDefaultPopulationFromHouseType(int i){
+
+    switch (i)
+    {
+        case bID::HouseLowDensityPoorClass:
+        case bID::HouseLowDensityMiddleClass:
+        case bID::HouseLowDensityWealthyClass:
+                return 1;
+        case bID::HouseAverageDensityPoorClass:
+        case bID::HouseAverageDensityMiddleClass:
+        case bID::HouseAverageDensityWealthyClass:
+                return 2;
+        case bID::HouseHighDensityPoorClass:
+        case bID::HouseHighDensityMiddleClass:
+        case bID::HouseHighDensityWealthyClass:
+                return 4;
+        default:
+                return 0;
+    }
+}
+
 void ConstantBuilding::printTab()
 {
     generate();
@@ -85,16 +107,16 @@ void ConstantBuilding::generate()
         tabGet[bID::HouseLowDensityPoorClass] = ConstantBuilding(QString("House Low Density $"),1,0,1,1, NULL, false, NULL, 0);
         tabGet[bID::HouseLowDensityMiddleClass] = ConstantBuilding(QString("House Low Density $$"),1,0,1,1, NULL, false, NULL, 0);
         tabGet[bID::HouseLowDensityWealthyClass] = ConstantBuilding(QString("House Low Density $$$"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseAverageDensityPoorClass] = ConstantBuilding(QString("House Average Density $"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseAverageDensityMiddleClass] = ConstantBuilding(QString("House Average Density $$"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseAverageDensityWealthyClass] = ConstantBuilding(QString("House Average Density $$$"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseHighDensityPoorClass] = ConstantBuilding(QString("House Height Density $"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseHighDensityMiddleClass] = ConstantBuilding(QString("House Height Density $$"),1,0,1,1, NULL, false, NULL, 0);
-        tabGet[bID::HouseHighDensityWealthyClass] = ConstantBuilding(QString("House Height Density $$$"),1,0,1,1, NULL, false, NULL, 0);
+        tabGet[bID::HouseAverageDensityPoorClass] = ConstantBuilding(QString("House Average Density $"),1,0,2,1, NULL, false, NULL, 0);
+        tabGet[bID::HouseAverageDensityMiddleClass] = ConstantBuilding(QString("House Average Density $$"),1,0,2,1, NULL, false, NULL, 0);
+        tabGet[bID::HouseAverageDensityWealthyClass] = ConstantBuilding(QString("House Average Density $$$"),1,0,2,1, NULL, false, NULL, 0);
+        tabGet[bID::HouseHighDensityPoorClass] = ConstantBuilding(QString("House High Density $"),1,0,2,2, NULL, false, NULL, 0);
+        tabGet[bID::HouseHighDensityMiddleClass] = ConstantBuilding(QString("House High Density $$"),1,0,2,2, NULL, false, NULL, 0);
+        tabGet[bID::HouseHighDensityWealthyClass] = ConstantBuilding(QString("House High Density $$$"),1,0,2,2, NULL, false, NULL, 0);
         tabGet[bID::TownHall] = ConstantBuilding(QString("Town Hall"),2,0,2,1, NULL, false, NULL, 0);
         tabGet[bID::Clinic] = ConstantBuilding(QString("Clinic"),3,100,1,1, NULL, false, NULL, 0);
         tabGet[bID::Hospital] = ConstantBuilding(QString("Hospital"),3,500,2,2, NULL, false, NULL, 0);
-        tabGet[bID::Graveyards] = ConstantBuilding(QString("Graveyards"),3,200,1,1, NULL, false, NULL, 0);
+        tabGet[bID::Graveyards] = ConstantBuilding(QString("Graveyard"),3,200,1,1, NULL, false, NULL, 0);
         tabGet[bID::Crematory] = ConstantBuilding(QString("Crematory"),3,50,1,1, NULL, false, NULL, 0);
         tabGet[bID::Sauna] = ConstantBuilding(QString("Sauna"),3,50,1,1, NULL, false, NULL, 0);
         tabGet[bID::MedicalLaboratory] = ConstantBuilding(QString("Medical Laboratory"),3,200,1,1, NULL, false, NULL, 0);
@@ -106,7 +128,7 @@ void ConstantBuilding::generate()
         tabGet[bID::Bunker] = ConstantBuilding(QString("Bunker"),4,100,1,1, NULL, false, NULL, 0);
         tabGet[bID::RadioAntenna] = ConstantBuilding(QString("Radio Antenna"),4,50,1,1, NULL, false, NULL, 0);
         tabGet[bID::PoliceOffice] = ConstantBuilding(QString("Police Office"),5,100,1,1, NULL, false, NULL, 0);
-        tabGet[bID::PoliceHeadquarter] = ConstantBuilding(QString("Police Headquarter"),5,500,2,2, NULL, false, NULL, 0);
+        tabGet[bID::PoliceHeadquarter] = ConstantBuilding(QString("Police Headquarters"),5,500,2,2, NULL, false, NULL, 0);
         tabGet[bID::Jail] = ConstantBuilding(QString("Jail"),5,200,2,1, NULL, false, NULL, 0);
         tabGet[bID::PoliceHelicopterAirport] = ConstantBuilding(QString("Police Helicopter Airport"),5,300,2,2, NULL, false, NULL, 0);
         tabGet[bID::SecurityAgency] = ConstantBuilding(QString("Security Agency"),5,50,1,1, NULL, false, NULL, 0);
@@ -134,7 +156,7 @@ void ConstantBuilding::generate()
         tabGet[bID::Barn] = ConstantBuilding(QString("Barn"),8,50,1,1, NULL, false, NULL, 0);
         tabGet[bID::Skatepark] = ConstantBuilding(QString("Skatepark"),8,200,1,2, NULL, false, NULL, 0);
         tabGet[bID::FootballStadium] = ConstantBuilding(QString("Football Stadium"),9,2000,4,3, NULL, false, NULL, 0);
-        tabGet[bID::OlympiqueStatium] = ConstantBuilding(QString("Olympique Statium"),9,2000,3,4, NULL, false, NULL, 0);
+        tabGet[bID::OlympiqueStatium] = ConstantBuilding(QString("Olympic Statium"),9,2000,3,4, NULL, false, NULL, 0);
         tabGet[bID::EiffelTower] = ConstantBuilding(QString("Eiffel Tower"),9,2000,5,5, NULL, false, NULL, 0);
         tabGet[bID::Statue] = ConstantBuilding(QString("Statue"),9,1000,4,4, NULL, false, NULL, 0);
         tabGet[bID::Memorial] = ConstantBuilding(QString("Memorial"),9,2000,5,5, NULL, false, NULL, 0);

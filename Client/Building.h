@@ -2,6 +2,7 @@
 #define BUILDING_H
 #include <QWidget>
 
+class ConstantBuilding;
 //Last updated : 21.11.2017 by DP
 /**
  * @brief The Building class
@@ -19,7 +20,7 @@ protected:
     int population;
 public:
 //constructor
-    Building(int id, int x, int y, int angle, int population = 0);
+    Building(int id, int x, int y, int angle);
 //destructor
     ~Building();
 //methods
@@ -30,6 +31,7 @@ public:
     int getX(){return x;}
     int getY(){return y;}
     int getPopulation(){return population;}
+    double getHappiness();
 };
 
 

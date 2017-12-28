@@ -16,6 +16,10 @@ BuildingManagementService* BuildingManagementService::getBuildingManagementServi
 
 BuildingManagementService::BuildingManagementService()
 {
+    bSumPricePerSeconds = true;
+    bSumPopulation = true;
+    bAverageHappiness = true;
+
     vectorBuildings = new QVector<Building*>();
 }
 
@@ -24,30 +28,23 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
 {
     if(isBuildingAddable(id))
     {
-        qDebug() << "Adding building " << id << "(" << x << ";" << y << ")";
+        //qDebug() << "Adding building " << id << "(" << x << ";" << y << ")";
 
         GameManagementService::getGameManagementService()->setMoney(GameManagementService::getGameManagementService()->getMoney()-(int)ConstantBuilding::get(id).getPrice());
-       GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
-        vectorBuildings->append(new Building(id, x, y, angle,ConstantBuilding::get(id).getCategory()==1)); //if a house (category==1), starts with 1 population
+        GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
+        vectorBuildings->append(new Building(id, x, y, angle));
+
+        bSumPricePerSeconds = true;
+        bSumPopulation = true;
+        bAverageHappiness = true;
     }
 }
 
 void BuildingManagementService::removeBuilding(int uid)
 {
-    qDebug() << "Removing building " << uid;
-    int idInVector=-1;
-    for(int i = 0; i < vectorBuildings->size(); i++)
-    {
-        int iuid = vectorBuildings->at(i)->getUid();
-        if(iuid == uid){
-            idInVector=i;
+    //qDebug() << "Removing building " << uid;
 
-
-
-
-        }
-    }
-
+    int idInVector=getVectorId(uid,vectorBuildings);
     if(idInVector!=-1){
         //75% refund of building price
     GameManagementService::getGameManagementService()->setMoney( GameManagementService::getGameManagementService()->getMoney()+ (int)ConstantBuilding::get(vectorBuildings->at(idInVector)->getId()).getPrice()*0.75);
@@ -55,6 +52,10 @@ void BuildingManagementService::removeBuilding(int uid)
 
 
     vectorBuildings->removeAt(idInVector);
+
+    bSumPricePerSeconds = true;
+    bSumPopulation = true;
+    bAverageHappiness = true;
     }
 }
 
@@ -117,17 +118,25 @@ bool BuildingManagementService::isBuildingAddable(int id) //TODO : we have to te
 
 double BuildingManagementService::getSumPricePerSeconds()
 {
-    double pricePerSeconds = 0.0;
-    for(int i = 0; i < vectorBuildings->size(); i++)
-        pricePerSeconds += ConstantBuilding::get(vectorBuildings->at(i)->getId()).getPricePerSeconds();
+    if(bSumPricePerSeconds)
+    {
+        pricePerSeconds = 0.0;
+        for(int i = 0; i < vectorBuildings->size(); i++)
+            pricePerSeconds += ConstantBuilding::get(vectorBuildings->at(i)->getId()).getPricePerSeconds();
+        bSumPricePerSeconds = !bSumPricePerSeconds;
+    }
     return pricePerSeconds;
 }
 
-double BuildingManagementService::getSumPopulation()
+int BuildingManagementService::getSumPopulation()
 {
-    int sumPopulation = 0;
-    for(int i = 0; i < vectorBuildings->size(); i++)
-        sumPopulation += vectorBuildings->at(i)->getPopulation();
+    if(bSumPopulation)
+    {
+        sumPopulation = 0;
+        for(int i = 0; i < vectorBuildings->size(); i++)
+            sumPopulation += vectorBuildings->at(i)->getPopulation();
+        bSumPopulation = !bSumPopulation;
+    }
     return sumPopulation;
 }
 
@@ -145,4 +154,34 @@ QJsonObject BuildingManagementService::getJsonBuildings()
         obj.insert(QString::number(vectorBuildings->at(i)->getUid()), obji);
     }
     return obj;
+}
+
+double BuildingManagementService::getAverageHappiness()
+{
+    if(bAverageHappiness)
+    {
+        averageHappiness = 0.0;
+        for(int i = 0; i < vectorBuildings->size(); i++)
+            averageHappiness += vectorBuildings->at(i)->getHappiness();
+
+        if(vectorBuildings->size() != 0)
+            averageHappiness /= vectorBuildings->size();
+        bAverageHappiness = !bAverageHappiness;
+    }
+    return averageHappiness;
+}
+
+int BuildingManagementService::getVectorId(int uid,QVector<Building*> *v)
+{
+    int idInVector=-1;
+    for(int i = 0; i < v->size() && idInVector==-1; i++)
+    {
+        int iuid = v->at(i)->getUid();
+        if(iuid == uid){
+            idInVector=i;
+
+        }
+    }
+
+    return idInVector;
 }

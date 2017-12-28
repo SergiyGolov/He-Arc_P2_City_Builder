@@ -10,9 +10,17 @@ class TickService : QTimer
 {
 private:
 //methods
-	void updateHappiness();
-	void updateMoney();
-	void updatePopulation();
+    int updatePopulation();
+    double updateHappiness();
+    double updateMoney();
+
+    int oldPopulation;
+    double oldHappiness;
+    double oldMoney;
+
+    int newPopulation;
+    double newHappiness;
+    double newMoney;
 public:
 //constructors
 	TickService(int tickrate);
@@ -20,6 +28,9 @@ public:
 	~TickService();
 //methods
     void timerEvent(QTimerEvent *);
+    int getPopulationDelta() {return newPopulation - oldPopulation;}
+    int getHappinessDelta() {return newHappiness - oldHappiness;}
+    int getMoneyDelta() {return newMoney - oldMoney;}
 //getters
 
 //setters

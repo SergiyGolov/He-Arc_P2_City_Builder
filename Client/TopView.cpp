@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QDoubleSpinBox>
-
+#include "GraphicService.h"
 #include "GameManagementService.h"
 
 TopView* TopView::topViewInstance=nullptr;
@@ -19,12 +19,11 @@ TopView* TopView::getTopView()
 
 TopView::TopView(QWidget *parent) : QGraphicsView(parent)
 {
-this->scene=new QGraphicsScene(this);
+    this->scene=new QGraphicsScene(this);
     this->setScene(scene);
 
     this->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     this->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
-
 
     this->setBackgroundBrush(QBrush(Qt::lightGray));
 
@@ -34,28 +33,42 @@ this->scene=new QGraphicsScene(this);
 
     this->setGeometry(0,0,screenWidth,50);
 
-    money=new QLabel("Money: 1000",this);
-    money->move(10,20);
+    money = new QLabel("Money: 1000",this);
     money->setFixedSize(150,15);
+    money->move(10,20);
 
-    happiness=new QLabel("Happiness: 0",this);
+    moneyDelta = new QLabel("+0",this);
+    moneyDelta->setFixedSize(150,15);
+    moneyDelta->move(10,40);
+
+    happiness = new QLabel("Happiness: 0",this);
+    happiness->setFixedSize(200,15);
     happiness->move(150,20);
 
-    quit=new QPushButton("&Quit game",this);
-    quit->move(screenWidth-120,20);
+    happinessDelta = new QLabel("+0",this);
+    happinessDelta->setFixedSize(150,15);
+    happinessDelta->move(150,40);
 
     population=new QLabel("Population: 0",this);
+    population->setFixedSize(200,15);
     population->move(275,20);
-    QLabel *labelTaxes=new QLabel("Taxes: ",this);
+
+    populationDelta = new QLabel("+0",this);
+    populationDelta->setFixedSize(150,15);
+    populationDelta->move(275,40);
+
+    labelTaxes = new QLabel("Taxes: ",this);
     labelTaxes->move(400,20);
+
     taxes = new QDoubleSpinBox(this);
     taxes->move(450, 20);
     taxes->setValue(7.0);
 
-    //TODO : syntaxe...
-     QObject::connect(taxes, SIGNAL(valueChanged(double)), this, SLOT(taxesChanged(void)));
+    quit=new QPushButton("&Quit game",this);
+    quit->move(screenWidth-120,20);
 
-     taxesChanged(); //we must call it the first time before the user changes the taxes
+    QObject::connect(taxes, SIGNAL(valueChanged(double)), this, SLOT(taxesChanged(void)));
+    taxesChanged(); //we must call it the first time before the user changes the taxes
 
     QObject::connect(quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
 }
@@ -72,7 +85,7 @@ void TopView::setMoney(int money)
 
 void TopView::setHappiness(int happiness)
 {
-    this->happiness->setText("Happiness: "+happiness);
+    this->happiness->setText(QString("Happiness: %1").arg(happiness));
 }
 
 void TopView::setPopulation(int population)
@@ -80,7 +93,38 @@ void TopView::setPopulation(int population)
     this->population->setText(QString("Population: %1").arg(population));
 }
 
+void TopView::setPopulationDelta(int delta)
+{
+    this->populationDelta->setText(deltaFormat((double)delta));
+}
+
+void TopView::setHappinessDelta(double delta)
+{
+    this->happinessDelta->setText(deltaFormat(delta));
+}
+
+void TopView::setMoneyDelta(double delta)
+{
+    this->moneyDelta->setText(deltaFormat(delta));
+}
+
+QString TopView::deltaFormat(double delta)
+{
+    QString s;
+    if(delta >= 0)
+        s.append('+');
+    else
+        s.append('-');
+    s.append(QString("%1").arg(delta));
+    return s;
+}
+
 void TopView::taxesChanged()
 {
     GameManagementService::getGameManagementService()->setTaxes(taxes->value());
+}
+
+void TopView::keyPressEvent(QKeyEvent *event)
+{
+    GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
 }

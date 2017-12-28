@@ -4,6 +4,7 @@
 
 #include "MainWidget.h"
 #include "TopView.h"
+#include "GraphicService.h"
 
 //variables statics
 MainWidget* MainWidget::mainWidgetInstance=nullptr;
@@ -42,34 +43,5 @@ void MainWidget::showBuildingPickerMenu(int tabId)
 
 void MainWidget::keyPressEvent(QKeyEvent *event)
 {
-    switch(event->key())
-    {
-    case Qt::Key_1:
-        showBuildingPickerMenu(0);
-        break;
-    case Qt::Key_2:
-        showBuildingPickerMenu(1);
-        break;
-    case Qt::Key_3:
-        showBuildingPickerMenu(2);
-        break;
-    case Qt::Key_4:
-        showBuildingPickerMenu(3);
-        break;
-    case Qt::Key_5:
-        showBuildingPickerMenu(4);
-        break;
-    case Qt::Key_6:
-        showBuildingPickerMenu(5);
-        break;
-    case Qt::Key_7:
-        showBuildingPickerMenu(6);
-        break;
-    case Qt::Key_8:
-        showBuildingPickerMenu(7);
-        break;
-    case Qt::Key_9:
-        showBuildingPickerMenu(8);
-        break;
-    }
+   GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
 }
