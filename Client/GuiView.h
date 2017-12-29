@@ -39,7 +39,7 @@ private:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-   void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // GUI_H

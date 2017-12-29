@@ -3,18 +3,15 @@
 
 #include <QList>
 
-class LoadSaveService
+class LoadSaveService : public QObject
 {
-private:
-
 public:
-//constructors
-	LoadSaveService();
-//destructor
-	~LoadSaveService();
-//methods
-    static void loadGame(QString filename);
-    static void saveGame(QString filename);
+public slots:
+    static void loadGameUI();
+    static void saveGameUI();
+private:
+    static void loadGame(QFile* filename);
+    static void saveGame(QFile* filename);
     static void saveOptions();
     static void loadOptions();
 };

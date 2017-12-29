@@ -41,7 +41,8 @@ HEADERS += ConstantBuilding.h \
            EffectBuilding.h \
            HouseBuilding.h \
     TopView.h \
-    BuildingManagementService.h
+    BuildingManagementService.h \
+    Services.h
 SOURCES += ConstantBuilding.cpp \
            GameManagementService.cpp \
            GraphicService.cpp \

@@ -3,6 +3,7 @@
 #include "TickService.h"
 #include "GraphicService.h"
 #include "GameManagementService.h"
+#include "Services.h"
 
 #include <QGraphicsScene>
 #include <QApplication>
@@ -67,13 +68,21 @@ TopView::TopView(QWidget *parent) : QGraphicsView(parent)
     taxes->move(450, 20);
     taxes->setValue(7.0);
 
+    save = new QPushButton("&Save",this);
+    save->move(screenWidth-330,20);
+
+    load = new QPushButton("&Load",this);
+    load->move(screenWidth-230,20);
+
     quit=new QPushButton("&Quit game",this);
-    quit->move(screenWidth-120,20);
+    quit->move(screenWidth-130,20);
 
     QObject::connect(taxes, SIGNAL(valueChanged(double)), this, SLOT(taxesChanged(void)));
     taxesChanged(); //we must call it the first time before the user changes the taxes
 
     QObject::connect(quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
+    QObject::connect(save, &QPushButton::clicked, LoadSaveService::saveGameUI);
+    QObject::connect(load, &QPushButton::clicked, LoadSaveService::loadGameUI);
 }
 
 TopView::~TopView()

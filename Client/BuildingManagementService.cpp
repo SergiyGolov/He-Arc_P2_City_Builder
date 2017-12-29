@@ -45,17 +45,18 @@ void BuildingManagementService::removeBuilding(int uid)
     //qDebug() << "Removing building " << uid;
 
     int idInVector=getVectorId(uid,vectorBuildings);
-    if(idInVector!=-1){
+    if(idInVector!=-1)
+    {
         //75% refund of building price
-    GameManagementService::getGameManagementService()->setMoney( GameManagementService::getGameManagementService()->getMoney()+ (int)ConstantBuilding::get(vectorBuildings->at(idInVector)->getId()).getPrice()*0.75);
-    GuiView::getGuiView()->showBuildingPickerMenu(GuiView::getGuiView()->getCurrentTabId()); // to update building that we can afford (if they are too expensive their names become red)
+        GameManagementService::getGameManagementService()->setMoney( GameManagementService::getGameManagementService()->getMoney()+ (int)ConstantBuilding::get(vectorBuildings->at(idInVector)->getId()).getPrice()*0.75);
+        GuiView::getGuiView()->showBuildingPickerMenu(GuiView::getGuiView()->getCurrentTabId()); // to update building that we can afford (if they are too expensive their names become red)
 
 
-    vectorBuildings->removeAt(idInVector);
+        vectorBuildings->removeAt(idInVector);
 
-    bSumPricePerSeconds = true;
-    bSumPopulation = true;
-    bAverageHappiness = true;
+        bSumPricePerSeconds = true;
+        bSumPopulation = true;
+        bAverageHappiness = true;
     }
 }
 

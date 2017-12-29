@@ -32,6 +32,8 @@ private:
     QLabel *happinessDelta;
     QLabel *labelTaxes;
     QDoubleSpinBox *taxes;
+    QPushButton *save;
+    QPushButton *load;
     QPushButton *quit;
 
     QString deltaFormat(double delta);
