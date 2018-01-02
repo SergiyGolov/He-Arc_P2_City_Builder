@@ -1,3 +1,7 @@
+/*
+ Source : https://github.com/sol-prog/Perlin_Noise
+*/
+
 #include <vector>
 
 // THIS CLASS IS A TRANSLATION TO C++11 FROM THE REFERENCE

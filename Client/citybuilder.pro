@@ -42,7 +42,9 @@ HEADERS += ConstantBuilding.h \
            HouseBuilding.h \
     TopView.h \
     BuildingManagementService.h \
-    Services.h
+    Services.h \
+    RandomService.h \
+    PerlinNoise.h
 SOURCES += ConstantBuilding.cpp \
            GameManagementService.cpp \
            GraphicService.cpp \
@@ -60,7 +62,9 @@ SOURCES += ConstantBuilding.cpp \
            EffectBuilding.cpp \
            HouseBuilding.cpp \
     TopView.cpp \
-    BuildingManagementService.cpp
+    BuildingManagementService.cpp \
+    RandomService.cpp \
+    PerlinNoise.cpp
 
 
 

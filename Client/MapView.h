@@ -10,6 +10,7 @@
 class QTimer;
 class GuiView;
 class QGraphicsScene;
+struct Cell;
 
 //TO-DO: REFACTOR FRENCH NAMES INTO ENGLISH
 
@@ -50,6 +51,8 @@ private:
     QList<MapTile*> *tempRoad;
     QList<MapTile*> *tempRemove;
     QColor prevRemoveColor;
+
+    Cell* cells;
 
     int roadStartX;
     int roadStartY;

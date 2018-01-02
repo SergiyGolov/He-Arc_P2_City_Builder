@@ -17,6 +17,7 @@
 #include "GameManagementService.h"
 #include "BuildingManagementService.h"
 #include "GraphicService.h"
+#include "Randomservice.h"
 
 //singleton
 MapView* MapView::mapViewInstance=nullptr;
@@ -81,11 +82,15 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     //this->setTransform(transform);
     // transform.shear(0,0.6);
     setTransformationAnchor ( QGraphicsView::NoAnchor );
-    srand(time(NULL));
+
+    int seed = rand();
+    cells = RandomService::generateMap(seed, nbCases, nbCases);
+
     for(int i=0;i<nbCases;i++)
     {
         for(int j=0;j<nbCases;j++)
         {
+            /*
             int random = (rand() % (6));
 
             switch(random)
@@ -101,6 +106,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
                 color=Qt::darkGreen;//darkBlue
                 break;
             }
+            */
             int coorX=i*pixelParCase;
             int coorY=j*pixelParCase;
 
@@ -130,7 +136,10 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
             // QGraphicsRectItem *rect= scene->addRect(coorX,coorY,pixelParCase,pixelParCase,QPen(Qt::transparent),QBrush(color));
             MapTile *tile=new MapTile(i,j,coorX,coorY,pixelParCase,pixelParCase);
             tile->setPen(QPen(Qt::transparent));
-            tile->setBrush(QBrush(color));
+
+            tile->setBrush(QBrush(Qt::darkGreen));
+            //tile->setBrush(QBrush(cells[i + j * nbCases].color));
+
             scene->addItem(tile);
             tiles[i][j]=tile;
             //faut limite construire un MapTile

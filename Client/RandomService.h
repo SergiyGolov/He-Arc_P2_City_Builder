@@ -1,11 +1,16 @@
-#ifndef RANDOMSERVICE_H
-#define RANDOMSERVICE_H
+#pragma once
+
+#include "QColor"
+
+struct Cell
+{
+    int id;
+    QColor color;
+};
 
 
 class RandomService
 {
 public:
-    RandomService();
+    static Cell* generateMap(int seed, int sizex, int sizey);
 };
-
-#endif // RANDOMSERVICE_H
