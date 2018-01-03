@@ -135,6 +135,7 @@ MapView::~MapView()
 
 void MapView::callPicker(int bId){
     bPicker=true;
+    prevRect=nullptr;
     pickerBId=bId;
     if(pickerBId != -1)
     {
@@ -334,6 +335,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 
             if(rect->getX()==roadStartX || rect->getY()==roadStartY)
             {
+
                 if(roadDir==0)
                 {
                     if(rect->getX()>roadStartX)
@@ -354,15 +356,13 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                     }
                 }
 
-
                 if(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX)
                 {
                     int tileDistanceX=0;
                     int tileDistanceY=0;
                     if(prevRect!=nullptr){
-                    tileDistanceX=(int)qFabs((double)rect->getX() - (double)prevRect->getX());
-                    tileDistanceY=(int)qFabs((double)rect->getY() - (double)prevRect->getY());
-
+                        tileDistanceX=(int)qFabs((double)rect->getX() - (double)prevRect->getX());
+                        tileDistanceY=(int)qFabs((double)rect->getY() - (double)prevRect->getY());
 
                     }
                     int multDirection=1;
@@ -390,9 +390,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                     if(prevRect!=rect)
                         prevRect=rect;
                 }
-
             }
-
         }
     }
 }
@@ -455,8 +453,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
         }
     }
 
-    if( road==true)
-    {
+    if(road){
         road=false;
         if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){
             if(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX){
@@ -497,7 +494,6 @@ void MapView::mousePressEvent(QMouseEvent *event)
                 }
                 tempRoad->clear();
             }else{
-
                 foreach(MapTile* tile,*tempRoad){
                     if(!grid)tile->setPen(QPen(Qt::transparent));
                     else tile->setPen(QPen(Qt::black));
@@ -517,8 +513,8 @@ void MapView::mousePressEvent(QMouseEvent *event)
             bPicker=false;
             if(pickerBId!=-1){
 
-
                 if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos()))){
+
                     bool caseOccupe=false;
                     for(int i=0;i<buildWidth;i++){
                         for(int j=0;j<buildHeight;j++){
@@ -537,12 +533,10 @@ void MapView::mousePressEvent(QMouseEvent *event)
                         prevRect=nullptr;
                         if(checkIfNearRoad(rect) || road ){
 
-
-                            //TODO: set the real image of the building instead of colorizing the tiles
+                            //TODO: set the real image of the building instead of colorizing the tiles => switch on the buildingId instead of the category
                             switch(ConstantBuilding::get(pickerBId).getCategory()-1){
                             case -1:
                                 rect->setBrush(Qt::darkGray);
-
                                 break;
                             case 0:
                                 rect->setBrush(Qt::yellow);
