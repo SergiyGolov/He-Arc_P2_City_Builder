@@ -213,7 +213,7 @@ void GuiView::showBuildingPickerMenu(int tabId){
 
 void GuiView::selectBuilding(int n){
     if(tabText->at(n)->getText()!="" && (GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(tabText->at(n)->getBId()).getPrice()>=0 ||ConstantBuilding::get(tabText->at(n)->getBId()).getCategory()<=2) ){
-        MapView::getMapView()->picker(tabText->at(n)->getBId());
+        MapView::getMapView()->callPicker(tabText->at(n)->getBId());
     }
 }
 
@@ -222,7 +222,7 @@ void GuiView::mousePressEvent(QMouseEvent *event){
 
     if(PickerElement *pick=dynamic_cast<PickerElement*>(itemAt(event->pos()))){
         if(pick->getBId()>=-1 && (pick->getBId()==-1 || GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2) ){ //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
-            MapView::getMapView()->picker(pick->getBId());
+            MapView::getMapView()->callPicker(pick->getBId());
 
         }else if(pick->getBId()<-1){
             showBuildingPickerMenu(-1*(pick->getBId()/10)-1);

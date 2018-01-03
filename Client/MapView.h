@@ -21,7 +21,7 @@ class MapView : public QGraphicsView
 public:
     static MapView* getMapView();
     ~MapView();
-    void picker(int bId);
+    void callPicker(int bId);
     void zoomMeth(bool plusMinus);
     void translateMeth(int direction);
     void removeBuildingMode();
@@ -66,6 +66,7 @@ private:
 
     QTimer *timer;
     MapTile* blinkRedTile;
+
 
     bool timeTick;
     int nbTimeTick;

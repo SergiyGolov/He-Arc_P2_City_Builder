@@ -19,7 +19,7 @@
 #include "GraphicService.h"
 #include "RandomService.h"
 
-//singleton
+
 MapView* MapView::mapViewInstance=nullptr;
 
 MapView* MapView::getMapView()
@@ -44,6 +44,8 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     prevRect=nullptr;
     roadDir=0;
 
+
+    //the purpose of this timer is to blink in red if the user try to add a building without an adjacent road
     timer=new QTimer(this);
     timer->setInterval(100);
     connect(timer,SIGNAL(timeout()),this,SLOT(blinkRedTileSlot()));
@@ -131,7 +133,7 @@ MapView::~MapView()
 
 }
 
-void MapView::picker(int bId){
+void MapView::callPicker(int bId){
     bPicker=true;
     pickerBId=bId;
     if(pickerBId != -1)
@@ -188,7 +190,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 
     if(bPicker)
     {
-        if(pickerBId!=-1)
+        if(pickerBId!=-1) //if we are not in remove mode
         {
             if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
             {
@@ -230,7 +232,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                     if(occuppiedTile==false)
                     {
                         QColor color;
-                       if(pickerBId!=-1)
+                        if(pickerBId!=-1)
                         {
                             switch(ConstantBuilding::get(pickerBId).getCategory()-1)
                             {
@@ -290,7 +292,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                                 }
                             }
 
-                            if(prevRect!=rect)
+                            if(prevRect!=rect && !road)
                                 prevRect=rect;
                         }
                     }
@@ -298,9 +300,9 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                 }
             }
         }
-        else if(bPicker || road)
+        else  //mode remove
         {
-            //mode remove
+
             foreach(MapTile* tile,*tempRemove)
             {
                 tile->setBrush(QBrush(prevRemoveColor));
@@ -325,10 +327,11 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
         }
     }
 
-    if(road==true)
+    if(road) //not a else if because the road boolean is affected in the code above
     {
         if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
         {
+
             if(rect->getX()==roadStartX || rect->getY()==roadStartY)
             {
                 if(roadDir==0)
@@ -351,19 +354,52 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                     }
                 }
 
+
                 if(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX)
                 {
-                    tempRoad->append(rect);
-                    rect->setBrush(QBrush(Qt::darkGray));
+                    int tileDistanceX=0;
+                    int tileDistanceY=0;
+                    if(prevRect!=nullptr){
+                    tileDistanceX=(int)qFabs((double)rect->getX() - (double)prevRect->getX());
+                    tileDistanceY=(int)qFabs((double)rect->getY() - (double)prevRect->getY());
+
+
+                    }
+                    int multDirection=1;
+
+                    if(tileDistanceX>1 || tileDistanceY>1){
+                        if(rect->getX()<prevRect->getX() && (int)qFabs(roadDir)==1 || rect->getY()<prevRect->getY() && (int)qFabs(roadDir)==2)multDirection=-1;
+                    }
+
+                    if(tileDistanceX > 1 && (int)qFabs(roadDir)==1){ //if the mouse "jumped" more than one tile in X
+
+                        for(int i=0;i<tileDistanceX;i++){
+                            tiles[prevRect->getX()+i*multDirection][prevRect->getY()]->setBrush(QBrush(Qt::darkGray));
+                            tempRoad->append(tiles[prevRect->getX()+i*multDirection][prevRect->getY()]);
+                        }
+                    }else if(tileDistanceY > 1 && (int)qFabs(roadDir)==2){ //same thing but in y
+
+                        for(int i=0;i<tileDistanceY;i++){
+                            tiles[prevRect->getX()][prevRect->getY()+i*multDirection]->setBrush(QBrush(Qt::darkGray));
+                            tempRoad->append(tiles[prevRect->getX()][prevRect->getY()+i*multDirection]);
+                        }
+                    }else{
+                        tempRoad->append(rect);
+                        rect->setBrush(QBrush(Qt::darkGray));
+                    }
+                    if(prevRect!=rect)
+                        prevRect=rect;
                 }
+
             }
+
         }
     }
 }
 
 void MapView::mousePressEvent(QMouseEvent *event)
 {
-    if ((event->button()==Qt::RightButton && bPicker )|| (event->button()==Qt::RightButton&&road))
+    if (event->button()==Qt::RightButton && (bPicker || road) )
     {
         if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
         {
@@ -431,30 +467,30 @@ void MapView::mousePressEvent(QMouseEvent *event)
                 foreach(MapTile* tile, *tempRoad){
 
                     tilesBool[tile->getX()][tile->getY()]=true;
-                   tile->setBId(0);
+                    tile->setBId(0);
 
-                   tile->setMainTile(roadStartX,roadStartY);
+                    tile->setMainTile(roadStartX,roadStartY);
                     if(roadDir==1){
 
-                       tile->setLargeurBat(rect->getX()-roadStartX+1);
-                       tile->setHauteurBat(1);
+                        tile->setLargeurBat(rect->getX()-roadStartX+1);
+                        tile->setHauteurBat(1);
 
                     }else if(roadDir==-1){
 
-                       tile->setLargeurBat(roadStartX-rect->getX()+1);
-                       tile->setHauteurBat(1);
-                       tile->setMainTile(rect->getX(),rect->getY());
+                        tile->setLargeurBat(roadStartX-rect->getX()+1);
+                        tile->setHauteurBat(1);
+                        tile->setMainTile(rect->getX(),rect->getY());
                         rect->setMainTile(rect->getX(),rect->getY());
                     }else if(roadDir==2){
 
-                       tile->setLargeurBat(1);
-                       tile->setHauteurBat(rect->getY()-roadStartY+1);
+                        tile->setLargeurBat(1);
+                        tile->setHauteurBat(rect->getY()-roadStartY+1);
 
                     }else if(roadDir==-2){
 
-                       tile->setLargeurBat(1);
-                       tile->setHauteurBat(roadStartY-rect->getY()+1);
-                       tile->setMainTile(rect->getX(),rect->getY());
+                        tile->setLargeurBat(1);
+                        tile->setHauteurBat(roadStartY-rect->getY()+1);
+                        tile->setMainTile(rect->getX(),rect->getY());
                         rect->setMainTile(rect->getX(),rect->getY());
                     }
 
@@ -477,7 +513,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
         }
     }else{
 
-        if(bPicker && road==false){
+        if(bPicker && !road){
             bPicker=false;
             if(pickerBId!=-1){
 
@@ -504,37 +540,37 @@ void MapView::mousePressEvent(QMouseEvent *event)
 
                             //TODO: set the real image of the building instead of colorizing the tiles
                             switch(ConstantBuilding::get(pickerBId).getCategory()-1){
-                                case -1:
-                                    rect->setBrush(Qt::darkGray);
+                            case -1:
+                                rect->setBrush(Qt::darkGray);
 
-                                    break;
-                                case 0:
-                                    rect->setBrush(Qt::yellow);
-                                    break;
-                                case 1:
-                                    rect->setBrush(Qt::red);
-                                    break;
-                                case 2:
-                                    rect->setBrush(Qt::green);
-                                    break;
-                                case 3:
-                                    rect->setBrush(Qt::darkRed);
-                                    break;
-                                case 4:
-                                    rect->setBrush(Qt::magenta);
-                                    break;
-                                case 5:
-                                    rect->setBrush(Qt::cyan);
-                                    break;
-                                case 6:
-                                    rect->setBrush(Qt::white);
-                                    break;
-                                case 7:
-                                    rect->setBrush(Qt::lightGray);
-                                    break;
-                                case 8:
-                                    rect->setBrush(Qt::darkMagenta);
-                                    break;
+                                break;
+                            case 0:
+                                rect->setBrush(Qt::yellow);
+                                break;
+                            case 1:
+                                rect->setBrush(Qt::red);
+                                break;
+                            case 2:
+                                rect->setBrush(Qt::green);
+                                break;
+                            case 3:
+                                rect->setBrush(Qt::darkRed);
+                                break;
+                            case 4:
+                                rect->setBrush(Qt::magenta);
+                                break;
+                            case 5:
+                                rect->setBrush(Qt::cyan);
+                                break;
+                            case 6:
+                                rect->setBrush(Qt::white);
+                                break;
+                            case 7:
+                                rect->setBrush(Qt::lightGray);
+                                break;
+                            case 8:
+                                rect->setBrush(Qt::darkMagenta);
+                                break;
 
                             }
                             int mainTileX=rect->getX();
@@ -647,13 +683,13 @@ void MapView::zoomMeth(bool plusMinus)
 
 void MapView::removeBuildingMode(){
     if(bPicker==false){
-        MapView::getMapView()->picker(-1);
+        MapView::getMapView()->callPicker(-1);
     }
 }
 
 void MapView::addRoadMode(){
     if(bPicker==false){
-        MapView::getMapView()->picker(0);
+        MapView::getMapView()->callPicker(0);
     }
 }
 
