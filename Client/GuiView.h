@@ -8,9 +8,6 @@
 class QGraphicsScene;
 class ConstantBuilding;
 
-
-//la mettre en singleton pour pouvoir l'appeller avec un getGui depuis n'importe où !
-
 class GuiView : public QGraphicsView
 {
     Q_OBJECT

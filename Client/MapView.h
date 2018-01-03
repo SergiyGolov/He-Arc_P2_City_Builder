@@ -5,14 +5,14 @@
 #include <MapTile.h>
 #include <QList>
 
-#define nbcases 256
+#define nbTiles 256
 
 class QTimer;
 class GuiView;
 class QGraphicsScene;
 struct Cell;
 
-//TO-DO: REFACTOR FRENCH NAMES INTO ENGLISH
+
 
 class MapView : public QGraphicsView
 {
@@ -40,14 +40,14 @@ private:
     int pickerBId;
     QColor prevColor;
     MapTile *prevRect;
-    int pixelParCase;
-    bool tilesBool[nbcases][nbcases];
-    MapTile* tiles[nbcases][nbcases];
-    int largeurBat;
-    int hauteurBat;
-    int rayonBat;
+    int pixelPerTile;
+    bool tilesBool[nbTiles][nbTiles];
+    MapTile* tiles[nbTiles][nbTiles];
+    int buildWidth;
+    int buildHeight;
+    int buildRadius;
     bool road;
-    QList<MapTile*> *rayonTile;
+    QList<MapTile*> *radiusTiles;
     QList<MapTile*> *tempRoad;
     QList<MapTile*> *tempRemove;
     QColor prevRemoveColor;
@@ -56,7 +56,7 @@ private:
 
     int roadStartX;
     int roadStartY;
-    bool grille;
+    bool grid;
     int buildingCount;
     int roadDir;
 

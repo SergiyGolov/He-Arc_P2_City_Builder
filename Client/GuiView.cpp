@@ -27,7 +27,7 @@ GuiView::GuiView(QWidget *parent)
 
     this->setBackgroundBrush(QBrush(Qt::lightGray));
     scene=new QGraphicsScene(this);
-    PickerElement::setScene(this->scene); //mdr magouille pas possible
+    PickerElement::setScene(this->scene); //to set the same scene to the rectItem and textItem in the pickerelement
     this->setScene(scene);
 
     this->setMouseTracking(true);
@@ -40,15 +40,10 @@ GuiView::GuiView(QWidget *parent)
     tab->setZValue(0);
 
 
-
-    //  text->moveBy(10,20);
-
-
     this->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     this->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     activeTabId=0;
 
-    //tabConstantBuilding=ConstantBuilding::tabGet();
 
     cptMaxCat=0;
     for(int i=0;i<10;i++){
@@ -63,7 +58,7 @@ GuiView::GuiView(QWidget *parent)
 
 
     tabText=new std::vector<PickerElement*>(cptMaxCat,nullptr);
-    //tabText(cptMaxCat);
+
     for(int i=0;i<cptMaxCat;i++){
         tabText->at(i)=new PickerElement();
         this->scene->addItem(tabText->at(i));
@@ -224,26 +219,15 @@ void GuiView::selectBuilding(int n){
 
 
 void GuiView::mousePressEvent(QMouseEvent *event){
-    //qDebug()<<event->pos().x()<<";"<<event->pos().y();
 
     if(PickerElement *pick=dynamic_cast<PickerElement*>(itemAt(event->pos()))){
-        if(pick->getBId()>=-1 && (pick->getBId()==-1 || GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2) ){ //test si on a assez de thune pour ajouter le batiment
-            //idee: colorier les batiment dont on a pas assez de thunes en rouge (en tout cas le texte)
+        if(pick->getBId()>=-1 && (pick->getBId()==-1 || GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2) ){ //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
             MapView::getMapView()->picker(pick->getBId());
 
         }else if(pick->getBId()<-1){
             showBuildingPickerMenu(-1*(pick->getBId()/10)-1);
         }
-
-        //  qDebug()<<pick->getText();
     }
-
-    //    try{
-    //        PickerElement *pick=(PickerElement*)itemAt(event->pos());
-    //        if(pick!=nullptr)qDebug()<<pick->getText();
-    //    }catch(int e){
-    //        qDebug()<<"fallait pas cliquer au mauvais endroit";
-    //    }
 }
 void GuiView::keyPressEvent(QKeyEvent *event){
     GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
