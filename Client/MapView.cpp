@@ -227,10 +227,10 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                         }
                     }
                 }
-                if(rect->getX()+buildWidth<nbTiles && rect->getX()+buildHeight<nbTiles && occuppiedTile==false)
+                if(rect->getX()+buildWidth<nbTiles && rect->getX()+buildHeight<nbTiles && !occuppiedTile)
                 {
 
-                    if(occuppiedTile==false)
+                    if(!occuppiedTile)
                     {
                         QColor color;
                         if(pickerBId!=-1)
@@ -410,7 +410,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
                         caseOccupe=true;
                 }
             }
-            if(caseOccupe==false){
+            if(!caseOccupe){
                 road=false;
                 bPicker=false;
                 foreach(MapTile* tile,*tempRoad)
@@ -523,7 +523,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
                     }
 
                     if(rect->getX()+buildWidth<nbTiles && rect->getX()+buildHeight<nbTiles && caseOccupe==false){
-                        if(pickerBId==0 && road==false){
+                        if(pickerBId==0 && !road){
                             road=true;
                             roadDir=0;
                             roadStartX=rect->getX();
@@ -645,12 +645,8 @@ void MapView::toggleGrid(){
         for(int j=0;j<nbTiles;j++){
             if(grid){
                 tiles[i][j]->setPen(QPen(Qt::transparent));
-
-
             }else if(!grid){
                 tiles[i][j]->setPen(QPen(Qt::black));
-
-
             }
         }
     }
@@ -676,13 +672,13 @@ void MapView::zoomMeth(bool plusMinus)
 
 
 void MapView::removeBuildingMode(){
-    if(bPicker==false){
+    if(!bPicker){
         MapView::getMapView()->callPicker(-1);
     }
 }
 
 void MapView::addRoadMode(){
-    if(bPicker==false){
+    if(!bPicker){
         MapView::getMapView()->callPicker(0);
     }
 }
