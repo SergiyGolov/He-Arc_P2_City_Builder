@@ -43,6 +43,7 @@ private:
     int pixelPerTile;
     bool tilesBool[nbTiles][nbTiles];
     MapTile* tiles[nbTiles][nbTiles];
+    QColor baseColors[nbTiles][nbTiles];
     int buildWidth;
     int buildHeight;
     int buildRadius;

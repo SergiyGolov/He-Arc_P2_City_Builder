@@ -78,8 +78,9 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
 
 
     setTransformationAnchor ( QGraphicsView::NoAnchor );
+    srand(time(NULL));
+    int seed = rand() ;
 
-    int seed = rand();
     cells = RandomService::generateMap(seed, nbCases, nbCases);
 
     for(int i=0;i<nbCases;i++)
@@ -111,12 +112,13 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
             MapTile *tile=new MapTile(i,j,coorX,coorY,pixelPerTile,pixelPerTile);
             tile->setPen(QPen(Qt::transparent));
 
-            tile->setBrush(QBrush(Qt::darkGreen));
-
+            // tile->setBrush(QBrush(Qt::darkGreen));
+            tile->setBrush(QBrush(cells[i+j*nbCases].color));
             scene->addItem(tile);
             tiles[i][j]=tile;
-
-            tilesBool[i][j]=false;
+            baseColors[i][j]=cells[i+j*nbCases].color;
+            if(cells[i+j*nbCases].color.blue()>45)tilesBool[i][j]=true;
+            else tilesBool[i][j]=false;
 
             tile->setRotation(45);
         }
@@ -221,7 +223,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                         {
                             if(prevRect->getX()+i<nbTiles && prevRect->getY()+j<nbTiles)
                             {
-                                tiles[prevRect->getX()+i][prevRect->getY()+j]->setBrush(QBrush(Qt::darkGreen));
+                                tiles[prevRect->getX()+i][prevRect->getY()+j]->setBrush(QBrush(baseColors[prevRect->getX()+i][prevRect->getY()+j]));
 
                             }
                         }
@@ -374,18 +376,24 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                     if(tileDistanceX > 1 && (int)qFabs(roadDir)==1){ //if the mouse "jumped" more than one tile in X
 
                         for(int i=0;i<tileDistanceX;i++){
-                            tiles[prevRect->getX()+i*multDirection][prevRect->getY()]->setBrush(QBrush(Qt::darkGray));
-                            tempRoad->append(tiles[prevRect->getX()+i*multDirection][prevRect->getY()]);
+                            if(!tilesBool[prevRect->getX()+i*multDirection][prevRect->getY()]){
+                                tiles[prevRect->getX()+i*multDirection][prevRect->getY()]->setBrush(QBrush(Qt::darkGray));
+                                tempRoad->append(tiles[prevRect->getX()+i*multDirection][prevRect->getY()]);
+                            }
                         }
                     }else if(tileDistanceY > 1 && (int)qFabs(roadDir)==2){ //same thing but in y
 
                         for(int i=0;i<tileDistanceY;i++){
-                            tiles[prevRect->getX()][prevRect->getY()+i*multDirection]->setBrush(QBrush(Qt::darkGray));
-                            tempRoad->append(tiles[prevRect->getX()][prevRect->getY()+i*multDirection]);
+                            if(!tilesBool[prevRect->getX()][prevRect->getY()+i*multDirection]){
+                                tiles[prevRect->getX()][prevRect->getY()+i*multDirection]->setBrush(QBrush(Qt::darkGray));
+                                tempRoad->append(tiles[prevRect->getX()][prevRect->getY()+i*multDirection]);
+                            }
                         }
                     }else{
-                        tempRoad->append(rect);
-                        rect->setBrush(QBrush(Qt::darkGray));
+                        if(!tilesBool[rect->getX()][rect->getY()]){
+                            tempRoad->append(rect);
+                            rect->setBrush(QBrush(Qt::darkGray));
+                        }
                     }
                     if(prevRect!=rect)
                         prevRect=rect;
@@ -417,7 +425,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
                 {
                     if(!grid)tile->setPen(QPen(Qt::transparent));
                     else tile->setPen(QPen(Qt::black));
-                    tile->setBrush(QBrush(Qt::darkGreen));
+                    tile->setBrush(QBrush(baseColors[tile->getX()][tile->getY()]));
                     tilesBool[tile->getX()][tile->getY()]=false;
                     tile->setLargeurBat(-10);
                     tile->setHauteurBat(-10);
@@ -437,14 +445,14 @@ void MapView::mousePressEvent(QMouseEvent *event)
 
                 if(MapTile *rect=dynamic_cast<MapTile*>(itemAt(event->pos())))
                 {
-                    rect->setBrush(QBrush(Qt::darkGreen));
+                    rect->setBrush(QBrush(baseColors[rect->getX()][rect->getY()]));
                     for(int i=0;i<buildWidth;i++)
                     {
                         for(int j=0;j<buildHeight;j++)
                         {
                             if(rect->getX()+i<nbTiles && rect->getY()+j<nbTiles)
                             {
-                                tiles[rect->getX()+i][rect->getY()+j]->setBrush(QBrush(Qt::darkGreen));
+                                tiles[rect->getX()+i][rect->getY()+j]->setBrush(QBrush(baseColors[rect->getX()+i][rect->getY()+j]));
                             }
                         }
                     }
@@ -497,7 +505,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
                 foreach(MapTile* tile,*tempRoad){
                     if(!grid)tile->setPen(QPen(Qt::transparent));
                     else tile->setPen(QPen(Qt::black));
-                    tile->setBrush(QBrush(Qt::darkGreen));
+                    tile->setBrush(QBrush(baseColors[tile->getX()][tile->getY()]));
                     tilesBool[tile->getX()][tile->getY()]=false;
                     tile->setLargeurBat(-10);
                     tile->setHauteurBat(-10);
@@ -590,7 +598,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
                             for(int i=0;i<buildWidth;i++){
                                 for(int j=0;j<buildHeight;j++){
                                     if(rect->getX()+i<nbTiles && rect->getY()+j<nbTiles){
-                                        tiles[rect->getX()+i][rect->getY()+j]->setBrush(QBrush(Qt::darkGreen));
+                                        tiles[rect->getX()+i][rect->getY()+j]->setBrush(QBrush(baseColors[rect->getX()+i][rect->getY()+j]));
 
                                     }
                                 }
@@ -620,7 +628,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
                                 tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setBId(-10);
 
                                 tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setUniqueBId(-10);
-                                tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setBrush(QBrush(Qt::darkGreen));
+                                tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setBrush(QBrush(baseColors[rect->getMainTileX()+i][rect->getMainTileY()+j]));
 
 
                             }
