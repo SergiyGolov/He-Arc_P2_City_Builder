@@ -70,3 +70,6 @@ SOURCES += ConstantBuilding.cpp \
 
 
 FORMS +=
+
+RESOURCES += \
+    images.qrc

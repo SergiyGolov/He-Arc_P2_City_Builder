@@ -83,6 +83,11 @@ TopView::TopView(QWidget *parent) : QGraphicsView(parent)
     QObject::connect(quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
     QObject::connect(save, &QPushButton::clicked, LoadSaveService::saveGameUI);
     QObject::connect(load, &QPushButton::clicked, LoadSaveService::loadGameUI);
+
+
+
+
+
 }
 
 TopView::~TopView()

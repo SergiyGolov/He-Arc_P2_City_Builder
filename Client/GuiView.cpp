@@ -102,7 +102,6 @@ GuiView::GuiView(QWidget *parent)
 
 
 
-
 }
 
 GuiView* GuiView::guiViewInstance=nullptr;

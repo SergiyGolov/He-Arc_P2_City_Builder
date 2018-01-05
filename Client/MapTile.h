@@ -33,7 +33,21 @@ public:
 
 
     static void setScene(QGraphicsScene *scene);
+
+    void addPixMove(QGraphicsPixmapItem *pix);
+
+    void removePixMove();
+
+    void addPix(QGraphicsPixmapItem *pix);
+
+    void removePix();
+
+    bool isOccupied(){return bOccupied;}
+    void setOccupied(bool b){bOccupied=b;}
+
+
 private:
+    bool bOccupied;
     int x;
     int y;
     int bId;
@@ -46,6 +60,10 @@ private:
     int mainTileY;
     int largeurBat;
     int hauteurBat;
+
+    bool bPix;
+
+    QGraphicsPixmapItem* buildImage;
 
 };
 
