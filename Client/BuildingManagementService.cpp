@@ -67,6 +67,8 @@ void BuildingManagementService::removeBuilding(int uid)
 
 bool BuildingManagementService::isBuildingAddable(int id) //TODO : we have to test it, it should be ok and it's possible to optimise it but this is fairly good
 {
+    //TODO : Check if enough money !!
+
     //The constantbuilding construtor array isnt set to handle the requirements
     int sumRequirements = ConstantBuilding::get(id).getSumRequirements();
 
