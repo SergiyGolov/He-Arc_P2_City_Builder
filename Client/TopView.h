@@ -2,10 +2,11 @@
 #define TOPVIEW_H
 
 #include <QGraphicsView>
-class QGraphicsScene;
 class QLabel;
+class QSlider;
 class QPushButton;
 class QDoubleSpinBox;
+class QGraphicsScene;
 
 class TopView: public QGraphicsView
 {
@@ -31,10 +32,18 @@ private:
     QLabel *happiness;
     QLabel *happinessDelta;
     QLabel *labelTaxes;
+
     QDoubleSpinBox *taxes;
     QPushButton *save;
     QPushButton *load;
     QPushButton *quit;
+
+    QLabel *labelMaster;
+    QLabel *labelMusic;
+    QLabel *labelSfx;
+    QSlider *master;
+    QSlider *music;
+    QSlider *sfx;
 
     QString deltaFormat(double delta);
 
@@ -49,6 +58,9 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 private slots:
     void taxesChanged();
+    void volumeMasterChanged();
+    void volumeSfxChanged();
+    void volumeMusicChanged();
 };
 
 #endif // TOPVIEW_H

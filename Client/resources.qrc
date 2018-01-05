@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>audio/citybuilder_song.wav</file>
+    </qresource>
+</RCC>

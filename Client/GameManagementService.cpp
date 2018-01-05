@@ -5,6 +5,9 @@
 #include <QDebug>
 #include "GuiView.h"
 #include "LoadSaveService.h"
+#include "AudioService.h"
+
+#include <QSound>
 
 GameManagementService* GameManagementService::gameManagementServiceInstance=nullptr;
 
@@ -20,7 +23,7 @@ GameManagementService::GameManagementService()
     this->money=1000;
     this->happiness=100;
     TickService::getTickService();
-    //LoadSaveService::saveGame(QString("C:/test.cbsave"));
+    AudioService::getAudioService()->playMusic();
 }
 
 GameManagementService::~GameManagementService()

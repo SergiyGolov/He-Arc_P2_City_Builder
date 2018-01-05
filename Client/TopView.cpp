@@ -4,6 +4,7 @@
 #include "GraphicService.h"
 #include "GameManagementService.h"
 #include "Services.h"
+#include "AudioService.h"
 
 #include <QGraphicsScene>
 #include <QApplication>
@@ -11,6 +12,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QDoubleSpinBox>
+#include <QSlider>
 
 TopView* TopView::topViewInstance=nullptr;
 
@@ -66,7 +68,6 @@ TopView::TopView(QWidget *parent) : QGraphicsView(parent)
 
     taxes = new QDoubleSpinBox(this);
     taxes->move(450, 20);
-    taxes->setValue(7.0);
 
     save = new QPushButton("&Save",this);
     save->move(screenWidth-330,20);
@@ -77,12 +78,51 @@ TopView::TopView(QWidget *parent) : QGraphicsView(parent)
     quit=new QPushButton("&Quit game",this);
     quit->move(screenWidth-130,20);
 
+    labelMaster = new QLabel("Music", this);
+    labelMaster->move(screenWidth-730, 20);
+
+    labelMusic = new QLabel("Music", this);
+    labelMusic->move(screenWidth-630, 20);
+
+    labelSfx = new QLabel("Sfx", this);
+    labelSfx->move(screenWidth-530, 20);
+
+    master = new QSlider(Qt::Horizontal, this);
+    master->move(screenWidth-730, 40);
+    master->setMinimum(0);
+    master->setMaximum(100);
+
+    music = new QSlider(Qt::Horizontal, this);
+    music->move(screenWidth-630, 40);
+    music->setMinimum(0);
+    music->setMaximum(100);
+
+    sfx = new QSlider(Qt::Horizontal, this);
+    sfx->move(screenWidth-530, 40);
+    sfx->setMinimum(0);
+    sfx->setMaximum(100);
+
+    QObject::connect(master, &QSlider::valueChanged, this, &TopView::volumeMasterChanged);
+    QObject::connect(music, &QSlider::valueChanged, this, &TopView::volumeMusicChanged);
+    QObject::connect(sfx, &QSlider::valueChanged, this, &TopView::volumeSfxChanged);
+
     QObject::connect(taxes, SIGNAL(valueChanged(double)), this, SLOT(taxesChanged(void)));
-    taxesChanged(); //we must call it the first time before the user changes the taxes
 
     QObject::connect(quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
     QObject::connect(save, &QPushButton::clicked, LoadSaveService::saveGameUI);
     QObject::connect(load, &QPushButton::clicked, LoadSaveService::loadGameUI);
+
+    //Default values
+    taxes->setValue(7.0);
+    master->setValue(100);
+    music->setValue(50);
+    sfx->setValue(50);
+
+    //Applying default values
+    taxesChanged();
+    volumeMasterChanged();
+    volumeMusicChanged();
+    volumeSfxChanged();
 }
 
 TopView::~TopView()
@@ -142,6 +182,24 @@ QString TopView::deltaFormat(double delta)
 void TopView::taxesChanged()
 {
     GameManagementService::getGameManagementService()->setTaxes(taxes->value());
+}
+
+void TopView::volumeMasterChanged()
+{
+    labelMaster->setText(QString("Master (%1\%)").arg(master->value()));
+    AudioService::getAudioService()->setVolumeMaster(master->value() / 100.0);
+}
+
+void TopView::volumeMusicChanged()
+{
+    labelMusic->setText(QString("Music (%1\%)").arg(music->value()));
+    AudioService::getAudioService()->setVolumeMusic(music->value() / 100.0);
+}
+
+void TopView::volumeSfxChanged()
+{
+    labelSfx->setText(QString("Sfx (%1\%)").arg(sfx->value()));
+    AudioService::getAudioService()->setVolumeSfx(sfx->value() / 100.0);
 }
 
 void TopView::keyPressEvent(QKeyEvent *event)

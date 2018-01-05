@@ -2,6 +2,7 @@
 #include "GameManagementService.h"
 #include "BuildingManagementService.h"
 #include "GuiView.h"
+#include "AudioService.h"
 
 #include <QJsonObject>
 
@@ -37,6 +38,8 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
         bSumPricePerSeconds = true;
         bSumPopulation = true;
         bAverageHappiness = true;
+
+        AudioService::getAudioService()->playSfx(sfxID::buildingAdded);
     }
 }
 
@@ -57,6 +60,8 @@ void BuildingManagementService::removeBuilding(int uid)
         bSumPricePerSeconds = true;
         bSumPopulation = true;
         bAverageHappiness = true;
+
+        AudioService::getAudioService()->playSfx(sfxID::buildingRemoved);
     }
 }
 

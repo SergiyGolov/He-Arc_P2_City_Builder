@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -44,7 +44,8 @@ HEADERS += ConstantBuilding.h \
     BuildingManagementService.h \
     Services.h \
     RandomService.h \
-    PerlinNoise.h
+    PerlinNoise.h \
+    AudioService.h
 SOURCES += ConstantBuilding.cpp \
            GameManagementService.cpp \
            GraphicService.cpp \
@@ -64,9 +65,8 @@ SOURCES += ConstantBuilding.cpp \
     TopView.cpp \
     BuildingManagementService.cpp \
     RandomService.cpp \
-    PerlinNoise.cpp
+    PerlinNoise.cpp \
+    AudioService.cpp
 
-
-
-
-FORMS +=
+RESOURCES += \
+    resources.qrc
