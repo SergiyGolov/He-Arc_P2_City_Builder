@@ -24,49 +24,53 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 # Input
-HEADERS += ConstantBuilding.h \
-           GameManagementService.h \
-           GraphicService.h \
-           GuiView.h \
-           LauncherService.h \
-           LoadSaveService.h \
-           MainWidget.h \
-           MapTile.h \
-           MapView.h \
-           OursMaths.h \
-           PickerElement.h \
-           TickService.h \
-           MapTile.h \
-           Building.h \
-           EffectBuilding.h \
-           HouseBuilding.h \
-    TopView.h \
-    BuildingManagementService.h \
-    Services.h \
-    RandomService.h \
-    PerlinNoise.h \
-    AudioService.h
-SOURCES += ConstantBuilding.cpp \
-           GameManagementService.cpp \
-           GraphicService.cpp \
-           GuiView.cpp \
-           LoadSaveService.cpp \
-           main.cpp \
-           MainWidget.cpp \
-           MapTile.cpp \
-           MapView.cpp \
-           OursMaths.cpp \
-           PickerElement.cpp \
-           TickService.cpp \
-    LauncherService.cpp \
-           Building.cpp \
-           EffectBuilding.cpp \
-           HouseBuilding.cpp \
-    TopView.cpp \
-    BuildingManagementService.cpp \
-    RandomService.cpp \
-    PerlinNoise.cpp \
-    AudioService.cpp
+HEADERS += \
+	ConstantBuilding.h \
+	GameManagementService.h \
+	GraphicService.h \
+	GuiView.h \
+	LauncherService.h \
+	LoadSaveService.h \
+	MainWidget.h \
+	MapTile.h \
+	MapView.h \
+	OursMaths.h \
+	PickerElement.h \
+	TickService.h \
+	MapTile.h \
+	Building.h \
+	EffectBuilding.h \
+	HouseBuilding.h \
+	TopView.h \
+	BuildingManagementService.h \
+	Services.h \
+	RandomService.h \
+	PerlinNoise.h \
+	AudioService.h
+	
+SOURCES += \
+	ConstantBuilding.cpp \
+	GameManagementService.cpp \
+	GraphicService.cpp \
+	GuiView.cpp \
+	LoadSaveService.cpp \
+	main.cpp \
+	MainWidget.cpp \
+	MapTile.cpp \
+	MapView.cpp \
+	OursMaths.cpp \
+	PickerElement.cpp \
+	TickService.cpp \
+	LauncherService.cpp \
+	Building.cpp \
+	EffectBuilding.cpp \
+	HouseBuilding.cpp \
+	TopView.cpp \
+	BuildingManagementService.cpp \
+	RandomService.cpp \
+	PerlinNoise.cpp \
+	AudioService.cpp
 
 RESOURCES += \
-    resources.qrc
+	images.qrc \
+	resources.qrc

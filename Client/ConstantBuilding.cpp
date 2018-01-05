@@ -288,7 +288,7 @@ void ConstantBuilding::generate()
             tabGet[bID::Hospital] = ConstantBuilding(displayName, category, price, tileWidth, tileHeight, ignoredTile, requirementType, requirements, sumRequirements);
 
             /// Graveyards ///
-            displayName     = QString("Graveyards");
+            displayName     = QString("Graveyard");
             price           = 200;
             tileWidth       = 1;
             tileHeight      = 1;

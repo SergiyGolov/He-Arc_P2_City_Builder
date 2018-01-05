@@ -41,18 +41,19 @@ private:
     QColor prevColor;
     MapTile *prevRect;
     int pixelPerTile;
-    bool tilesBool[nbTiles][nbTiles];
+
     MapTile* tiles[nbTiles][nbTiles];
     QColor baseColors[nbTiles][nbTiles];
     int buildWidth;
     int buildHeight;
     int buildRadius;
     bool road;
-    QList<MapTile*> *radiusTiles;
-    QList<MapTile*> *tempRoad;
-    QList<MapTile*> *tempRemove;
+    QList<MapTile*> *radiusTilesList;
+    QList<MapTile*> *tempRoadList;
+    QList<MapTile*> *tempRemoveList;
+    QList<QGraphicsPixmapItem*> *buildPixList;
     QColor prevRemoveColor;
-
+    MapTile* lastTilePix;
     Cell* cells;
 
     int roadStartX;
@@ -71,6 +72,8 @@ private:
 
     bool timeTick;
     int nbTimeTick;
+
+    QGraphicsPixmapItem *currentBuild;
 public slots:
     void blinkRedTileSlot();
 protected:
