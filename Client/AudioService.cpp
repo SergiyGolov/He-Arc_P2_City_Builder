@@ -29,13 +29,13 @@ AudioService::AudioService()
         sfx[i].setLoopCount(1);
     }
 
-    sfx[0].setSource(QUrl::fromLocalFile(QString("truck.wav")));
-    sfx[1].setSource(QUrl::fromLocalFile(QString("hammerSFX1.wav")));
-    sfx[2].setSource(QUrl::fromLocalFile(QString("hammerSFX2.wav")));
-    sfx[3].setSource(QUrl::fromLocalFile(QString("hammerSFX3.wav")));
-    sfx[4].setSource(QUrl::fromLocalFile(QString("hammerSFX4.wav")));
-    sfx[5].setSource(QUrl::fromLocalFile(QString("hammerSFX5.wav")));
-    sfx[6].setSource(QUrl::fromLocalFile(QString("hammerSFX6.wav")));
+    sfx[0].setSource(QUrl::fromLocalFile(QString(":/audio/truck.wav")));
+    sfx[1].setSource(QUrl::fromLocalFile(QString(":/audio/hammerSFX1.wav")));
+    sfx[2].setSource(QUrl::fromLocalFile(QString(":/audio/hammerSFX2.wav")));
+    sfx[3].setSource(QUrl::fromLocalFile(QString(":/audio/hammerSFX3.wav")));
+    sfx[4].setSource(QUrl::fromLocalFile(QString(":/audio/hammerSFX4.wav")));
+    sfx[5].setSource(QUrl::fromLocalFile(QString(":/audio/hammerSFX5.wav")));
+    sfx[6].setSource(QUrl::fromLocalFile(QString(":/audio/hammerSFX6.wav")));
 }
 
 void AudioService::playMusic()
