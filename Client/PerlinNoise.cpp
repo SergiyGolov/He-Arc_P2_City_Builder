@@ -48,6 +48,8 @@ PerlinNoise::PerlinNoise(unsigned int seed) {
 	p.insert(p.end(), p.begin(), p.end());
 }
 
+
+//http://flafla2.github.io/2014/08/09/perlinnoise.html
  double PerlinNoise::OctavePerlin(double x, double y, double z, int octaves, double persistence) {
     double total = 0;
     double frequency = 1;
