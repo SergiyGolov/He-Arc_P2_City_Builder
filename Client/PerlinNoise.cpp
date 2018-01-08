@@ -48,6 +48,23 @@ PerlinNoise::PerlinNoise(unsigned int seed) {
 	p.insert(p.end(), p.begin(), p.end());
 }
 
+ double PerlinNoise::OctavePerlin(double x, double y, double z, int octaves, double persistence) {
+    double total = 0;
+    double frequency = 1;
+    double amplitude =1;
+    double maxValue = 0.5;  // Used for normalizing result to 0.0 - 1.0
+    for(int i=0;i<octaves;i++) {
+        total += noise(x * frequency, y * frequency, z * frequency) * amplitude;
+
+        maxValue += amplitude;
+
+        amplitude *= persistence;
+        frequency *= 2;
+    }
+
+    return total/maxValue;
+}
+
 double PerlinNoise::noise(double x, double y, double z) {
 	// Find the unit cube that contains the point
 	int X = (int) floor(x) & 255;

@@ -19,7 +19,8 @@ Cell* RandomService::generateMap(int seed, int sizex, int sizey)
         xoff = 0;
         for(int x = 0; x < sizex; x++)
         {
-            double n = p->noise(xoff, yoff, 0);
+            //double n = p->noise(xoff, yoff, 0); //TODO: use octave
+            double n = p->OctavePerlin(xoff,yoff,0,4,0.35);
             int index = x + y * sizex;
 
             if (!(n > 0.70 || n < 0.30))
