@@ -77,6 +77,14 @@ private:
 
     bool checkIfNearRoadY(MapTile* tile);
     bool checkIfNearRoadX(MapTile* tile);
+
+    void moveAddBuilding(MapTile* rect);
+    void moveRemoveBuilding(MapTile *rect);
+    void moveAddRoad(MapTile* rect);
+    void finalAddRoad(MapTile* rect);
+    void finalAddBuilding(MapTile* rect);
+    void finalRemove(MapTile* rect);
+    void cancelAdd(MapTile* rect);
 public slots:
     void blinkRedTileSlot();
 protected:
