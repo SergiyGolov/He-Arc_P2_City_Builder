@@ -30,6 +30,7 @@ public:
     int getHauteurBat(){return hauteurBat;}
     int getMainTileX(){return mainTileX;}
     int getMainTileY(){return mainTileY;}
+    int getWidth(){return rect().size().width();}
 
 
     static void setScene(QGraphicsScene *scene);
@@ -40,10 +41,15 @@ public:
 
     void addPix(QGraphicsPixmapItem *pix);
 
+    void addPixRoad(QGraphicsPixmapItem *pix);
+
+
     void removePix();
 
     bool isOccupied(){return bOccupied;}
     void setOccupied(bool b){bOccupied=b;}
+
+    void setPixOpacity(double op){if(buildImage!=nullptr)buildImage->setOpacity(op);}
 
 
 private:

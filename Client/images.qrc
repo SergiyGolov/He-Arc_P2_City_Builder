@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>ressources/house.png</file>
+        <file>ressources/route.png</file>
+        <file>ressources/routeL.png</file>
+        <file>ressources/routeT.png</file>
+        <file>ressources/routeX.png</file>
     </qresource>
 </RCC>
