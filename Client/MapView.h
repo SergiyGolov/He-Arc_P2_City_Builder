@@ -74,6 +74,9 @@ private:
     int nbTimeTick;
 
     QGraphicsPixmapItem *currentBuild;
+
+    bool checkIfNearRoadY(MapTile* tile);
+    bool checkIfNearRoadX(MapTile* tile);
 public slots:
     void blinkRedTileSlot();
 protected:

@@ -1,12 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>audio/citybuilder_song.wav</file>
-        <file>audio/truck.wav</file>
-        <file>audio/hammerSFX6.wav</file>
-        <file>audio/hammerSFX5.wav</file>
-        <file>audio/hammerSFX4.wav</file>
-        <file>audio/hammerSFX3.wav</file>
-        <file>audio/hammerSFX2.wav</file>
-        <file>audio/hammerSFX1.wav</file>
     </qresource>
 </RCC>
