@@ -431,8 +431,13 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                         int tileDistanceX=0;
                         int tileDistanceY=0;
                         if(prevRect!=nullptr){
+                            //if(roadDir>0){
                             tileDistanceX=(int)qFabs((double)rect->getX() - (double)prevRect->getX());
                             tileDistanceY=(int)qFabs((double)rect->getY() - (double)prevRect->getY());
+                            //                            }else{
+                            //                                tileDistanceX=(int)qFabs((double)rect->getX() - (double)prevRect->getX()+1);
+                            //                                tileDistanceY=(int)qFabs((double)rect->getY() - (double)prevRect->getY()+1);
+                            //                            }
 
                         }
                         int multDirection=1;
@@ -443,7 +448,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 
                         if(tileDistanceX > 1 && (int)qFabs(roadDir)==1){ //if the mouse "jumped" more than one tile in X
 
-                            for(int i=0;i<tileDistanceX;i++){
+                            for(int i=0;i<tileDistanceX+1;i++){
                                 if(!tiles[prevRect->getX()+i*multDirection][prevRect->getY()]->isOccupied()){
                                     tiles[prevRect->getX()+i*multDirection][prevRect->getY()]->setBrush(QBrush(Qt::darkGray));
 
@@ -452,23 +457,23 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                             }
                         }else if(tileDistanceY > 1 && (int)qFabs(roadDir)==2){ //same thing but in y
 
-                            for(int i=0;i<tileDistanceY;i++){
+                            for(int i=0;i<tileDistanceY+1;i++){
                                 if(!tiles[prevRect->getX()][prevRect->getY()+i*multDirection]->isOccupied()){
                                     tiles[prevRect->getX()][prevRect->getY()+i*multDirection]->setBrush(QBrush(Qt::darkGray));
 
                                     tempRoadList->append(tiles[prevRect->getX()][prevRect->getY()+i*multDirection]);
                                 }
                             }
-                        }else{
-                            if(!rect->isOccupied()){
-                                tempRoadList->append(rect);
-                                rect->setBrush(QBrush(Qt::darkGray));
+                        }else if(!rect->isOccupied()){
+                            tempRoadList->append(rect);
+                            rect->setBrush(QBrush(Qt::darkGray));
 
-                            }
+
                         }
-                        if(prevRect!=rect)
-                            prevRect=rect;
+
+
                     }
+                    prevRect=rect;
                 }
             }
         }
@@ -556,67 +561,72 @@ void MapView::mousePressEvent(QMouseEvent *event)
 
                     int dir=(int)qFabs(roadDir);
                     //if(roadDir==-1 || roadDir==-2)std::reverse(tempRoadList->begin(), tempRoadList->end());
+                    int lastX=-1;
+                    int lastY=-1;
                     foreach(MapTile* tile, *tempRoadList){
+                        if(tile->getX()!=lastX && dir==1 || tile->getY()!=lastY && dir==2){
+                            tile->setOccupied(true);
+                            tile->setBId(0);
 
-                        tile->setOccupied(true);
-                        tile->setBId(0);
+                            tile->setMainTile(roadStartX,roadStartY);
+                            if(roadDir==1){
 
-                        tile->setMainTile(roadStartX,roadStartY);
-                        if(roadDir==1){
+                                tile->setLargeurBat(rect->getX()-roadStartX+1);
+                                tile->setHauteurBat(1);
 
-                            tile->setLargeurBat(rect->getX()-roadStartX+1);
-                            tile->setHauteurBat(1);
+                            }else if(roadDir==-1){
 
-                        }else if(roadDir==-1){
+                                tile->setLargeurBat(roadStartX-rect->getX()+1);
+                                tile->setHauteurBat(1);
+                                tile->setMainTile(rect->getX(),rect->getY());
+                                rect->setMainTile(rect->getX(),rect->getY());
+                            }else if(roadDir==2){
 
-                            tile->setLargeurBat(roadStartX-rect->getX()+1);
-                            tile->setHauteurBat(1);
-                            tile->setMainTile(rect->getX(),rect->getY());
-                            rect->setMainTile(rect->getX(),rect->getY());
-                        }else if(roadDir==2){
+                                tile->setLargeurBat(1);
+                                tile->setHauteurBat(rect->getY()-roadStartY+1);
 
-                            tile->setLargeurBat(1);
-                            tile->setHauteurBat(rect->getY()-roadStartY+1);
+                            }else if(roadDir==-2){
 
-                        }else if(roadDir==-2){
+                                tile->setLargeurBat(1);
+                                tile->setHauteurBat(roadStartY-rect->getY()+1);
+                                tile->setMainTile(rect->getX(),rect->getY());
+                                rect->setMainTile(rect->getX(),rect->getY());
+                            }
 
-                            tile->setLargeurBat(1);
-                            tile->setHauteurBat(roadStartY-rect->getY()+1);
-                            tile->setMainTile(rect->getX(),rect->getY());
-                            rect->setMainTile(rect->getX(),rect->getY());
+
+                            QString pixFilePath=":/ressources/route.png";
+
+
+
+
+
+                            //if((dir==2 && checkIfNearRoadX(tile)) || (dir==1 && checkIfNearRoadY(tile))) pixFilePath=":/ressources/roadCross.png";
+
+
+
+                            QTransform trans;
+
+                            if(dir==1 ){
+                                trans.scale(0.19,0.175);
+
+                            }
+                            else {
+                                trans.scale(0.175,0.19);
+                                trans.rotate(-90);
+                                trans.translate(-5.25*pixelPerTile,0);
+                            }
+                            currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
+
+
+                            currentBuild->setZValue(2);
+                            currentBuild->setTransform(trans);
+                            scene->addItem(currentBuild);
+                            tile->addPixRoad(currentBuild);
+                            currentBuild=nullptr;
+                            tile->setBrush(QBrush(baseColors[tile->getX()][tile->getY()]));
+                            lastX=tile->getX();
+                            lastY=tile->getY();
                         }
-
-
-                        QString pixFilePath=":/ressources/route.png";
-
-
-
-
-
-                        //if((dir==2 && checkIfNearRoadX(tile)) || (dir==1 && checkIfNearRoadY(tile))) pixFilePath=":/ressources/roadCross.png";
-
-
-
-                        QTransform trans;
-
-                        if(dir==1 ){
-                            trans.scale(0.19,0.175);
-
-                        }
-                        else {
-                            trans.scale(0.175,0.19);
-                            trans.rotate(-90);
-                            trans.translate(-5*pixelPerTile,0);
-                        }
-                        currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
-
-
-                        currentBuild->setZValue(2);
-                        currentBuild->setTransform(trans);
-                        scene->addItem(currentBuild);
-                        tile->addPixRoad(currentBuild);
-                        currentBuild=nullptr;
-                        tile->setBrush(QBrush(baseColors[tile->getX()][tile->getY()]));
 
                     }
 
