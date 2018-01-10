@@ -1,4 +1,4 @@
-#include "EffectBuilding.h"
+/*#include "EffectBuilding.h"
 
 /*
 int EffectBuilding::effectBuildingsCount=0;

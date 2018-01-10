@@ -45,8 +45,10 @@ double TickService::updateHappiness()
 
     //Smoothing of the happiness
     happiness = (happiness * 20 + BuildingManagementService::getBuildingManagementService()->getAverageHappiness() * 80) / 100;
+    //Add 'free' 0.2 happiness to control better the smoothing, correspond to the 20%
+    happiness += 0.2;
 
-    //Barriere of happiness
+    //Barriere of happiness by average
     happiness = (happiness * 50 + 100 * 50) / 100;
 
     return happiness;

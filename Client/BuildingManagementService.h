@@ -43,6 +43,8 @@ private:
     BuildingManagementService();
     QVector<Building*>* vectorBuildings;
 
+    static double getHappiness(int uid);
+
     bool bSumPricePerSeconds;
     bool bSumPopulation;
     bool bAverageHappiness;

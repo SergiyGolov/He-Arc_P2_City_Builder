@@ -40,7 +40,7 @@ private:
     int TILE_HEIGHT;
     QList<QPoint>* IGNORED_TILE;
 	
-    bool REQUIREMENTS_TYPE; //True : OR, False : AND
+    bool REQUIREMENTS_TYPE; //False : OR, True : AND
     QSet<int>* REQUIREMENTS;
     double SUM_REQUIREMENTS;
 	

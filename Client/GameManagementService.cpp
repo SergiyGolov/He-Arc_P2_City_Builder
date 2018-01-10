@@ -20,7 +20,7 @@ GameManagementService* GameManagementService::getGameManagementService()
 
 GameManagementService::GameManagementService()
 {
-    this->money=1000;
+    this->money=100000;
     this->happiness=100;
     TickService::getTickService();
     AudioService::getAudioService()->playMusic();

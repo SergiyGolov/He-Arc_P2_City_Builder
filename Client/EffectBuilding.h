@@ -1,9 +1,11 @@
+/*
+ * Vessel of an old conception
 #ifndef EFFECTBUILDING_H
 #define EFFECTBUILDING_H
 #include "Building.h"
 
 //Last updated : 21.11.2017 by DP
-/*
+
 class EffectBuilding : public Building
 {
 private:
@@ -33,5 +35,6 @@ public:
     void setEffectRadius(int value){this->effectRadius = value;}
     /
 };
-*/
+
 #endif // EFFECTBUILDING_H
+*/

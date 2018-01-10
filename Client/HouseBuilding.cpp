@@ -1,4 +1,4 @@
-#include "HouseBuilding.h"
+/*#include "HouseBuilding.h"
 /*
 int HouseBuilding::globalPopulation=0;
 int HouseBuilding::globalPopulationMax=0;

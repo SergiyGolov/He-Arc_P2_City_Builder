@@ -1,4 +1,6 @@
-#ifndef HOUSEBUILDING_H
+/*
+ * Vessel of an old conception
+ * #ifndef HOUSEBUILDING_H
 #define HOUSEBUILDING_H
 #include "Building.h"
 
@@ -35,7 +37,8 @@ public:
     /*
     void setPopulation(int value){this->population=value;}
     void setPopulationMax(int value){this->populationMax=value;}
-    */
+
 };
 
 #endif // HOUSEBUILDING_H
+*/

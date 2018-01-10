@@ -27,10 +27,10 @@ BuildingManagementService::BuildingManagementService()
 //methods
 void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
 {
-    if(isBuildingAddable(id))
+    bool requirements = isBuildingAddable(id);
+    qDebug() << "id:" << id << "requirement_status:" << requirements << "RequirementsWeight:" << ConstantBuilding::get(id).getRequirementsWeight() << "\n";
+    if(requirements)
     {
-        //qDebug() << "Adding building " << id << "(" << x << ";" << y << ")";
-
         GameManagementService::getGameManagementService()->setMoney(GameManagementService::getGameManagementService()->getMoney()-(int)ConstantBuilding::get(id).getPrice());
         GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
         vectorBuildings->append(new Building(id, x, y, angle));
@@ -45,8 +45,6 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
 
 void BuildingManagementService::removeBuilding(int uid)
 {
-    //qDebug() << "Removing building " << uid;
-
     int idInVector=getVectorId(uid,vectorBuildings);
     if(idInVector!=-1)
     {
@@ -67,61 +65,56 @@ void BuildingManagementService::removeBuilding(int uid)
 
 bool BuildingManagementService::isBuildingAddable(int id) //TODO : we have to test it, it should be ok and it's possible to optimise it but this is fairly good
 {
-    //TODO : Check if enough money !!
+    //Check money
+    int price = ConstantBuilding::get(id).getPrice();
+    if(price > GameManagementService::getGameManagementService()->getMoney())
+        return false;
 
     //The constantbuilding construtor array isnt set to handle the requirements
     int sumRequirements = ConstantBuilding::get(id).getSumRequirements();
-
-    if(sumRequirements == 0)
+    if(sumRequirements <= 0)
         return true;
 
     bool requirementsType = ConstantBuilding::get(id).getRequirementsType();
     QSet<int>* setRequirements = ConstantBuilding::get(id).getRequirements();
-    //Copy of the list for the boolean AND
-    QSet<int>* setRequirementsFlags = new QSet<int>(); //I dont really like doing this but there is no copy constructor, so before every return i have to delete the new set
 
-    foreach (const int &i, *setRequirements) //Fill it with the copy of setRequirements
+    bool* tabSetRequirements = new bool[setRequirements->size()];
+    for(int i = 0; i < setRequirements->size(); i++)
     {
-        setRequirementsFlags->insert(i);
+        tabSetRequirements[i] = false;
     }
 
+    int k = 0;
     foreach (const int &i, *setRequirements)
     {
         for(int j = 0; j < vectorBuildings->size(); j++)
         {
             if(i == vectorBuildings->at(j)->getId())
             {
-                sumRequirements -= ConstantBuilding::get(id).getRequirementsWeight();
-
-                if(!requirementsType)
+                tabSetRequirements[k] = true;
+                sumRequirements -= ConstantBuilding::get(vectorBuildings->at(j)->getId()).getRequirementsWeight();
+                if(sumRequirements <= 0 && !requirementsType) //OR
                 {
-                    //AND
-                    setRequirementsFlags->remove(i);
-                }
-            }
-        }
-
-        if(sumRequirements <= 0)
-        {
-            if(!requirementsType)
-            {
-                //AND
-                if(setRequirementsFlags->empty())
-                {
-                    delete setRequirementsFlags;
                     return true;
                 }
             }
-            else
-            {
-                //OR
-                delete setRequirementsFlags;
-                return true;
-            }
         }
+        k++;
     }
-    delete setRequirementsFlags;
-    return false;
+
+    if(!requirementsType) //OR
+    {
+        return false;
+    }
+    else //AND
+    {
+        for(int i = 0; i < setRequirements->size(); i++)
+        {
+            if(tabSetRequirements[i] == false)
+                return false;
+        }
+        return true;
+    }
 }
 
 double BuildingManagementService::getSumPricePerSeconds()
@@ -164,13 +157,18 @@ QJsonObject BuildingManagementService::getJsonBuildings()
     return obj;
 }
 
+double BuildingManagementService::getHappiness(int uid)
+{
+
+}
+
 double BuildingManagementService::getAverageHappiness()
 {
     if(bAverageHappiness)
     {
-        averageHappiness = 0.0;
+        double averageHappiness = 0.0;
         for(int i = 0; i < vectorBuildings->size(); i++)
-            averageHappiness += vectorBuildings->at(i)->getHappiness();
+            averageHappiness += getHappiness(vectorBuildings->at(i)->getUid());
 
         if(vectorBuildings->size() != 0)
             averageHappiness /= vectorBuildings->size();
