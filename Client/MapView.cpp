@@ -740,8 +740,9 @@ void MapView::finalAddRoad(MapTile* rect){
                         trans.translate(-5.4*pixelPerTile,0);
                         angle=1;
                     }
-
-                    BuildingManagementService::getBuildingManagementService()->addBuilding(pickerBId,tile->getX(),tile->getY(), angle);
+                    buildingCount++;
+                    tile->setUniqueBId(buildingCount);
+                    BuildingManagementService::getBuildingManagementService()->addBuilding(0,tile->getX(),tile->getY(), angle);
                     currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
 
 
