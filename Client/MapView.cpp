@@ -1055,8 +1055,8 @@ MapTile* MapView::getOnlyRoadNeighbour(MapTile* tile){
         if(tile->getMainTileX()+2<nbTiles){
             int countRoadOnPath=0;
             for(int i=0;i<4;i++){
-                if(tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()]->getBId()==0)countRoadOnPath++;
-                if(tile->getY()-1>=0 && tile->getY()+1<nbTiles && (tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()-1]->getBId()==0 || tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()+1]->getBId()==0))countRoadOnPath--;
+                if(tile->getMainTileX()+tile->getBuildingWidth()-2+i<nbTiles&&tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()]->getBId()==0)countRoadOnPath++;
+                if(tile->getMainTileX()+tile->getBuildingWidth()-2+i>=0 && tile->getMainTileX()+tile->getBuildingWidth()-2+i<nbTiles && (tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()-1]->getBId()==0 || tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()+1]->getBId()==0))countRoadOnPath--;
             }
             if(countRoadOnPath==4)return nullptr;
         }
