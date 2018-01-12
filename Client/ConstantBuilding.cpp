@@ -53,6 +53,19 @@ int ConstantBuilding::getNbBuildings()
     return nbBuildings;
 }
 
+bool ConstantBuilding::isHouse(int id)
+{
+    return
+            id == bID::HouseLowDensityPoorClass ||
+            id == bID::HouseLowDensityMiddleClass ||
+            id == bID::HouseLowDensityWealthyClass ||
+            id == bID::HouseAverageDensityPoorClass ||
+            id == bID::HouseAverageDensityMiddleClass ||
+            id == bID::HouseAverageDensityWealthyClass ||
+            id == bID::HouseHighDensityPoorClass ||
+            id == bID::HouseHighDensityMiddleClass ||
+            id == bID::HouseHighDensityWealthyClass;
+}
 
 int ConstantBuilding::getDefaultPopulationFromHouseType(int i){
 

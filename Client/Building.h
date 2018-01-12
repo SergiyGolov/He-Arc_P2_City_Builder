@@ -9,7 +9,7 @@
  *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
  *                       - Petroff Damian <damian.petroff@he-arc.ch>
  * ************************************ File spec ************************************
- * Workpackage manager : Margueron Raphael
+ * Workpackage manager : Damian Petroff
  * Description         :
  * This class is used to create a single Buidling with his properties and is mainly
  * mainly used in the BuildingManagmentService

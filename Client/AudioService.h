@@ -1,3 +1,20 @@
+/*
+ * ************************************* Project *************************************
+ * School              : Haute Ecole Arc
+ * Module              : Projet P2
+ * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
+ *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
+ * Group               : CityBuilder
+ * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
+ *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
+ *                       - Petroff Damian <damian.petroff@he-arc.ch>
+ * ************************************ File spec ************************************
+ * Workpackage manager : Margueron Raphael
+ * Description         :
+ * This class handle the audio part -> the audio mixer. It can be access as a
+ * singleton object. There is an enume that handle the sfx array
+ * ***********************************************************************************
+ */
 #pragma once
 
 class QSound;

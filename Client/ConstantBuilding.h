@@ -88,6 +88,7 @@ public:
     double          getSumRequirements()    {return SUM_REQUIREMENTS;}
 
 //methods statics
+    static bool isHouse(int id);
     static void generate();
     static void printTab();
 
