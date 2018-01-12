@@ -49,6 +49,7 @@ public:
     int getX(){return x;}
     int getY(){return y;}
     int getPopulation(){return population;}
+    int setAngle(int newAngle){this->angle=newAngle;}
 };
 
 #endif // BUILDING_H

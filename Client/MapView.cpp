@@ -727,18 +727,21 @@ void MapView::finalAddRoad(MapTile* rect){
 
 
                     QTransform trans;
-
+                    int angle;
                     if(dir==1 ){
                         //trans.scale(0.19,0.175);
                         trans.scale(0.19,0.19);
-
+                        angle=0;
                     }
                     else {
                         //trans.scale(0.175,0.19);
                         trans.scale(0.19,0.19);
                         trans.rotate(-90);
                         trans.translate(-5.4*pixelPerTile,0);
+                        angle=1;
                     }
+
+                    BuildingManagementService::getBuildingManagementService()->addBuilding(pickerBId,tile->getX(),tile->getY(), angle);
                     currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
 
 
@@ -765,7 +768,7 @@ void MapView::finalAddRoad(MapTile* rect){
 
             tempRoadList->clear();
 
-    }else{
+        }else{
 
             blinkTileRed(rect);
             cancelAdd(rect);
@@ -1041,7 +1044,7 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
 
     getNeighbours(tileIn);
 
-     foreach(MapTile* tile,*neighbourList){
+    foreach(MapTile* tile,*neighbourList){
 
         int neighbourCount=countNeighbourRoads(tile);
 
@@ -1056,12 +1059,14 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
         //"T"
         case 3:
             pixPath=":/ressources/routeT.png";
+             BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),3);
 
             break;
             //crossroad
         case 4:
 
             pixPath=":/ressources/routeX.png";
+            BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),2);
 
             break;
         }
@@ -1074,17 +1079,21 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
                 trans.rotate(-90);
                 trans.translate(-5.35*pixelPerTile,0);
                 pixPath=":/ressources/routeL.png";
+                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),7);
             }else if(tile->getX()+1<nbTiles && tile->getY()-1>=0 && tiles[tile->getX()+1][tile->getY()]->getBId()==0 && tiles[tile->getX()][tile->getY()-1]->getBId()==0){
                 trans.rotate(90);
                 trans.translate(0,-5.35*pixelPerTile);
                 pixPath=":/ressources/routeL.png";
+                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),8);
             }else if(tile->getX()+1<nbTiles && tile->getY()+1<nbTiles && tiles[tile->getX()+1][tile->getY()]->getBId()==0 && tiles[tile->getX()][tile->getY()+1]->getBId()==0){
                 trans.rotate(180);
                 trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
                 pixPath=":/ressources/routeL.png";
+                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),9);
             }else if(tile->getX()-1>=0 && tile->getY()-1>=0 && tiles[tile->getX()-1][tile->getY()]->getBId()==0 && tiles[tile->getX()][tile->getY()-1]->getBId()==0){
                 pixPath=":/ressources/routeL.png";
                 // trans.translate(-pixelPerTile/7,0);
+                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),10);
             }
             break;
 
@@ -1092,14 +1101,17 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
             if(tile->getX()-1 >=0 && tile->getY()-1>=0 && tile->getX()+1<nbTiles&&tiles[tile->getX()-1][tile->getY()]->getBId()==0 && tiles[tile->getX()+1][tile->getY()]->getBId()==0 && tiles[tile->getX()][tile->getY()-1]->getBId()==0){
                 trans.rotate(180);
                 trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),4);
             }
             if(tile->getX()+1 <nbTiles && tile->getY()-1>=0 && tile->getY()+1<nbTiles&&tiles[tile->getX()+1][tile->getY()]->getBId()==0 && tiles[tile->getX()][tile->getY()+1]->getBId()==0 && tiles[tile->getX()][tile->getY()-1]->getBId()==0){
                 trans.rotate(-90);
                 trans.translate(-5.35*pixelPerTile,0);
+                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),5);
             }
             if(tile->getX()-1>=0 && tile->getY()-1>=0 && tile->getY()+1<nbTiles&&tiles[tile->getX()-1][tile->getY()]->getBId()==0 && tiles[tile->getX()][tile->getY()+1]->getBId()==0 && tiles[tile->getX()][tile->getY()-1]->getBId()==0){
                 trans.rotate(90);
                 trans.translate(0,-5.35*pixelPerTile);
+                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),6);
             }
             break;
         }
@@ -1162,6 +1174,6 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
             tile->addPixRoad(roadPix);
         }
 
-}
+    }
 }
 
