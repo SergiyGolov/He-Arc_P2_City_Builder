@@ -3,6 +3,7 @@
 #include "GuiView.h"
 #include "GameManagementService.h"
 #include "BuildingManagementService.h"
+#include "OursMaths.h"
 
 TickService* TickService::tickService = nullptr;
 
@@ -43,14 +44,29 @@ double TickService::updateHappiness()
 {
     double happiness = GameManagementService::getGameManagementService()->getHappiness();
 
+
     //Smoothing of the happiness
     happiness = (happiness * 20 + BuildingManagementService::getBuildingManagementService()->getAverageHappiness() * 80) / 100;
-    //Add 'free' 0.2 happiness to control better the smoothing, correspond to the 20%
-    happiness += 0.2;
+
+    double taxesratio = GameManagementService::getGameManagementService()->getTaxes();
+
+    double taxelimit = 8;
+
+    taxesratio -= taxelimit; //Taxe limite
+    taxesratio *= -1; //Inverse the ratio
+    if(taxesratio >= 0)
+    {
+        taxesratio = OursMaths::map(taxesratio, 0, taxelimit, 100, 200);
+    }
+    else
+    {
+        taxesratio = OursMaths::map(taxesratio, 0, -taxelimit, 100, 0);
+    }
+
+    if(happiness != 0)
+        happiness *= taxesratio / 100.0;
 
     //Barriere of happiness by average
-    happiness = (happiness * 50 + 100 * 50) / 100;
-
     return happiness;
 }
 
@@ -66,10 +82,7 @@ double TickService::updateMoney()
     diff -= BuildingManagementService::getBuildingManagementService()->getSumPricePerSeconds();
 
     //Taxes fonds
-    diff += BuildingManagementService::getBuildingManagementService()->getSumPopulation()*1.0 * 1.5 * GameManagementService::getGameManagementService()->getTaxes();
-
-    //Happiness scale
-    diff *= newHappiness / 100.0;
+    diff += BuildingManagementService::getBuildingManagementService()->getSumPopulation()*(newHappiness/100.0) * 1.5 * GameManagementService::getGameManagementService()->getTaxes();
 
     money += diff;
 

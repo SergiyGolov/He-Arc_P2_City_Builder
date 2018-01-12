@@ -11,12 +11,7 @@ double OursMaths::roundExcel(double val, int dec)
 }
 
 
-double OursMaths::map(double value, double start1, double stop1, double start2, double stop2)
+double OursMaths::map(double n, double start1, double stop1, double start2, double stop2)
 {
-    double gap1 = stop1 - start1;
-    double gap2 = stop2 - start2;
-
-    double ratio = gap2 / gap1;
-
-    return value * ratio;
+    return ((n-start1)/(stop1-start1))*(stop2-start2)+start2;
 }

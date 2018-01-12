@@ -157,21 +157,52 @@ QJsonObject BuildingManagementService::getJsonBuildings()
     return obj;
 }
 
-double BuildingManagementService::getHappiness(int uid)
+double BuildingManagementService::getHappiness(Building* b)
 {
-
+    double sumHappiness = 0;
+    for(int i = 0; i < vectorBuildings->size(); i++)
+    {
+        Building* bi = vectorBuildings->at(i);
+        if(b->getUid() != bi->getUid())
+        {
+            ConstantBuilding c = ConstantBuilding::get(bi->getId());
+            int dx = b->getX() - bi->getX();
+            int dy = b->getY() - bi->getY();
+            int d = sqrt(dx*dx+dy*dy);
+            if(d < c.getRadius())
+            {
+                double ratioProximity = OursMaths::map(d ,0, c.getRadius(), 1, 0);
+                sumHappiness += ConstantBuilding::get(bi->getId()).getEfficiancy() * ratioProximity;
+            }
+        }
+    }
+    if(sumHappiness > 200)
+        sumHappiness = 200;
+    qDebug() << "House calculated";
+    return sumHappiness;
 }
 
 double BuildingManagementService::getAverageHappiness()
 {
     if(bAverageHappiness)
     {
-        double averageHappiness = 0.0;
+        qDebug() << "AverageHappiness Called";
+        int houseCount = 0;
+        double averageHappiness_loc = 0.0;
         for(int i = 0; i < vectorBuildings->size(); i++)
-            averageHappiness += getHappiness(vectorBuildings->at(i)->getUid());
-
-        if(vectorBuildings->size() != 0)
-            averageHappiness /= vectorBuildings->size();
+        {
+            Building* bi = vectorBuildings->at(i);
+            if(ConstantBuilding::isHouse(bi->getId()))
+            {
+                qDebug() << "House detected";
+                houseCount++;
+                averageHappiness_loc += getHappiness(bi);
+            }
+        }
+        if(houseCount != 0)
+            averageHappiness_loc /= houseCount;
+        qDebug() << "AverageHappiness calculated";
+        averageHappiness = averageHappiness_loc;
         bAverageHappiness = !bAverageHappiness;
     }
     return averageHappiness;
