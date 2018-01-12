@@ -1075,7 +1075,7 @@ MapTile* MapView::getOnlyRoadNeighbour(MapTile* tile){
             int countRoadOnPath=0;
             for(int i=0;i<4;i++){
                 if(tiles[tile->getX()][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0)countRoadOnPath++;
-                if(tile->getY()-1>=0 && tile->getY()+1<nbTiles && (tiles[tile->getX()-1][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0 || tiles[tile->getY()+1][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0))countRoadOnPath--;
+                if(tile->getX()-1>=0 &&tile->getY()-1>=0 && tile->getY()+1<nbTiles && (tiles[tile->getX()-1][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0 || tiles[tile->getY()+1][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0))countRoadOnPath--;
             }
             if(countRoadOnPath==4)return nullptr;
         }
