@@ -88,9 +88,9 @@ private:
     void cancelAdd(MapTile* rect);
 
     int countNeighbourRoads(MapTile* tile);
-    bool checkIfNeighbourRoadsOk(QList<MapTile*> *tempRoadList);
+
     void updateNeighbourRoad(MapTile* tile);
-    MapTile* getOnlyRoadNeighbour(MapTile* tile);
+
 
    void getNeighbours(MapTile* tile);
     QList<MapTile*> *neighbourList;

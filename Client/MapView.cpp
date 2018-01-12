@@ -665,7 +665,7 @@ void MapView::finalAddRoad(MapTile* rect){
     int dir=(int)qFabs(roadDir);
 
     if(rect->getBId()!=0){
-        if((checkIfNeighbourRoadsOk(tempRoadList) &&(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX))){
+        if(((rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX))){
 
 
 
@@ -1024,98 +1024,7 @@ int MapView::countNeighbourRoads(MapTile* tile){
     return n;
 }
 
-bool  MapView::checkIfNeighbourRoadsOk(QList<MapTile*> *tempRoadList){
-    return true;
 
-    bool bLastRoad=false;
-    bool bThisRoad=false;
-
-    MapTile* lastTile=tempRoadList->first();
-    foreach(MapTile* tile, *tempRoadList){
-        //if(countNeighbourRoads(tile)>1)return false;
-        bThisRoad=checkIfNearRoad(tile);
-
-        if(bThisRoad && bLastRoad &&  ((int)qFabs(tile->getX()-lastTile->getX())==0 || (int)qFabs(tile->getY()-lastTile->getY())==0))return false;
-        bLastRoad=bThisRoad;
-        lastTile=tile;
-    }
-    return true;
-}
-
-MapTile* MapView::getOnlyRoadNeighbour(MapTile* tile){
-    int dir=(int)qFabs(roadDir);
-
-
-
-    if(dir==1){
-        if(tile->getMainTileX()-2>=0){
-            int countRoadOnPath=0;
-            for(int i=0;i<4;i++){
-                if(tiles[tile->getMainTileX()+1-i][tile->getY()]->getBId()==0)countRoadOnPath++;
-                if(tile->getY()-1>=0 && tile->getY()+1<nbTiles && (tiles[tile->getMainTileX()+1-i][tile->getY()-1]->getBId()==0 || tiles[tile->getMainTileX()+1-i][tile->getY()+1]->getBId()==0))countRoadOnPath--;
-            }
-            if(countRoadOnPath==4)return nullptr;
-        }
-        if(tile->getMainTileX()+2<nbTiles){
-            int countRoadOnPath=0;
-            for(int i=0;i<4;i++){
-                if(tile->getMainTileX()+tile->getBuildingWidth()-2+i<nbTiles&&tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()]->getBId()==0)countRoadOnPath++;
-                if(tile->getMainTileX()+tile->getBuildingWidth()-2+i>=0 && tile->getMainTileX()+tile->getBuildingWidth()-2+i<nbTiles && (tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()-1]->getBId()==0 || tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()+1]->getBId()==0))countRoadOnPath--;
-            }
-            if(countRoadOnPath==4)return nullptr;
-        }
-    }
-
-    if(dir==2){
-        if(tile->getMainTileY()-2>=0){
-            int countRoadOnPath=0;
-            for(int i=0;i<4;i++){
-                if(tiles[tile->getX()][tile->getMainTileY()+1-i]->getBId()==0)countRoadOnPath++;
-                if(tile->getX()-1>=0 && tile->getX()+1<nbTiles && (tiles[tile->getX()-1][tile->getMainTileY()+1-i]->getBId()==0 || tiles[tile->getX()+1][tile->getMainTileY()+1-i]->getBId()==0))countRoadOnPath--;
-            }
-            if(countRoadOnPath==4)return nullptr;
-        }
-        if(tile->getMainTileY()+2<nbTiles){
-            int countRoadOnPath=0;
-            for(int i=0;i<4;i++){
-                if(tiles[tile->getX()][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0)countRoadOnPath++;
-                if(tile->getX()-1>=0 &&tile->getY()-1>=0 && tile->getY()+1<nbTiles && (tiles[tile->getX()-1][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0 || tiles[tile->getY()+1][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0))countRoadOnPath--;
-            }
-            if(countRoadOnPath==4)return nullptr;
-        }
-    }
-
-
-    MapTile* tempNeighbour=nullptr;
-
-    if(tile->getX()-1>=0)tempNeighbour=tiles[tile->getX()-1][tile->getY()];
-
-
-    if(tempNeighbour!=nullptr && tempNeighbour->getBId()==0 && tempRoadList->indexOf(tempNeighbour)==-1){
-        if(dir==1)return tempNeighbour;
-        else return tile;
-    }
-    if(tile->getX()+1<nbTiles)tempNeighbour=tiles[tile->getX()+1][tile->getY()];
-
-    if(tempNeighbour!=nullptr  && tempNeighbour->getBId()==0 && tempRoadList->indexOf(tempNeighbour)==-1){
-        if(dir==1)return tempNeighbour;
-        else return tile;
-    }
-    if(tile->getY()-1>=0)tempNeighbour=tiles[tile->getX()][tile->getY()-1];
-
-    if(tempNeighbour!=nullptr  && tempNeighbour->getBId()==0 && tempRoadList->indexOf(tempNeighbour)==-1){
-        if(dir==2)return tempNeighbour;
-        else return tile;
-    }
-    if(tile->getY()+1<nbTiles)tempNeighbour=tiles[tile->getX()][tile->getY()+1];
-
-    if(tempNeighbour!=nullptr && tempNeighbour->getBId()==0 && tempRoadList->indexOf(tempNeighbour)==-1){
-        if(dir==2)return tempNeighbour;
-        else return tile;
-    }
-
-    return nullptr;
-}
 
 void MapView::getNeighbours(MapTile* tile){
     neighbourList->clear();
