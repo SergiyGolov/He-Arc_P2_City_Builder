@@ -2,7 +2,9 @@
 #include "OursMaths.h"
 #include "PerlinNoise.h"
 
-Cell* RandomService::generateMap(int seed, int sizex, int sizey)
+int RandomService::seed = 0;
+
+Cell* RandomService::generateMap(int sizex, int sizey)
 {
     Cell* cells = new Cell[sizex * sizey];
 
@@ -52,7 +54,7 @@ Cell* RandomService::generateMap(int seed, int sizex, int sizey)
     return cells;
 }
 
- Cell* RandomService::generateSky(int seed, int sizex, int sizey){
+ Cell* RandomService::generateSky(int sizex, int sizey){
     Cell* cells = new Cell[sizex * sizey];
 
     const double dx = 0.01;

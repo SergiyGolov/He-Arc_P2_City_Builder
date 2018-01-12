@@ -1,11 +1,7 @@
-#include "GameManagementService.h"
+#include "services.h"
 #include "ConstantBuilding.h"
-#include "TickService.h"
 #include "TopView.h"
-#include <QDebug>
 #include "GuiView.h"
-#include "LoadSaveService.h"
-#include "AudioService.h"
 
 #include <QSound>
 
@@ -20,8 +16,9 @@ GameManagementService* GameManagementService::getGameManagementService()
 
 GameManagementService::GameManagementService()
 {
-    this->money=100000;
-    this->happiness=100;
+    saveCount = 0;
+    money=100000;
+    happiness=100;
     TickService::getTickService();
     AudioService::getAudioService()->playMusic();
 }

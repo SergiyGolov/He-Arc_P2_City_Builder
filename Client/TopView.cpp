@@ -1,18 +1,13 @@
 #include "TopView.h"
 
-#include "TickService.h"
-#include "GraphicService.h"
-#include "GameManagementService.h"
 #include "Services.h"
-#include "AudioService.h"
+#include "ClickableLabel.h"
 
+#include <QTime>
 #include <QGraphicsScene>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QLabel>
-#include <QPushButton>
-#include <QDoubleSpinBox>
-#include <QSlider>
+#include <QtWidgets>
 
 TopView* TopView::topViewInstance=nullptr;
 
@@ -38,6 +33,21 @@ TopView::TopView(QWidget *parent) : QGraphicsView(parent)
     screenHeight=QApplication::desktop()->screenGeometry().height();
 
     this->setGeometry(0,0,screenWidth,50);
+
+    time = new QLabel("00:00 - 00.00.0000", this);
+    time->setFixedSize(200,15);
+    time->move(10,0);
+
+    cityNameLabel = new ClickableLabel("ClickHereToEditTheCityName", this);
+    cityNameLabel->setFixedSize(200,15);
+    cityNameLabel->move((width() - cityNameLabel->width())/2,20);
+    cityNameLabel->setAlignment(Qt::AlignCenter);
+
+    cityName = new QLineEdit("ClickHereToEditTheCityName", this);
+    cityName->setFixedSize(200,15);
+    cityName->move((width() - cityName->width())/2,20);
+    cityName->setAlignment(Qt::AlignCenter);
+    cityName->setVisible(false);
 
     money = new QLabel("Money: 1000",this);
     money->setFixedSize(150,15);
@@ -102,10 +112,26 @@ TopView::TopView(QWidget *parent) : QGraphicsView(parent)
     quit=new QPushButton("&Quit game",this);
     quit->move(screenWidth-130,20);
 
+    seed = new QLabel("Seed : ", this);
+    seed->setFixedWidth(200);
+    seed->move(screenWidth - seed->width(), 0);
+
     QObject::connect(taxes, SIGNAL(valueChanged(double)), this, SLOT(taxesChanged(void)));
     QObject::connect(quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
     QObject::connect(save, &QPushButton::clicked, LoadSaveService::saveGameUI);
     QObject::connect(load, &QPushButton::clicked, LoadSaveService::loadGameUI);
+
+    QObject::connect(cityName, &QLineEdit::editingFinished, [=]() {
+        GameManagementService::getGameManagementService()->setCityName(cityName->text());
+        cityNameLabel->setText(cityName->text());
+        cityName->setVisible(false);
+        cityNameLabel->setVisible(true);
+    });
+
+    QObject::connect(cityNameLabel, &ClickableLabel::clicked, [=]() {
+        cityName->setVisible(true);
+        cityNameLabel->setVisible(false);
+    });
 
     QObject::connect(master, &QSlider::valueChanged, this, &TopView::volumeMasterChanged);
     QObject::connect(music, &QSlider::valueChanged, this, &TopView::volumeMusicChanged);
@@ -144,6 +170,11 @@ void TopView::setPopulation(int population)
     this->population->setText(QString("Population: %1").arg(population));
 }
 
+void TopView::setTime(QDateTime* time)
+{
+    this->time->setText(time->toString(QString("hh:mm %1 dd.MM.yyyy").arg("on")));
+}
+
 void TopView::setPopulationDelta(int delta)
 {
     this->populationDelta->setText(deltaFormat((double)delta));
@@ -164,9 +195,11 @@ void TopView::update()
     setMoney(GameManagementService::getGameManagementService()->getMoney());
     setHappiness(GameManagementService::getGameManagementService()->getHappiness());
     setPopulation(GameManagementService::getGameManagementService()->getTotalPopulation());
+    setTime(TickService::getTickService()->getGameTime());
     setPopulationDelta(TickService::getTickService()->getPopulationDelta());
     setHappinessDelta(TickService::getTickService()->getHappinessDelta());
     setMoneyDelta(TickService::getTickService()->getMoneyDelta());
+    seed->setText(QString("Seed : %1").arg(RandomService::getSeed()));
 }
 
 QString TopView::deltaFormat(double delta)

@@ -7,6 +7,8 @@ class QSlider;
 class QPushButton;
 class QDoubleSpinBox;
 class QGraphicsScene;
+class QLineEdit;
+class ClickableLabel;
 
 class TopView: public QGraphicsView
 {
@@ -24,6 +26,10 @@ private:
 
     int screenWidth;
     int screenHeight;
+
+    QLabel *time;
+    ClickableLabel *cityNameLabel;
+    QLineEdit *cityName;
 
     QLabel *money;
     QLabel *moneyDelta;
@@ -45,7 +51,11 @@ private:
     QSlider *music;
     QSlider *sfx;
 
+    QLabel *seed;
+
     QString deltaFormat(double delta);
+
+    void setTime(QDateTime* time);
 
     void setMoney(int money);
     void setHappiness(int happiness);

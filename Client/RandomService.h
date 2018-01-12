@@ -1,6 +1,6 @@
 #pragma once
 
-#include "QColor"
+#include <QColor>
 
 struct Cell
 {
@@ -11,7 +11,11 @@ struct Cell
 
 class RandomService
 {
+private:
+    static int seed;
 public:
-    static Cell* generateMap(int seed, int sizex, int sizey);
-     static Cell* generateSky(int seed, int sizex, int sizey);
+    static Cell* generateMap(int sizex, int sizey);
+    static Cell* generateSky(int sizex, int sizey);
+    static int getSeed() {return seed;}
+    static int setSeed(int newSeed) {RandomService::seed = newSeed;}
 };

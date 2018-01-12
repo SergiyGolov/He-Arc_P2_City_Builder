@@ -1,3 +1,5 @@
+#include <QDateTime>
+
 #include "TickService.h"
 #include "TopView.h"
 #include "GuiView.h"
@@ -17,12 +19,21 @@ TickService* TickService::getTickService()
 //constructors
 TickService::TickService()
 {
+    QDateTime dt = QDateTime::currentDateTime();
+    QTime t = dt.time();
+    t.setHMS(t.hour(), 0, 0);
+    dt.setTime(t);
+
+    startDateTime = new QDateTime(QDateTime::currentDateTime());
+    gameDateTime = new QDateTime(dt);
+
     oldPopulation = 0;
     oldHappiness = 100;
     oldMoney = 0;
     newPopulation = 0;
     newHappiness = 100;
     newMoney = 0;
+
     this->start(1000);
 }
 
@@ -66,6 +77,11 @@ double TickService::updateHappiness()
     if(happiness != 0)
         happiness *= taxesratio / 100.0;
 
+    if(happiness > 250)
+        happiness = 250;
+    else if(happiness < 0)
+        happiness = 0;
+
     //Barriere of happiness by average
     return happiness;
 }
@@ -92,6 +108,10 @@ double TickService::updateMoney()
 //methods
 void TickService::timerEvent(QTimerEvent *tevent)
 {
+    gameDateTime->setTime(gameDateTime->time().addSecs(60*60));
+    if(gameDateTime->time().hour() == 0)
+        gameDateTime->setDate(gameDateTime->date().addDays(1));
+
     oldPopulation = newPopulation;
     oldHappiness = newHappiness;
     oldMoney = newMoney;

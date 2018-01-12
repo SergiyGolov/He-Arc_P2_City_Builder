@@ -87,10 +87,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
 
 
     setTransformationAnchor ( QGraphicsView::NoAnchor );
-    srand(time(NULL));
-    int seed = rand() ;
-    //int seed=666;
-    cells = RandomService::generateMap(seed, tileNb, tileNb);
+    cells = RandomService::generateMap(tileNb, tileNb);
 
     for(int i=0;i<tileNb;i++)
     {
