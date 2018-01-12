@@ -1,15 +1,20 @@
 #include "Launcher.h"
 
-Launcher::Launcher(QWidget *parent) : QMainWindow(parent)
+Launcher::Launcher(QWidget *parent) : QWidget(parent)
 {
-    double r = 16.0/9.0;
-    double width = 900;
-    resize((int)width,(int)(width/r));
+    //double r = 16.0/9.0;
+    //double width = 900;
+    //resize((int)width,(int)(width/r));
 
     this->startTimer(1000);
+    QLabel *l = new QLabel(QString(tr("ALLO")),this);
+    QPixmap pix_Background(":/img/bg_city.jpg");
+    l->setGeometry(0,0, width(), height());
+    l->setPixmap(pix_Background);
+
 
     l_title = new QLabel(QString(tr("CITY BUILDER")),this);
-    l_title->setGeometry(0,0, width, 100);
+    l_title->setGeometry(0,0, width(), height());
     l_title->setFont(QFont(QString("Arial"),40));
 
     p_newgame = new QPushButton(QString(tr("New")),this);

@@ -12,8 +12,9 @@
 #include <QDir>
 #include <QProcess>
 #include <QMessageBox>
+#include <QPixmap>
 
-class Launcher : public QMainWindow
+class Launcher : public QWidget
 {
     Q_OBJECT
 

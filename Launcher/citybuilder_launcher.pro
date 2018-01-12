@@ -29,3 +29,6 @@ SOURCES += \
 
 HEADERS += \
         Launcher.h
+
+RESOURCES += \
+    ressources/resources.qrc
