@@ -38,7 +38,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     timeTick=false;
     roadStartX=0;
     roadStartY=0;
-    road=false;
+    bRoad=false;
     bPicker=false;
     click=false;
     grid=false;
@@ -59,7 +59,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     MapTile::setScene(scene);
 
     this->setScene(scene);
-
+    falseRoadAdd=false;
 
     zoom=1;
     buildingCount=0;
@@ -77,6 +77,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     tempRoadList=new QList<MapTile*>();
     tempRemoveList=new QList<MapTile*>();
     buildPixList=new QList<QGraphicsPixmapItem*>();
+    neighbourList=new QList<MapTile*>();
 
     int tileNb = nbTiles;
 
@@ -125,11 +126,23 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     }
 
 
+    //    QGraphicsRectItem *darkDirt=new QGraphicsRectItem(0,screenHeight*1.0075,screenWidth*0.5675,screenHeight*1.4);
+    //    scene->addItem(darkDirt);
+    //    darkDirt->setBrush(QBrush(QColor::fromRgb(40,26,13)));
+    //    darkDirt->setRotation(-45);
+
+    //    QGraphicsRectItem *lightDirt=new QGraphicsRectItem(-screenWidth*0.5675,screenHeight*1.0075,screenWidth*0.5675,screenHeight*1.4);
+    //    scene->addItem(lightDirt);
+    //    lightDirt->setBrush(QBrush(QColor::fromRgb(153,101,21)));
+    //    lightDirt->setRotation(-45);
+
     translate(screenWidth/2,0);
 
 
     scale(1,0.5);
     rotate(45);
+
+
 
 
 }
@@ -211,7 +224,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
                 }
             }
 
-            if(road) //not a else if because the road boolean is affected in the code above
+            if(bRoad) //not a else if because the road boolean is affected in the code above
             {
                 moveAddRoad(rect);
             }
@@ -226,11 +239,11 @@ void MapView::mousePressEvent(QMouseEvent *event)
     if(!itemsList.isEmpty()){
         if(MapTile *rect=dynamic_cast<MapTile*>(itemsList.last()))
         {
-            if (event->button()==Qt::RightButton && (bPicker || road) )
+            if (event->button()==Qt::RightButton && (bPicker || bRoad) )
             {
                 cancelAdd(rect);
             }else if(event->button()==Qt::LeftButton){
-                if(road){
+                if(bRoad){
                     finalAddRoad(rect);
                 }else if(bPicker){
                     bPicker=false;
@@ -266,9 +279,9 @@ void MapView::moveRemoveBuilding(MapTile *rect){
     if(rect->getBId()!=-10)
     {
         prevRemoveColor=rect->brush().color();
-        for(int i=0;i<rect->getLargeurBat();i++)
+        for(int i=0;i<rect->getBuildingWidth();i++)
         {
-            for(int j=0;j<rect->getHauteurBat();j++)
+            for(int j=0;j<rect->getBuildingHeight();j++)
             {
                 tempRemoveList->append(tiles[rect->getMainTileX()+i][ rect->getMainTileY()+j]);
                 tiles[rect->getMainTileX()+i][ rect->getMainTileY()+j]->setBrush(QBrush(Qt::black));
@@ -311,121 +324,121 @@ void MapView::moveAddBuilding(MapTile *rect){
             }
         }
     }
-    if(rect->getX()+buildWidth-1<nbTiles && rect->getY()+buildHeight-1<nbTiles && !occuppiedTile)
+
+
+
+    if(rect->getX()+buildWidth-1<nbTiles && rect->getY()+buildHeight-1<nbTiles && !occuppiedTile )
     {
 
 
         QColor color;
 
 
+        QString pixFilePath="NOPIX";
+        bool pixExists=false;
 
-        if(pickerBId!=-1 )
+        switch(pickerBId)
         {
-            QString pixFilePath="NOPIX";
-            bool pixExists=false;
+        case 1:
+            pixFilePath=":/ressources/house.png";
+            break;
+        }
 
-            switch(pickerBId)
+        if(pixFilePath!="NOPIX") pixExists=true;
+
+        if(currentBuild==nullptr && pixExists){
+            QTransform trans;
+
+            trans.scale(1.1*0.04,1.2*0.04);
+            trans.rotate(-45);
+            currentBuild=new QGraphicsPixmapItem( QPixmap(pixFilePath));
+
+            //currentBuild->setFlag(QGraphicsItem::ItemIgnoresTransformations,true);
+            currentBuild->setOpacity(0.65);
+            //currentBuild->setScale(0.04);
+
+
+            currentBuild->setZValue(2);
+            //currentBuild->setRotation(-45);
+            currentBuild->setTransform(trans);
+
+            scene->addItem(currentBuild);
+
+        }
+        if(prevRect!=nullptr && prevRect!=rect && pixExists)prevRect->removePixMove();
+        if(prevRect!=rect && pixExists){
+            rect->addPixMove(currentBuild);
+            lastTilePix=rect;
+        }
+
+
+
+        if(currentBuild==nullptr){
+            switch(ConstantBuilding::get(pickerBId).getCategory()-1)
             {
-            case 1:
-                pixFilePath=":/ressources/house.png";
+            case -1:
+                color=Qt::darkGray;
                 break;
+            case 0:
+                color=Qt::yellow;
+                break;
+            case 1:
+                color=Qt::red;
+                break;
+            case 2:
+                color=Qt::green;
+                break;
+            case 3:
+                color=Qt::darkRed;
+                break;
+            case 4:
+                color=Qt::magenta;
+                break;
+            case 5:
+                color=Qt::cyan;
+                break;
+            case 6:
+                color=Qt::white;
+                break;
+            case 7:
+                color=Qt::lightGray;
+                break;
+            case 8:
+                color=Qt::darkMagenta;
+                break;
+
             }
-
-            if(pixFilePath!="NOPIX") pixExists=true;
-
-            if(currentBuild==nullptr && pixExists){
-                QTransform trans;
-
-                trans.scale(1.1*0.04,1.2*0.04);
-                trans.rotate(-45);
-                currentBuild=new QGraphicsPixmapItem( QPixmap(pixFilePath));
-
-                //currentBuild->setFlag(QGraphicsItem::ItemIgnoresTransformations,true);
-                currentBuild->setOpacity(0.65);
-                //currentBuild->setScale(0.04);
+        }else{
+            color=baseColors[rect->getX()][rect->getY()];
+        }
 
 
-                currentBuild->setZValue(2);
-                //currentBuild->setRotation(-45);
-                currentBuild->setTransform(trans);
-
-                scene->addItem(currentBuild);
-
-            }
-            if(prevRect!=nullptr && prevRect!=rect && pixExists)prevRect->removePixMove();
-            if(prevRect!=rect && pixExists){
-                rect->addPixMove(currentBuild);
-                lastTilePix=rect;
-            }
-
-
-
-            if(currentBuild==nullptr){
-                switch(ConstantBuilding::get(pickerBId).getCategory()-1)
-                {
-                case -1:
-                    color=Qt::darkGray;
-                    break;
-                case 0:
-                    color=Qt::yellow;
-                    break;
-                case 1:
-                    color=Qt::red;
-                    break;
-                case 2:
-                    color=Qt::green;
-                    break;
-                case 3:
-                    color=Qt::darkRed;
-                    break;
-                case 4:
-                    color=Qt::magenta;
-                    break;
-                case 5:
-                    color=Qt::cyan;
-                    break;
-                case 6:
-                    color=Qt::white;
-                    break;
-                case 7:
-                    color=Qt::lightGray;
-                    break;
-                case 8:
-                    color=Qt::darkMagenta;
-                    break;
-
-                }
-            }else{
-                color=baseColors[rect->getX()][rect->getY()];
-            }
-
-
-            for(int i=0;i<buildWidth;i++)
+        for(int i=0;i<buildWidth;i++)
+        {
+            for(int j=0;j<buildHeight;j++)
             {
-                for(int j=0;j<buildHeight;j++)
-                {
-                    tiles[rect->getX()+i][rect->getY()+j]->setBrush(color);
-                }
+                tiles[rect->getX()+i][rect->getY()+j]->setBrush(color);
             }
+        }
 
-            if(buildRadius>0) //if the selected building has an effect radius
+        if(buildRadius>0) //if the selected building has an effect radius
+        {
+            for(int i=-buildRadius;i<buildRadius+buildWidth;i++)
             {
-                for(int i=-buildRadius;i<buildRadius+buildWidth;i++)
+                for(int j=-buildRadius;j<buildRadius+buildHeight;j++)
                 {
-                    for(int j=-buildRadius;j<buildRadius+buildHeight;j++)
+                    if(rect->getX()+i>=0 && rect->getY()+j>=0 && rect->getX()+i<nbTiles && rect->getY()+j<nbTiles)
                     {
-                        if(rect->getX()+i>=0 && rect->getY()+j>=0 && rect->getX()+i<nbTiles && rect->getY()+j<nbTiles)
-                        {
-                            tiles[rect->getX()+i][rect->getY()+j]->setPen(color);
-                            radiusTilesList->append(tiles[rect->getX()+i][rect->getY()+j]);
-                        }
+                        tiles[rect->getX()+i][rect->getY()+j]->setPen(color);
+                        radiusTilesList->append(tiles[rect->getX()+i][rect->getY()+j]);
                     }
                 }
             }
-
-            if(prevRect!=rect && !road)
-                prevRect=rect;
         }
+
+        if(prevRect!=rect && !bRoad)
+            prevRect=rect;
+
 
 
 
@@ -464,8 +477,9 @@ void MapView::moveAddRoad(MapTile* rect){
 
 
 
-        if(rect != prevRect && (rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX))
+        if(rect != prevRect && (rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX) && tempRoadList->indexOf(rect)==-1)
         {
+
             int tileDistanceX=0;
             int tileDistanceY=0;
             if(prevRect!=nullptr){
@@ -519,8 +533,8 @@ void MapView::finalRemove(MapTile* rect){
     if(rect->getBId()!=-10){ //if it is not a default tile (no building/road on it)
         if(rect->getUniqueBId()!=-10 && rect->getUniqueBId()!=0)BuildingManagementService::getBuildingManagementService()->removeBuilding(rect->getUniqueBId());
 
-        for(int i=0;i<rect->getLargeurBat();i++){
-            for(int j=0;j<rect->getHauteurBat();j++){
+        for(int i=0;i<rect->getBuildingWidth();i++){
+            for(int j=0;j<rect->getBuildingHeight();j++){
                 tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->removePix();
                 tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setOccupied(false);
                 tiles[rect->getMainTileX()+i][rect->getMainTileY()+j]->setBId(-10);
@@ -544,15 +558,16 @@ void MapView::finalAddBuilding(MapTile* rect){
     }
 
     if(rect->getX()+buildWidth-1<nbTiles && rect->getX()+buildHeight-1<nbTiles && caseOccupe==false){
-        if(pickerBId==0 && !road){
-            road=true;
+        if(pickerBId==0 && !bRoad){
+            bRoad=true;
             roadDir=0;
             roadStartX=rect->getX();
             roadStartY=rect->getY();
             tempRoadList->append(rect);
+
         }
         prevRect=nullptr;
-        if(checkIfNearRoad(rect) || road ){
+        if(checkIfNearRoad(rect) || bRoad ){
             QColor color;
 
             //TODO: set the real image of the building instead of colorizing the tiles => switch on the buildingId instead of the category
@@ -611,15 +626,15 @@ void MapView::finalAddBuilding(MapTile* rect){
                         tiles[rect->getX()+i][rect->getY()+j]->setOccupied(true);
                         tiles[rect->getX()+i][rect->getY()+j]->setBId(pickerBId);
                         tiles[rect->getX()+i][rect->getY()+j]->setMainTile(mainTileX,mainTileY);
-                        tiles[rect->getX()+i][rect->getY()+j]->setLargeurBat(buildWidth);
-                        tiles[rect->getX()+i][rect->getY()+j]->setHauteurBat(buildHeight);
+                        tiles[rect->getX()+i][rect->getY()+j]->setBuildingWidth(buildWidth);
+                        tiles[rect->getX()+i][rect->getY()+j]->setBuildingHeight(buildHeight);
                         tiles[rect->getX()+i][rect->getY()+j]->setUniqueBId(buildingCount);
 
                     }
                 }
                 BuildingManagementService::getBuildingManagementService()->addBuilding(pickerBId,mainTileX,mainTileY, 0); //TODO : set 0 to 3 angles
             }
-        }else if(!road){
+        }else if(!bRoad){
 
 
             for(int i=0;i<buildWidth;i++){
@@ -645,99 +660,141 @@ void MapView::finalAddBuilding(MapTile* rect){
 }
 
 void MapView::finalAddRoad(MapTile* rect){
-    road=false;
-    if(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX){
 
+    bRoad=false;
+    int dir=(int)qFabs(roadDir);
 
-        int dir=(int)qFabs(roadDir);
-        //if(roadDir==-1 || roadDir==-2)std::reverse(tempRoadList->begin(), tempRoadList->end());
-        int lastX=-1;
-        int lastY=-1;
-        foreach(MapTile* tile, *tempRoadList){
-            if(tile->getX()!=lastX && dir==1 || tile->getY()!=lastY && dir==2){
-                tile->setOccupied(true);
-                tile->setBId(0);
-
-                tile->setMainTile(roadStartX,roadStartY);
-                if(roadDir==1){
-
-                    tile->setLargeurBat(rect->getX()-roadStartX+1);
-                    tile->setHauteurBat(1);
-
-                }else if(roadDir==-1){
-
-                    tile->setLargeurBat(roadStartX-rect->getX()+1);
-                    tile->setHauteurBat(1);
-                    tile->setMainTile(rect->getX(),rect->getY());
-                    rect->setMainTile(rect->getX(),rect->getY());
-                }else if(roadDir==2){
-
-                    tile->setLargeurBat(1);
-                    tile->setHauteurBat(rect->getY()-roadStartY+1);
-
-                }else if(roadDir==-2){
-
-                    tile->setLargeurBat(1);
-                    tile->setHauteurBat(roadStartY-rect->getY()+1);
-                    tile->setMainTile(rect->getX(),rect->getY());
-                    rect->setMainTile(rect->getX(),rect->getY());
-                }
-
-
-                QString pixFilePath=":/ressources/route.png";
+    if(rect->getBId()!=0){
+        if(checkIfNeighbourRoadsOk(tempRoadList) &&(rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX)){
 
 
 
+            //if(roadDir==-1 || roadDir==-2)std::reverse(tempRoadList->begin(), tempRoadList->end());
+            int lastX=-1;
+            int lastY=-1;
 
-
-                //if((dir==2 && checkIfNearRoadX(tile)) || (dir==1 && checkIfNearRoadY(tile))) pixFilePath=":/ressources/roadCross.png";
-
-
-
-                QTransform trans;
-
-                if(dir==1 ){
-                    trans.scale(0.19,0.175);
-
-                }
-                else {
-                    trans.scale(0.175,0.19);
-                    trans.rotate(-90);
-                    trans.translate(-5.25*pixelPerTile,0);
-                }
-                currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
-
-
-                currentBuild->setZValue(2);
-                currentBuild->setTransform(trans);
-                scene->addItem(currentBuild);
-                tile->addPixRoad(currentBuild);
-                currentBuild=nullptr;
-                tile->setBrush(QBrush(baseColors[tile->getX()][tile->getY()]));
-                lastX=tile->getX();
-                lastY=tile->getY();
+            int aNeighbourCount[tempRoadList->count()];
+            bool bNeighbour=false;
+            foreach(MapTile* tile, *tempRoadList){
+                int neighbourCount=countNeighbourRoads(tile);
+                aNeighbourCount[tempRoadList->indexOf(tile)]=neighbourCount;
+                if(neighbourCount>0)bNeighbour=true;
             }
 
+            foreach(MapTile* tile, *tempRoadList){
+                if(tile->getX()!=lastX && dir==1 || tile->getY()!=lastY && dir==2){
+
+
+
+
+                    tile->setOccupied(true);
+                    tile->setBId(0);
+
+                    tile->setMainTile(roadStartX,roadStartY);
+                    if(roadDir==1){
+
+                        tile->setBuildingWidth(rect->getX()-roadStartX+1);
+                        tile->setBuildingHeight(1);
+
+                    }else if(roadDir==-1){
+
+                        tile->setBuildingWidth(roadStartX-rect->getX()+1);
+                        tile->setBuildingHeight(1);
+                        tile->setMainTile(rect->getX(),rect->getY());
+                        rect->setMainTile(rect->getX(),rect->getY());
+                    }else if(roadDir==2){
+
+                        tile->setBuildingWidth(1);
+                        tile->setBuildingHeight(rect->getY()-roadStartY+1);
+
+                    }else if(roadDir==-2){
+
+                        tile->setBuildingWidth(1);
+                        tile->setBuildingHeight(roadStartY-rect->getY()+1);
+                        tile->setMainTile(rect->getX(),rect->getY());
+                        rect->setMainTile(rect->getX(),rect->getY());
+                    }
+
+
+                    QString pixFilePath=":/ressources/route.png";
+
+
+
+
+
+                    //if((dir==2 && checkIfNearRoadX(tile)) || (dir==1 && checkIfNearRoadY(tile))) pixFilePath=":/ressources/roadCross.png";
+
+
+
+                    QTransform trans;
+
+                    if(dir==1 ){
+                        //trans.scale(0.19,0.175);
+                        trans.scale(0.19,0.19);
+
+                    }
+                    else {
+                        //trans.scale(0.175,0.19);
+                        trans.scale(0.19,0.19);
+                        trans.rotate(-90);
+                        trans.translate(-5.4*pixelPerTile,0);
+                    }
+                    currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
+
+
+                    currentBuild->setZValue(2);
+                    currentBuild->setTransform(trans);
+                    scene->addItem(currentBuild);
+                    tile->addPixRoad(currentBuild);
+                    currentBuild=nullptr;
+                    tile->setBrush(QBrush(baseColors[tile->getX()][tile->getY()]));
+                    lastX=tile->getX();
+                    lastY=tile->getY();
+                }
+
+            }
+
+            if(bNeighbour){
+                for(int i=0;i<tempRoadList->count();i++){
+                    if(aNeighbourCount[i]>0){
+                        updateNeighbourRoad(tempRoadList->at(i));
+                    }
+                }
+            }
+
+
+            tempRoadList->clear();
+        }else{
+
+            blinkTileRed(rect);
+            cancelAdd(rect);
         }
 
-
-        tempRoadList->clear();
     }else{
-        foreach(MapTile* tile,*tempRoadList){
-            if(!grid)tile->setPen(QPen(Qt::transparent));
-            else tile->setPen(QPen(Qt::black));
-            tile->setBrush(QBrush(baseColors[tile->getX()][tile->getY()]));
-            tile->setOccupied(false);
-            tile->setLargeurBat(-10);
-            tile->setHauteurBat(-10);
-            tile->setMainTile(-10,-10);
-        }
+        falseRoadAdd=true;
+        //copier rect, cancelAdd, et remettre rect
+        int mainTileX=rect->getMainTileX();
+        int mainTileY=rect->getMainTileY();
+        int width=rect->getBuildingWidth();
+        int height=rect->getBuildingHeight();
+        int uniqBid=rect->getUniqueBId();
+        QGraphicsPixmapItem *pix=rect->getPix();
 
-        tempRoadList->clear();
+        cancelAdd(rect);
+        rect->addPix(pix);
+        pix->moveBy(0.25*pixelPerTile, -0.5*pixelPerTile);
+        rect->setMainTile(mainTileX,mainTileY);
+        rect->setBuildingWidth(width);
+        rect->setBuildingHeight(height);
+        rect->setBId(0);
+        rect->setUniqueBId(uniqBid);
+
+
     }
 }
 
 void MapView::cancelAdd(MapTile* rect){
+
     if(currentBuild!=nullptr){
         delete currentBuild;
         currentBuild=nullptr;
@@ -751,8 +808,9 @@ void MapView::cancelAdd(MapTile* rect){
                 occupiedTile=true;
         }
     }
-    if(!occupiedTile){
-        road=false;
+    if(!occupiedTile || falseRoadAdd){
+        falseRoadAdd=false;
+        bRoad=false;
         bPicker=false;
         foreach(MapTile* tile,*tempRoadList)
         {
@@ -761,8 +819,8 @@ void MapView::cancelAdd(MapTile* rect){
             else tile->setPen(QPen(Qt::black));
             tile->setBrush(QBrush(baseColors[tile->getX()][tile->getY()]));
             tile->setOccupied(false);
-            tile->setLargeurBat(-10);
-            tile->setHauteurBat(-10);
+            tile->setBuildingWidth(-10);
+            tile->setBuildingHeight(-10);
             tile->setMainTile(-10,-10);
 
         }
@@ -887,6 +945,10 @@ bool MapView::checkIfNearRoadX(MapTile* tile)
 }
 
 
+
+
+
+
 //TO-DO: RETURN TILE CONTAINING NEIGHTBOUR ROAD TO CHANGE HIS PIXMAP OR NULLPTR IF NOT FOUND
 bool MapView::checkIfNearRoadY(MapTile* tile)
 {
@@ -897,6 +959,8 @@ bool MapView::checkIfNearRoadY(MapTile* tile)
 
     return false;
 }
+
+
 
 void MapView::blinkTileRed(MapTile* tile)
 {
@@ -943,6 +1007,239 @@ void MapView::blinkRedTileSlot()
                 else
                     tiles[blinkRedTile->getX()+i][blinkRedTile->getY()+j]->setPen(QPen(Qt::transparent));
             }
+        }
+    }
+}
+
+int MapView::countNeighbourRoads(MapTile* tile){
+    int n=0;
+
+    if(tile->getX()-1>=0 && tiles[tile->getX()-1][tile->getY()]->getBId()==0)n++;
+    if(tile->getX()+1<nbTiles && tiles[tile->getX()+1][tile->getY()]->getBId()==0)n++;
+    if(tile->getY()-1>=0 && tiles[tile->getX()][tile->getY()-1]->getBId()==0)n++;
+    if(tile->getY()+1<nbTiles && tiles[tile->getX()][tile->getY()+1]->getBId()==0)n++;
+
+    return n;
+}
+
+bool  MapView::checkIfNeighbourRoadsOk(QList<MapTile*> *tempRoadList){
+    bool bLastRoad=false;
+    bool bThisRoad=false;
+
+    MapTile* lastTile=tempRoadList->first();
+    foreach(MapTile* tile, *tempRoadList){
+        if(countNeighbourRoads(tile)>1)return false;
+        bThisRoad=checkIfNearRoad(tile);
+
+        if(bThisRoad && bLastRoad &&  ((int)qFabs(tile->getX()-lastTile->getX())==1 || (int)qFabs(tile->getY()-lastTile->getY())==1))return false;
+        bLastRoad=bThisRoad;
+        lastTile=tile;
+    }
+    return true;
+}
+
+MapTile* MapView::getOnlyRoadNeighbour(MapTile* tile){
+    int dir=(int)qFabs(roadDir);
+
+
+
+    if(dir==1){
+        if(tile->getMainTileX()-2>=0){
+            int countRoadOnPath=0;
+            for(int i=0;i<4;i++){
+                if(tiles[tile->getMainTileX()+1-i][tile->getY()]->getBId()==0)countRoadOnPath++;
+                if(tile->getY()-1>=0 && tile->getY()+1<nbTiles && (tiles[tile->getMainTileX()+1-i][tile->getY()-1]->getBId()==0 || tiles[tile->getMainTileX()+1-i][tile->getY()+1]->getBId()==0))countRoadOnPath--;
+            }
+            if(countRoadOnPath==4)return nullptr;
+        }
+        if(tile->getMainTileX()+2<nbTiles){
+            int countRoadOnPath=0;
+            for(int i=0;i<4;i++){
+                if(tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()]->getBId()==0)countRoadOnPath++;
+                if(tile->getY()-1>=0 && tile->getY()+1<nbTiles && (tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()-1]->getBId()==0 || tiles[tile->getMainTileX()+tile->getBuildingWidth()-2+i][tile->getY()+1]->getBId()==0))countRoadOnPath--;
+            }
+            if(countRoadOnPath==4)return nullptr;
+        }
+    }
+
+    if(dir==2){
+        if(tile->getMainTileY()-2>=0){
+            int countRoadOnPath=0;
+            for(int i=0;i<4;i++){
+                if(tiles[tile->getX()][tile->getMainTileY()+1-i]->getBId()==0)countRoadOnPath++;
+                if(tile->getX()-1>=0 && tile->getX()+1<nbTiles && (tiles[tile->getX()-1][tile->getMainTileY()+1-i]->getBId()==0 || tiles[tile->getX()+1][tile->getMainTileY()+1-i]->getBId()==0))countRoadOnPath--;
+            }
+            if(countRoadOnPath==4)return nullptr;
+        }
+        if(tile->getMainTileY()+2<nbTiles){
+            int countRoadOnPath=0;
+            for(int i=0;i<4;i++){
+                if(tiles[tile->getX()][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0)countRoadOnPath++;
+                if(tile->getY()-1>=0 && tile->getY()+1<nbTiles && (tiles[tile->getX()-1][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0 || tiles[tile->getY()+1][tile->getMainTileY()+tile->getBuildingHeight()-2+i]->getBId()==0))countRoadOnPath--;
+            }
+            if(countRoadOnPath==4)return nullptr;
+        }
+    }
+
+
+    MapTile* tempNeighbour=nullptr;
+
+    if(tile->getX()-1>=0)tempNeighbour=tiles[tile->getX()-1][tile->getY()];
+
+
+    if(tempNeighbour!=nullptr && tempNeighbour->getBId()==0 && tempRoadList->indexOf(tempNeighbour)==-1){
+        if(dir==1)return tempNeighbour;
+        else return tile;
+    }
+    if(tile->getX()+1<nbTiles)tempNeighbour=tiles[tile->getX()+1][tile->getY()];
+
+    if(tempNeighbour!=nullptr  && tempNeighbour->getBId()==0 && tempRoadList->indexOf(tempNeighbour)==-1){
+        if(dir==1)return tempNeighbour;
+        else return tile;
+    }
+    if(tile->getY()-1>=0)tempNeighbour=tiles[tile->getX()][tile->getY()-1];
+
+    if(tempNeighbour!=nullptr  && tempNeighbour->getBId()==0 && tempRoadList->indexOf(tempNeighbour)==-1){
+        if(dir==2)return tempNeighbour;
+        else return tile;
+    }
+    if(tile->getY()+1<nbTiles)tempNeighbour=tiles[tile->getX()][tile->getY()+1];
+
+    if(tempNeighbour!=nullptr && tempNeighbour->getBId()==0 && tempRoadList->indexOf(tempNeighbour)==-1){
+        if(dir==2)return tempNeighbour;
+        else return tile;
+    }
+
+    return nullptr;
+}
+
+void MapView::getNeighbours(MapTile* tile){
+    neighbourList->clear();
+
+
+}
+
+void  MapView::updateNeighbourRoad(MapTile* tile){
+
+
+    MapTile* onlyNeighbour=getOnlyRoadNeighbour(tile);
+    if(onlyNeighbour!=nullptr){
+        int neighbourCount=countNeighbourRoads(onlyNeighbour);
+        QString pixPath="NOPIX";
+        QTransform trans;
+
+        switch(neighbourCount){
+        //"L"
+//        case 2:
+//            pixPath=":/ressources/routeL.png";
+//            break;
+            //"T"
+        case 3:
+            pixPath=":/ressources/routeT.png";
+
+            break;
+            //crossroad
+        case 4:
+
+            pixPath=":/ressources/routeX.png";
+
+            break;
+        }
+
+trans.scale(0.19,0.19);
+
+        switch(neighbourCount){
+        case 2:
+            if(onlyNeighbour->getX()-1>=0 && onlyNeighbour->getY()+1<nbTiles && tiles[onlyNeighbour->getX()-1][onlyNeighbour->getY()]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()+1]->getBId()==0){
+                trans.rotate(-90);
+                trans.translate(-5.35*pixelPerTile,0);
+                pixPath=":/ressources/routeL.png";
+            }else if(onlyNeighbour->getX()+1<nbTiles && onlyNeighbour->getY()-1>=0 && tiles[onlyNeighbour->getX()+1][onlyNeighbour->getY()]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()-1]->getBId()==0){
+                trans.rotate(90);
+                trans.translate(0,-5.35*pixelPerTile);
+                pixPath=":/ressources/routeL.png";
+            }else if(onlyNeighbour->getX()+1<nbTiles && onlyNeighbour->getY()+1<nbTiles && tiles[onlyNeighbour->getX()+1][onlyNeighbour->getY()]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()+1]->getBId()==0){
+                trans.rotate(180);
+                trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+                pixPath=":/ressources/routeL.png";
+            }else if(onlyNeighbour->getX()-1>=0 && onlyNeighbour->getY()-1>=0 && tiles[onlyNeighbour->getX()-1][onlyNeighbour->getY()]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()-1]->getBId()==0){
+                pixPath=":/ressources/routeL.png";
+               // trans.translate(-pixelPerTile/7,0);
+            }
+            break;
+
+        case 3:
+            if(onlyNeighbour->getX()-1 >=0 && onlyNeighbour->getY()-1>=0 && onlyNeighbour->getX()+1<nbTiles&&tiles[onlyNeighbour->getX()-1][onlyNeighbour->getY()]->getBId()==0 && tiles[onlyNeighbour->getX()+1][onlyNeighbour->getY()]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()-1]->getBId()==0){
+                trans.rotate(180);
+                trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+            }
+            if(onlyNeighbour->getX()+1 <nbTiles && onlyNeighbour->getY()-1>=0 && onlyNeighbour->getY()+1<nbTiles&&tiles[onlyNeighbour->getX()+1][onlyNeighbour->getY()]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()+1]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()-1]->getBId()==0){
+                trans.rotate(-90);
+                trans.translate(-5.35*pixelPerTile,0);
+            }
+            if(onlyNeighbour->getX()-1>=0 && onlyNeighbour->getY()-1>=0 && onlyNeighbour->getY()+1<nbTiles&&tiles[onlyNeighbour->getX()-1][onlyNeighbour->getY()]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()+1]->getBId()==0 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()-1]->getBId()==0){
+                trans.rotate(90);
+                trans.translate(0,-5.35*pixelPerTile);
+            }
+            break;
+        }
+        //        if(neighbourCount==2 ){
+        //            if(onlyNeighbour!=tile){
+        //                if(  onlyNeighbour->getY()<tile->getY() && onlyNeighbour->getX()==tile->getX() &&roadDir==2 && onlyNeighbour->getX()-1>0 && tiles[onlyNeighbour->getX()-1][onlyNeighbour->getY()]->getBId()==0){
+
+        //                qDebug()<<"1";
+        //                trans.rotate(-90);
+        //                trans.translate(-5.35*pixelPerTile,0);
+        //                }
+
+        //                if( onlyNeighbour->getY()<tile->getY() && onlyNeighbour->getX()==tile->getX()  &&roadDir==2 && onlyNeighbour->getX()+1<nbTiles && tiles[onlyNeighbour->getX()+1][onlyNeighbour->getY()]->getBId()==0 && tempRoadList->indexOf(tiles[onlyNeighbour->getX()+1][onlyNeighbour->getY()])==-1){
+
+        //                qDebug()<<"2";
+        //                trans.rotate(180);
+        //                trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+        //                }
+
+        //                if(onlyNeighbour->getX()<tile->getX() && onlyNeighbour->getY()==tile->getY()  && roadDir==1 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()+1]->getBId()==0){
+        //                    trans.rotate(180);
+        //                trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+        //                 qDebug()<<"3";
+        //                }
+
+        //                if( onlyNeighbour->getY()>tile->getY() && onlyNeighbour->getX()==tile->getX()  && roadDir==-2 && tiles[onlyNeighbour->getX()+1][onlyNeighbour->getY()]->getBId()==0){
+        //                    trans.rotate(90);
+        //                trans.translate(0,-5.35*pixelPerTile);
+        //                  qDebug()<<"4";
+        //                }
+
+        //                if( onlyNeighbour->getX()<tile->getX() && onlyNeighbour->getY()==tile->getY()  && roadDir==1 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()-1]->getBId()==0){
+        //                    trans.rotate(90);
+        //                trans.translate(0,-5.35*pixelPerTile);
+        //                 qDebug()<<"5";
+        //                }
+
+        //                if( onlyNeighbour->getX()>tile->getX() && onlyNeighbour->getY()==tile->getY()&& roadDir==-1 && tiles[onlyNeighbour->getX()][onlyNeighbour->getY()+1]->getBId()==0){
+        //                    trans.rotate(-90);
+        //                    trans.translate(-5.35*pixelPerTile,0);
+        //                 qDebug()<<"6";
+        //                }
+        //            }else{
+        //                //le cas dans le cas une case qu'on vient d'ajouter fait office de virage
+        //            }
+        //        }
+
+
+
+        if(pixPath!="NOPIX"){
+            QGraphicsPixmapItem *roadPix=new QGraphicsPixmapItem(QPixmap(pixPath));
+            scene->addItem(roadPix);
+            onlyNeighbour->removePix();
+
+
+
+
+            roadPix->setTransform(trans);
+            roadPix->setZValue(2);
+            onlyNeighbour->addPixRoad(roadPix);
         }
     }
 }

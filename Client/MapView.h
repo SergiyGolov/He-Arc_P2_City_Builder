@@ -47,7 +47,7 @@ private:
     int buildWidth;
     int buildHeight;
     int buildRadius;
-    bool road;
+    bool bRoad;
     QList<MapTile*> *radiusTilesList;
     QList<MapTile*> *tempRoadList;
     QList<MapTile*> *tempRemoveList;
@@ -61,6 +61,7 @@ private:
     bool grid;
     int buildingCount;
     int roadDir;
+    bool falseRoadAdd;
 
     bool checkIfNearRoad(MapTile* tile);
 
@@ -85,6 +86,18 @@ private:
     void finalAddBuilding(MapTile* rect);
     void finalRemove(MapTile* rect);
     void cancelAdd(MapTile* rect);
+
+    int countNeighbourRoads(MapTile* tile);
+    bool checkIfNeighbourRoadsOk(QList<MapTile*> *tempRoadList);
+    void updateNeighbourRoad(MapTile* tile);
+    MapTile* getOnlyRoadNeighbour(MapTile* tile);
+
+   void getNeighbours(MapTile* tile);
+    QList<MapTile*> *neighbourList;
+
+
+
+
 public slots:
     void blinkRedTileSlot();
 protected:

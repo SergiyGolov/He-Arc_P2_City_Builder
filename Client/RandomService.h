@@ -13,4 +13,5 @@ class RandomService
 {
 public:
     static Cell* generateMap(int seed, int sizex, int sizey);
+     static Cell* generateSky(int seed, int sizex, int sizey);
 };
