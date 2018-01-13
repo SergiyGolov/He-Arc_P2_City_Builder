@@ -98,7 +98,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     baseColors=new QVector<QColor>(nbTiles*nbTiles);
 
 
-    setTransformationAnchor ( QGraphicsView::NoAnchor );
+    setTransformationAnchor(QGraphicsView::NoAnchor);
     cells = RandomService::generateMap(nbTiles, nbTiles);
 
     for(int j=0;j<nbTiles;j++)
@@ -159,14 +159,16 @@ MapView::~MapView()
 
 void MapView::callPicker(int bId){
 
-    bPicker=true;
-    prevRect=nullptr;
-    pickerBId=bId;
-    if(pickerBId != -1)
-    {
-        buildWidth=ConstantBuilding::get(pickerBId).getTileWidth();
-        buildHeight=ConstantBuilding::get(pickerBId).getTileHeight();
-        buildRadius=ConstantBuilding::get(pickerBId).getRadius();
+    if(!bPicker){
+        bPicker=true;
+        prevRect=nullptr;
+        pickerBId=bId;
+        if(pickerBId != -1)
+        {
+            buildWidth=ConstantBuilding::get(pickerBId).getTileWidth();
+            buildHeight=ConstantBuilding::get(pickerBId).getTileHeight();
+            buildRadius=ConstantBuilding::get(pickerBId).getRadius();
+        }
     }
 
 }
@@ -222,10 +224,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
             {
                 if(pickerBId!=-1) //if we are not in remove mode
                 {
-                    if(lastbId!=pickerBId){
-                        cancelAdd(rect);
-                        bPicker=true;
-                    }
+
                     moveAddBuilding(rect);
                 }
                 else  //mode remove
@@ -435,7 +434,7 @@ void MapView::moveAddBuilding(MapTile *rect){
             if(lastbId!=pickerBId){
                 int buildSizeOffset=buildHeight;
                 if(buildWidth>buildHeight)buildSizeOffset=buildWidth;
-                 circleWidth=(buildRadius+buildSizeOffset-3)*pixelPerTile*2;
+                circleWidth=(buildRadius+buildSizeOffset-3)*pixelPerTile*2;
 
 
                 radiusCircle->setPen(QPen(color));
@@ -469,6 +468,7 @@ void MapView::moveAddBuilding(MapTile *rect){
             //                    }
             //                }
             //            }
+
         }
 
         if(prevRect!=rect && !bRoad)
@@ -513,7 +513,7 @@ void MapView::moveAddRoad(MapTile* rect){
         }
 
 
-    int dir=(int)qFabs(roadDir);
+        int dir=(int)qFabs(roadDir);
 
 
         if(rect != prevRect && ((rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY) ||(rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY )|| (rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX)|| (rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX)) && tempRoadList->indexOf(rect)==-1)
@@ -557,7 +557,7 @@ void MapView::moveAddRoad(MapTile* rect){
 
             }
 
-prevRect=rect;
+            prevRect=rect;
         }
 
     }
@@ -855,7 +855,7 @@ void MapView::cancelAdd(MapTile* rect){
             {
                 if(rect->getX()+i<nbTiles && rect->getY()+j<nbTiles)
                 {
-                    tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->setBrush(QBrush(baseColors->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)));
+                    if(!tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->isOccupied())tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->setBrush(QBrush(baseColors->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)));
                 }
             }
         }
