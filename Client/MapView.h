@@ -5,7 +5,7 @@
 #include <MapTile.h>
 #include <QList>
 
-#define nbTiles 256
+
 
 class QTimer;
 class GuiView;
@@ -29,6 +29,7 @@ public:
     void addRoadMode();
     void toggleGrid();
 private:
+    int nbTiles;
     static MapView* mapViewInstance;
     MapView(QWidget *parent = 0);
     QGraphicsScene *scene;
@@ -42,9 +43,10 @@ private:
     QColor prevColor;
     MapTile *prevRect;
     int pixelPerTile;
-
-    MapTile* tiles[nbTiles][nbTiles];
-    QColor baseColors[nbTiles][nbTiles];
+    QVector<MapTile*> *tiles;
+    //MapTile* tiles[nbTiles][nbTiles];
+    QVector<QColor> *baseColors;
+    //QColor baseColors[nbTiles][nbTiles];
     int buildWidth;
     int buildHeight;
     int buildRadius;
