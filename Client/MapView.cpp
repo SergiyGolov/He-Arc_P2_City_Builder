@@ -73,7 +73,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     this->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
 
 
-    radiusTilesList=new QList<MapTile*>();
+
     tempRoadList=new QList<MapTile*>();
     tempRemoveList=new QList<MapTile*>();
     buildPixList=new QList<QGraphicsPixmapItem*>();
@@ -81,9 +81,13 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
 
     int tileNb = nbTiles;
 
-    pixelPerTile=((screenHeight-screenHeight/10)/tileNb)*2; //*qSqrt(2)
+    pixelPerTile=((screenHeight-screenHeight/10)/tileNb)*2;
 
 
+    radiusCircle=new QGraphicsEllipseItem(0,0,1,1);
+    radiusCircle->setVisible(false);
+    radiusCircle->setZValue(5);
+    scene->addItem(radiusCircle);
 
 
     setTransformationAnchor ( QGraphicsView::NoAnchor );
@@ -291,13 +295,9 @@ void MapView::moveRemoveBuilding(MapTile *rect){
 }
 
 void MapView::moveAddBuilding(MapTile *rect){
-    foreach(MapTile* tile,*radiusTilesList)
-    {
-        if(!grid)tile->setPen(QPen(Qt::transparent));
-        else tile->setPen(QPen(Qt::black));
-    }
 
-    radiusTilesList->clear();
+
+
     bool occuppiedTile=false;
     for(int i=0;i<buildWidth;i++)
     {
@@ -418,19 +418,52 @@ void MapView::moveAddBuilding(MapTile *rect){
             }
         }
 
-        if(buildRadius>0) //if the selected building has an effect radius
+        if(buildRadius>0 && rect!=prevRect) //if the selected building has an effect radius
         {
-            for(int i=-buildRadius;i<buildRadius+buildWidth;i++)
-            {
-                for(int j=-buildRadius;j<buildRadius+buildHeight;j++)
-                {
-                    if(rect->getX()+i>=0 && rect->getY()+j>=0 && rect->getX()+i<nbTiles && rect->getY()+j<nbTiles)
-                    {
-                        tiles[rect->getX()+i][rect->getY()+j]->setPen(color);
-                        radiusTilesList->append(tiles[rect->getX()+i][rect->getY()+j]);
-                    }
-                }
-            }
+
+            radiusCircle->setVisible(true);
+            //radiusCircle->setPos(rect->pos());
+
+          // radiusCircle->setRect(rect->pos().x()-buildRadius*pixelPerTile,rect->pos().y()-buildRadius*pixelPerTile,2*buildRadius*pixelPerTile,2*buildRadius*pixelPerTile);
+
+
+
+
+
+            int buildSizeOffset=buildHeight;
+            if(buildWidth>buildHeight)buildSizeOffset=buildWidth;
+           int circleWidth=(buildRadius+buildSizeOffset-3)*pixelPerTile*2;
+
+            radiusCircle->setRect(rect->pos().x()-circleWidth/2,rect->pos().y()-circleWidth/2,circleWidth,circleWidth);
+            radiusCircle->setPen(QPen(color));
+
+//            QRadialGradient radialGrad;
+
+//               radialGrad.setColorAt(0, color);
+
+//               radialGrad.setColorAt(1, Qt::white);
+
+//               radialGrad.setCenter(mapFromScene(rect->pos().toPoint()));
+
+//               radialGrad.setRadius(circleWidth);
+
+
+
+              // radiusCircle->setBrush(radialGrad);
+
+               //radiusCircle->setOpacity(0.5);
+
+//            for(int i=-buildRadius;i<buildRadius+buildWidth;i++)
+//            {
+//                for(int j=-buildRadius;j<buildRadius+buildHeight;j++)
+//                {
+//                    if(rect->getX()+i>=0 && rect->getY()+j>=0 && rect->getX()+i<nbTiles && rect->getY()+j<nbTiles)
+//                    {
+//                        tiles[rect->getX()+i][rect->getY()+j]->setPen(color);
+//                        radiusTilesList->append(tiles[rect->getX()+i][rect->getY()+j]);
+//                    }
+//                }
+//            }
         }
 
         if(prevRect!=rect && !bRoad)
@@ -443,6 +476,8 @@ void MapView::moveAddBuilding(MapTile *rect){
 
         lastTilePix->removePixMove();
         lastTilePix=nullptr;
+    }else{
+         radiusCircle->setVisible(false);
     }
 }
 
@@ -528,7 +563,7 @@ void MapView::moveAddRoad(MapTile* rect){
 
 void MapView::finalRemove(MapTile* rect){
     if(rect->getBId()!=-10){ //if it is not a default tile (no building/road on it)
-        if(rect->getUniqueBId()!=-10 && rect->getUniqueBId()!=0)BuildingManagementService::getBuildingManagementService()->removeBuilding(rect->getUniqueBId());
+        if(rect->getUniqueBId()!=-10)BuildingManagementService::getBuildingManagementService()->removeBuilding(rect->getUniqueBId());
 
         for(int i=0;i<rect->getBuildingWidth();i++){
             for(int j=0;j<rect->getBuildingHeight();j++){
@@ -644,12 +679,7 @@ void MapView::finalAddBuilding(MapTile* rect){
             }
             blinkTileRed(rect);
         }
-        foreach(MapTile* tile,*radiusTilesList){
-            if(!grid)tile->setPen(QPen(Qt::transparent));
-            else tile->setPen(QPen(Qt::black));
-        }
-
-        radiusTilesList->clear();
+        radiusCircle->setVisible(false);
 
 
     }
@@ -737,8 +767,8 @@ void MapView::finalAddRoad(MapTile* rect){
                         trans.translate(-5.4*pixelPerTile,0);
                         angle=1;
                     }
-                    buildingCount++;
-                    tile->setUniqueBId(buildingCount);
+
+                    tile->setUniqueBId(++buildingCount);
                     BuildingManagementService::getBuildingManagementService()->addBuilding(0,tile->getX(),tile->getY(), angle);
                     currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
 
@@ -828,15 +858,7 @@ void MapView::cancelAdd(MapTile* rect){
         }
 
         tempRoadList->clear();
-        foreach(MapTile* tile,*radiusTilesList)
-        {
-            if(!grid)
-                tile->setPen(QPen(Qt::transparent));
-            else
-                tile->setPen(QPen(Qt::black));
-        }
-
-        radiusTilesList->clear();
+       radiusCircle->setVisible(false);
 
 
         rect->setBrush(QBrush(baseColors[rect->getX()][rect->getY()]));

@@ -10,6 +10,7 @@
 class QTimer;
 class GuiView;
 class QGraphicsScene;
+class QGraphicsEllipseItem;
 struct Cell;
 
 
@@ -48,7 +49,7 @@ private:
     int buildHeight;
     int buildRadius;
     bool bRoad;
-    QList<MapTile*> *radiusTilesList;
+    //QList<MapTile*> *radiusTilesList;
     QList<MapTile*> *tempRoadList;
     QList<MapTile*> *tempRemoveList;
     QList<QGraphicsPixmapItem*> *buildPixList;
@@ -96,7 +97,7 @@ private:
     QList<MapTile*> *neighbourList;
 
 
-
+ QGraphicsEllipseItem *radiusCircle;
 
 public slots:
     void blinkRedTileSlot();
