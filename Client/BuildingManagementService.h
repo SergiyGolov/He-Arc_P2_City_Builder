@@ -38,7 +38,7 @@ public:
     double getAverageHappiness();
     int getVectorId(int uid,QVector<Building*> *v);
 
-    void setAngleFromId(int uid,int newAngle){vectorBuildings->at(uid)->setAngle(newAngle);}
+    void setAngleFromId(int uid,int newAngle){vectorBuildings->at(getVectorId(uid,vectorBuildings))->setAngle(newAngle);}
 	
 private:
     static BuildingManagementService* buildingManagementService;

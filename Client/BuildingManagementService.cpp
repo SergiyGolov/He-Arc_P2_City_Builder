@@ -31,7 +31,7 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
     if(requirements)
     {
         GameManagementService::getGameManagementService()->setMoney(GameManagementService::getGameManagementService()->getMoney()-(int)ConstantBuilding::get(id).getPrice());
-        GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
+        if(ConstantBuilding::get(id).getPrice()>0)GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
         vectorBuildings->append(new Building(id, x, y, angle));
 
         bSumPricePerSeconds = true;

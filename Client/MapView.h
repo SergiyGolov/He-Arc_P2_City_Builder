@@ -5,11 +5,12 @@
 #include <MapTile.h>
 #include <QList>
 
-#define nbTiles 256
+
 
 class QTimer;
 class GuiView;
 class QGraphicsScene;
+class QGraphicsEllipseItem;
 struct Cell;
 
 
@@ -28,27 +29,27 @@ public:
     void addRoadMode();
     void toggleGrid();
 private:
+    int nbTiles;
     static MapView* mapViewInstance;
     MapView(QWidget *parent = 0);
     QGraphicsScene *scene;
-    double zoom;
+    double zoomFactor;
     int screenWidth;
     int screenHeight;
-    GuiView *gui;
-    bool click;
+    int lastbId;
+    int circleWidth;
+    bool bClick;
     bool bPicker;
     int pickerBId;
     QColor prevColor;
     MapTile *prevRect;
     int pixelPerTile;
-
-    MapTile* tiles[nbTiles][nbTiles];
-    QColor baseColors[nbTiles][nbTiles];
+    QVector<MapTile*> *tiles;
+    QVector<QColor> *baseColors;
     int buildWidth;
     int buildHeight;
     int buildRadius;
     bool bRoad;
-    QList<MapTile*> *radiusTilesList;
     QList<MapTile*> *tempRoadList;
     QList<MapTile*> *tempRemoveList;
     QList<QGraphicsPixmapItem*> *buildPixList;
@@ -96,7 +97,7 @@ private:
     QList<MapTile*> *neighbourList;
 
 
-
+ QGraphicsEllipseItem *radiusCircle;
 
 public slots:
     void blinkRedTileSlot();
