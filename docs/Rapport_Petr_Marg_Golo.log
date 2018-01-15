@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2018.1.12)  12 JAN 2018 11:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2018.1.12)  15 JAN 2018 08:32
 entering extended mode
 **./Rapport_Petr_Marg_Golo.tex
 (Rapport_Petr_Marg_Golo.tex
@@ -818,46 +818,45 @@ Chapitre 4.
 [4
 
 ]
-Chapitre 5.
-[5
 
-]
-Chapitre 6.
+LaTeX Warning: Command \' invalid in math mode on input line 115.
+
+Missing character: There is no é in font cmr10!
+[5]
+Chapitre 5.
 [6
 
 ]
-Chapitre 7.
+Chapitre 6.
 [7
 
 ]
-Chapitre 8.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 104.
+Chapitre 7.
 [8
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 104.
+Chapitre 8.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 198.
+[9
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 198.
  (Rapport_Petr_Marg_Golo.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 104.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 104.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 198.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 198.
+Package rerunfilecheck Info: File `Rapport_Petr_Marg_Golo.out' has not changed.
 
-
-Package rerunfilecheck Warning: File `Rapport_Petr_Marg_Golo.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `Rapport_Petr_Marg_Golo.out':
-(rerunfilecheck)             Before: B30ED5AF865099532BFCF608E47FBB1E;1001
-(rerunfilecheck)             After:  5877CF4435E4CBE5426C19353E29899F;1001.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 104.
+(rerunfilecheck)             Checksum: 532D762CC2AABBD383C7DE66A2F0B999;1133.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 198.
  ) 
 Here is how much of TeX's memory you used:
- 9628 strings out of 493323
- 134788 string characters out of 3139033
- 259341 words of memory out of 3000000
- 13005 multiletter control sequences out of 15000+200000
+ 9635 strings out of 493323
+ 134865 string characters out of 3139033
+ 264341 words of memory out of 3000000
+ 13009 multiletter control sequences out of 15000+200000
  18513 words of font info for 51 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 33i,6n,58p,243b,423s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 33i,6n,58p,710b,461s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\raphael.marguero\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen
 \ec\dpi600\ecbx1440.pk> <C:\Users\raphael.marguero\AppData\Local\MiKTeX\2.9\fon
 ts\pk\ljfour\jknappen\ec\dpi600\ecbx2074.pk> <C:\Users\raphael.marguero\AppData
@@ -868,10 +867,16 @@ appen\ec\dpi600\ecbx1000.pk> <C:\Users\raphael.marguero\AppData\Local\MiKTeX\2.
 9\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2488.pk> <C:\Users\raphael.marguero\Ap
 pData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\User
 s\raphael.marguero\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
-ecrm1728.pk>
-Output written on Rapport_Petr_Marg_Golo.pdf (10 pages, 103808 bytes).
+ecrm1728.pk><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.
+pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/P
+rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Program Files/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmsy7.pfb>
+Output written on Rapport_Petr_Marg_Golo.pdf (11 pages, 181530 bytes).
 PDF statistics:
- 391 PDF objects out of 1000 (max. 8388607)
- 27 named destinations out of 1000 (max. 500000)
- 137 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 473 PDF objects out of 1000 (max. 8388607)
+ 30 named destinations out of 1000 (max. 500000)
+ 153 words of extra memory for PDF output out of 10000 (max. 10000000)
 
