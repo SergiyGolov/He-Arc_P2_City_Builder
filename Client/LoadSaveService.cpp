@@ -1,4 +1,5 @@
 #include "LoadSaveService.h"
+#include "Services.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -6,14 +7,11 @@
 #include <QJsonObject>
 #include <QJsonValue>
 
-#include <QDebug>
-
 #include <QFileDialog>
 
-#include "BuildingManagementService.h"
+#include <QDateTime>
 
 //methods
-
 void LoadSaveService::loadGameUI()
 {
     QFile* loadfile = new QFile();
@@ -76,28 +74,28 @@ void LoadSaveService::saveGame(QFile* savefile)
         QJsonObject gamedata;
         QJsonObject savedata;
 
-        levelsize.insert(QString("w"), 64);
-        levelsize.insert(QString("h"), 128);
-    generation.insert(QString("levelsize"), levelsize);
-    generation.insert(QString("mapseed"), QJsonValue(1));
+            levelsize.insert(QString("w"), 0); //not implemented
+            levelsize.insert(QString("h"), 0); //not implemented
+        generation.insert(QString("levelsize"), levelsize); //not implemented
+        generation.insert(QString("mapseed"), RandomService::getSeed());
 
-    gamedata.insert(QString("cityname"), QJsonValue("Zooland"));
-    gamedata.insert(QString("money"), 12345);
-    gamedata.insert(QString("taxes"), 7.0);
-    gamedata.insert(QString("igtime"), QJsonValue(2));
-    gamedata.insert(QString("lastuid"), 1);
-    gamedata.insert(QString("uid"), BuildingManagementService::getBuildingManagementService()->getJsonBuildings());
+        gamedata.insert(QString("cityname"), GameManagementService::getGameManagementService()->getCityName());
+        gamedata.insert(QString("money"), GameManagementService::getGameManagementService()->getMoney());
+        gamedata.insert(QString("taxes"), GameManagementService::getGameManagementService()->getTaxes());
+        gamedata.insert(QString("igtime"), TickService::getTickService()->getGameTime()->toString(Qt::ISODate));
+        gamedata.insert(QString("lastuid"), Building::getUIDCpt());
+        gamedata.insert(QString("uid"), BuildingManagementService::getBuildingManagementService()->getJsonBuildings());
 
-        camera.insert(QString("zoom"), 200);
-            position.insert(QString("x"), 0);
-            position.insert(QString("y"), 10);
-        camera.insert(QString("position"), position);
-    igconfig.insert(QString("camera"), camera);
-    igconfig.insert(QString("timespeed"), QJsonValue(3));
+            camera.insert(QString("zoom"), 0); //not implemented
+                position.insert(QString("x"), 0); //not implemented
+                position.insert(QString("y"), 0); //not implemented
+            camera.insert(QString("position"), position);
+        igconfig.insert(QString("camera"), camera);
+        igconfig.insert(QString("timespeed"), 0); //not implemented
 
-    savedata.insert(QString("firstsave"), QJsonValue("2017-10-31T09:19:00Z"));
-    savedata.insert(QString("lastsave"), QJsonValue("2017-10-31T09:19:00Z"));
-    savedata.insert(QString("countsave"), QJsonValue(1));
+        savedata.insert(QString("firstsave"), TickService::getTickService()->getStartTime()->toString(Qt::ISODate));
+        savedata.insert(QString("lastsave"), QDateTime::currentDateTime().toString(Qt::ISODate));
+        savedata.insert(QString("countsave"), GameManagementService::getGameManagementService()->incrementAndGetSaveCount());
 
     jo.insert(QString("generation"), generation);
     jo.insert(QString("igconfig"), igconfig);

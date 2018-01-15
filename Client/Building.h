@@ -27,7 +27,7 @@ class ConstantBuilding;
  */
 class Building
 {
-    static int uid_cpt;
+    static int uIDCpt;
 protected:
 //attributes
     int uid;        //Identifier of the building (unique)
@@ -43,12 +43,16 @@ public:
     ~Building();
 //methods
     //getters
+    static void setUIDCpt(int uIDCpt) { uIDCpt = uIDCpt; }
+    static int getUIDCpt() {return uIDCpt; }
+
     int getUid(){return uid;}
     int getId(){return id;}
     int getAngle(){return angle;}
     int getX(){return x;}
     int getY(){return y;}
     int getPopulation(){return population;}
+    void setAngle(int newAngle){this->angle=newAngle;}
 };
 
 #endif // BUILDING_H

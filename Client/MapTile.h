@@ -23,14 +23,16 @@ public:
     QString getText(){return this->text->text();}
 
     void setMainTile(int x,int y){this->mainTileX=x;this->mainTileY=y;}
-    void setLargeurBat(int l){this->largeurBat=l;}
-    void setHauteurBat(int h){this->hauteurBat=h;}
+    void setBuildingWidth(int l){this->largeurBat=l;}
+    void setBuildingHeight(int h){this->hauteurBat=h;}
 
-    int getLargeurBat(){return largeurBat;}
-    int getHauteurBat(){return hauteurBat;}
+    int getBuildingWidth(){return largeurBat;}
+    int getBuildingHeight(){return hauteurBat;}
     int getMainTileX(){return mainTileX;}
     int getMainTileY(){return mainTileY;}
-    int getWidth(){return rect().size().width();}
+    int getPixelWidth(){return rect().size().width();}
+
+    QGraphicsPixmapItem* getPix(){return buildImage;}
 
 
     static void setScene(QGraphicsScene *scene);

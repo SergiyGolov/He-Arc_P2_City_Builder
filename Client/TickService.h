@@ -3,6 +3,7 @@
 
 #include <QTimer>
 
+class QDateTime;
 class GameManagementService;
 class BuildingManagementService;
 
@@ -13,6 +14,9 @@ public:
     int getPopulationDelta() {return newPopulation - oldPopulation;}
     int getHappinessDelta() {return newHappiness - oldHappiness;}
     int getMoneyDelta() {return newMoney - oldMoney;}
+    //Dont add setters for these variables. To set them get the pointer and set it with functions (like setHMS)
+    QDateTime* getStartTime() { return startDateTime; }
+    QDateTime* getGameTime() { return gameDateTime; }
 private:
     static TickService *tickService;
     TickService();
@@ -31,6 +35,9 @@ private:
     int newPopulation;
     double newHappiness;
     double newMoney;
+
+    QDateTime* startDateTime;
+    QDateTime* gameDateTime;
 };
 
 #endif

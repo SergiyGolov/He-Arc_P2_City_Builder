@@ -20,6 +20,8 @@ private:
     int totalPopulation;
     int happiness;
     double taxes;
+    QString cityName;
+    int saveCount;
 public:
     static GameManagementService* getGameManagementService();
     //destructor
@@ -31,10 +33,14 @@ public:
     int getHappiness(){return happiness;}
     int getTotalPopulation(){return totalPopulation;}
     int getTaxes(){return taxes;}
+    int incrementAndGetSaveCount() {return ++saveCount;}
+    QString getCityName(){return cityName;}
     //setters
     void setHappiness(int newHappiness);
     void setMoney(int newMoney);
     void setTotalPopulation(int newTotalPopulation);
     void setTaxes(double newTaxes);
+    void setCityName(QString cityName) { this->cityName = cityName; }
+    void setSaveCount(int saveCount) { this->saveCount = saveCount; }
 };
 #endif // GAMEMANAGEMENTSERVICE_H

@@ -1,2 +1,8 @@
 *.pro.user
 build*/**
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.gz
+docs/*.toc
+docs/*.pdf

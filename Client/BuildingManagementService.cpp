@@ -28,11 +28,10 @@ BuildingManagementService::BuildingManagementService()
 void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
 {
     bool requirements = isBuildingAddable(id);
-    qDebug() << "id:" << id << "requirement_status:" << requirements << "RequirementsWeight:" << ConstantBuilding::get(id).getRequirementsWeight() << "\n";
     if(requirements)
     {
         GameManagementService::getGameManagementService()->setMoney(GameManagementService::getGameManagementService()->getMoney()-(int)ConstantBuilding::get(id).getPrice());
-        GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
+        if(ConstantBuilding::get(id).getPrice()>0)GuiView::getGuiView()->showBuildingPickerMenu(ConstantBuilding::get(id).getCategory()-1); // to update building that we can afford (if they are too expensive their names become red)
         vectorBuildings->append(new Building(id, x, y, angle));
 
         bSumPricePerSeconds = true;
@@ -178,7 +177,6 @@ double BuildingManagementService::getHappiness(Building* b)
     }
     if(sumHappiness > 200)
         sumHappiness = 200;
-    qDebug() << "House calculated";
     return sumHappiness;
 }
 
@@ -186,7 +184,6 @@ double BuildingManagementService::getAverageHappiness()
 {
     if(bAverageHappiness)
     {
-        qDebug() << "AverageHappiness Called";
         int houseCount = 0;
         double averageHappiness_loc = 0.0;
         for(int i = 0; i < vectorBuildings->size(); i++)
@@ -194,14 +191,12 @@ double BuildingManagementService::getAverageHappiness()
             Building* bi = vectorBuildings->at(i);
             if(ConstantBuilding::isHouse(bi->getId()))
             {
-                qDebug() << "House detected";
                 houseCount++;
                 averageHappiness_loc += getHappiness(bi);
             }
         }
         if(houseCount != 0)
             averageHappiness_loc /= houseCount;
-        qDebug() << "AverageHappiness calculated";
         averageHappiness = averageHappiness_loc;
         bAverageHappiness = !bAverageHappiness;
     }
@@ -216,7 +211,6 @@ int BuildingManagementService::getVectorId(int uid,QVector<Building*> *v)
         int iuid = v->at(i)->getUid();
         if(iuid == uid){
             idInVector=i;
-
         }
     }
 

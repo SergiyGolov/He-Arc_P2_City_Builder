@@ -15,6 +15,7 @@
 #include <QDebug>
 #include <GameManagementService.h>
 #include "GraphicService.h"
+#include "BuildingManagementService.h"
 
 GuiView::GuiView(QWidget *parent)
     : QGraphicsView(parent)
@@ -194,7 +195,7 @@ void GuiView::showBuildingPickerMenu(int tabId){
                 tabText->at(ptrElem)->setBId(i);
 
 
-                if(GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(i).getPrice()<0 && ConstantBuilding::get(i).getCategory()>2){
+                if(!BuildingManagementService::getBuildingManagementService()->isBuildingAddable(i)||GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(i).getPrice()<0 && ConstantBuilding::get(i).getCategory()>2){
                     tabText->at(ptrElem)->changeTextColor(Qt::red);
                 }else{
                     tabText->at(ptrElem)->changeTextColor(Qt::black);
@@ -220,7 +221,7 @@ void GuiView::selectBuilding(int n){
 void GuiView::mousePressEvent(QMouseEvent *event){
 
     if(PickerElement *pick=dynamic_cast<PickerElement*>(itemAt(event->pos()))){
-        if(pick->getBId()>=-1 && (pick->getBId()==-1 || GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2) ){ //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
+        if( pick->getBId()>=-1&& BuildingManagementService::getBuildingManagementService()->isBuildingAddable(pick->getBId()) && (pick->getBId()==-1 || GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2) ){ //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
             MapView::getMapView()->callPicker(pick->getBId());
 
         }else if(pick->getBId()<-1){

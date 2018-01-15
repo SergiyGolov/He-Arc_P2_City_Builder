@@ -34,6 +34,7 @@ private:
     PickerElement* remove;
     int cptMaxCat;
 
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);

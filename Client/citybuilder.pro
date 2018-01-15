@@ -46,7 +46,8 @@ HEADERS += \
 	Services.h \
 	RandomService.h \
 	PerlinNoise.h \
-	AudioService.h
+	AudioService.h \
+    ClickableLabel.h
 	
 SOURCES += \
 	ConstantBuilding.cpp \
@@ -69,7 +70,8 @@ SOURCES += \
 	BuildingManagementService.cpp \
 	RandomService.cpp \
 	PerlinNoise.cpp \
-	AudioService.cpp
+	AudioService.cpp \
+    ClickableLabel.cpp
 
 RESOURCES += \
 	images.qrc \

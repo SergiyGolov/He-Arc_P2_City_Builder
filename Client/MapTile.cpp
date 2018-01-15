@@ -15,7 +15,7 @@ MapTile::MapTile(int x, int y, int left, int top, int width, int height,QGraphic
     hauteurBat=-10;
 
 
-    this->setZValue(2);
+
 
     this->setZValue(1);
     bPix=false;

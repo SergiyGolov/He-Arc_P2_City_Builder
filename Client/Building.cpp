@@ -2,11 +2,11 @@
 
 #include "ConstantBuilding.h"
 
-int Building::uid_cpt=0;
+int Building::uIDCpt=0;
 
 Building::Building(int id, int x, int y, int angle)
 {
-    this->uid = ++uid_cpt;
+    this->uid = ++uIDCpt;
     this->id = id;
     this->x = x;
     this->y = y;
