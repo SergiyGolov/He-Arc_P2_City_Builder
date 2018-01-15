@@ -75,10 +75,15 @@
 \chapter{Développement}
 \thispagestyle{headings}
 
+\section{Génération des sols}
+Pour la gestion du terrain, nous avons décidé d'avoir deux types de sol, l'eau et l'herbe. Sur l'herbe, il est possible d'ajouter des bâtiments et sur l'eau non.
 
+Pour pouvoir avoir des cartes auto-générée, nous avons décide d'utiliser un algorithme de bruit de Perlin. Nous n'allons pas aller dans les détails du fonctionnement du bruit de Perlin, dans ce rapport. Mais principe est le suivant, il permet d'avoir des nombres aléatoires qui sont proche les uns de autres en function d'une seed(initialisé au début) et de 1, 2 ou X dimensions (trois dans celui que nous avons utilisés, mais que 2 utilisés).  Vu que les outputs de la function de bruit de Perlin sont les mêmes quand nous utilisons les mêmes inputs. Nous pouvons la considéré comme une fonction à plusieurs variables (qui sont les dimensions et la seed). 
 
-\section{Gestion du terrain du jeu}
+Les nombres aléatoires que nous récupérons de la function sont des nombres flottant entre 0 et 1.
+Leurs distribution sont sous la forme d'une distribution normal (y=e^(-x^2)).
 
+Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le function de Perlin" d'un certain offset (qui n'est pas le même que les index des cases). 
 \section{Gestion du  bonheur}
 
 \section{Launcher et gestion des sauvegardes}
