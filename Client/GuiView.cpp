@@ -212,7 +212,7 @@ void GuiView::showBuildingPickerMenu(int tabId){
 }
 
 void GuiView::selectBuilding(int n){
-    if(tabText->at(n)->getText()!="" && (GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(tabText->at(n)->getBId()).getPrice()>=0 ||ConstantBuilding::get(tabText->at(n)->getBId()).getCategory()<=2) ){
+    if(BuildingManagementService::getBuildingManagementService()->isBuildingAddable(tabText->at(n)->getBId())&& (tabText->at(n)->getText()!="" && (GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(tabText->at(n)->getBId()).getPrice()>=0 ||ConstantBuilding::get(tabText->at(n)->getBId()).getCategory()<=2) )){
         MapView::getMapView()->callPicker(tabText->at(n)->getBId());
     }
 }

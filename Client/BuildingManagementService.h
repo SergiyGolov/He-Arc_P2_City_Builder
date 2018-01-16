@@ -37,7 +37,7 @@ public:
     QJsonObject getJsonBuildings();
     double getAverageHappiness();
     int getVectorId(int uid,QVector<Building*> *v);
-
+    void addBuildingFromSave(int id, int x, int y, int angle);
     void setAngleFromId(int uid,int newAngle){vectorBuildings->at(getVectorId(uid,vectorBuildings))->setAngle(newAngle);}
 	
 private:

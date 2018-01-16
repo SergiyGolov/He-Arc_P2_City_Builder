@@ -28,7 +28,20 @@ public:
     void removeBuildingMode();
     void addRoadMode();
     void toggleGrid();
+    int getNbTiles(){return nbTiles;}
+    void setNbTiles(int nb){this->nbTiles=nb;}
+    double getZoomFactor(){return zoomFactor;}
+    void setZoomFactor(double zoom){this->zoomFactor=zoom;}
+    int getCameraX(){return cameraX;}
+    void setCameraX(int camX){this->cameraX=camX;}
+    int getCameraY(){return cameraY;}
+    void setCameraY(int camY){this->cameraY=camY;}
+    void generateMap();
+    void addBuildingFromSave(int id, int x, int y, int angle);
+
 private:
+    int cameraX;
+    int cameraY;
     int nbTiles;
     static MapView* mapViewInstance;
     MapView(QWidget *parent = 0);
@@ -59,7 +72,7 @@ private:
 
     int roadStartX;
     int roadStartY;
-    bool grid;
+    bool bGrid;
     int buildingCount;
     int roadDir;
     bool falseRoadAdd;
