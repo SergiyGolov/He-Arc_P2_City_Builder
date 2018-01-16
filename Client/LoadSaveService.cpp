@@ -43,50 +43,53 @@ void LoadSaveService::loadGame(QFile* loadFile)
 {
     QString s = loadFile->readAll();
 
-    QJsonDocument jd = QJsonDocument::fromJson(s.toUtf8());
-    QJsonObject jo = jd.object();
-    QJsonObject generation = jo.value(QString("generation")).toObject();
-    QJsonObject mapsize = generation.value(QString("mapsize")).toObject();
-    QJsonObject igconfig = jo.value(QString("igconfig")).toObject();
-    QJsonObject camera = igconfig.value(QString("camera")).toObject();
-    QJsonObject position = camera.value(QString("position")).toObject();
+    if(s.length()>0){
+        QJsonDocument jd = QJsonDocument::fromJson(s.toUtf8());
+        QJsonObject jo = jd.object();
+        QJsonObject generation = jo.value(QString("generation")).toObject();
+        QJsonObject mapsize = generation.value(QString("mapsize")).toObject();
+        QJsonObject igconfig = jo.value(QString("igconfig")).toObject();
+        QJsonObject camera = igconfig.value(QString("camera")).toObject();
+        QJsonObject position = camera.value(QString("position")).toObject();
 
-    QJsonObject gamedata = jo.value(QString("gamedata")).toObject();
-    QJsonObject savedata = jo.value(QString("savedata")).toObject();
+        QJsonObject gamedata = jo.value(QString("gamedata")).toObject();
+        QJsonObject savedata = jo.value(QString("savedata")).toObject();
 
-    MapView::getMapView()->setNbTiles(mapsize.value(QString("h")).toInt());
-    MapView::getMapView()->setZoomFactor(camera.value(QString("zoom")).toDouble());
-    MapView::getMapView()->setCameraX(position.value(QString("x")).toInt());
-    MapView::getMapView()->setCameraY(position.value(QString("y")).toInt());
+        MapView::getMapView()->setNbTiles(mapsize.value(QString("h")).toInt());
+        MapView::getMapView()->setZoomFactor(camera.value(QString("zoom")).toDouble());
+        MapView::getMapView()->setCameraX(position.value(QString("x")).toInt());
+        MapView::getMapView()->setCameraY(position.value(QString("y")).toInt());
 
 
-    GameManagementService::getGameManagementService()->setCityName(gamedata.value(QString("cityname")).toString());
-    GameManagementService::getGameManagementService()->setMoney(gamedata.value(QString("money")).toInt());
-    GameManagementService::getGameManagementService()->setTaxes(gamedata.value(QString("taxes")).toDouble());
+        GameManagementService::getGameManagementService()->setCityName(gamedata.value(QString("cityname")).toString());
+        GameManagementService::getGameManagementService()->setMoney(gamedata.value(QString("money")).toInt());
+        GameManagementService::getGameManagementService()->setTaxes(gamedata.value(QString("taxes")).toDouble());
 
-    Building::setUIDCpt(gamedata.value(QString("lastuid")).toInt());
+        Building::setUIDCpt(gamedata.value(QString("lastuid")).toInt());
 
-    RandomService::setSeed(generation.value(QString("mapseed")).toInt());
+        RandomService::setSeed(generation.value(QString("mapseed")).toInt());
 
-    QJsonObject buildings=gamedata.value(QString("uid")).toObject();
+        MapView::getMapView()->generateMap();
 
-    foreach(const QString& key,buildings.keys())
-    {
-        QJsonObject building=buildings.value(key).toObject();
-        int bId=building.value(QString("id")).toInt();
-        int x=building.value(QString("x")).toInt();
-        int y=building.value(QString("y")).toInt();
-        int angle=building.value(QString("angle")).toInt();
-        int population=building.value(QString("population")).toInt();
+        QJsonObject buildings=gamedata.value(QString("uid")).toObject();
 
-        BuildingManagementService::getBuildingManagementService()->addBuildingFromSave(bId,x,y,angle);
-        MapView::getMapView()->addBuildingFromSave(bId,x,y,angle);
+        foreach(const QString& key,buildings.keys())
+        {
+            QJsonObject building=buildings.value(key).toObject();
+            int bId=building.value(QString("id")).toInt();
+            int x=building.value(QString("x")).toInt();
+            int y=building.value(QString("y")).toInt();
+            int angle=building.value(QString("angle")).toInt();
+            int population=building.value(QString("population")).toInt();
+
+            BuildingManagementService::getBuildingManagementService()->addBuildingFromSave(bId,x,y,angle);
+            MapView::getMapView()->addBuildingFromSave(bId,x,y,angle);
+
+        }
+        //We have to call the right setter restore corrects datas
+
 
     }
-    //We have to call the right setter restore corrects datas
-
-
-    MapView::getMapView()->generateMap();
 
 }
 

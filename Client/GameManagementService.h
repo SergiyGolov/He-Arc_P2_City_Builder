@@ -3,7 +3,7 @@
 
 #include <QList>
 #include <Building.h>
-
+#include <TopView.h>
 
 
 class ConstantBuilding;
@@ -40,7 +40,8 @@ public:
     void setMoney(int newMoney);
     void setTotalPopulation(int newTotalPopulation);
     void setTaxes(double newTaxes);
-    void setCityName(QString cityName) { this->cityName = cityName; }
+    void setCityName(QString cityName) { this->cityName = cityName;
+                                      TopView::getTopView()->setCityName();}
     void setSaveCount(int saveCount) { this->saveCount = saveCount; }
 };
 #endif // GAMEMANAGEMENTSERVICE_H

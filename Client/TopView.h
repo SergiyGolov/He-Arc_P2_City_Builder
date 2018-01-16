@@ -18,6 +18,7 @@ public:
     ~TopView();
      static TopView* getTopView();
      void update();
+     void setCityName();
 private:
     TopView(QWidget *parent = 0);
     static TopView* topViewInstance;
