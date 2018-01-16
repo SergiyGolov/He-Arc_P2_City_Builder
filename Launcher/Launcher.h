@@ -13,31 +13,32 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QPixmap>
+#include <QButtonGroup>
 
-class Launcher : public QWidget
+class Launcher : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    Launcher(QWidget *parent = 0);
+    Launcher(QMainWindow *parent = 0);
     ~Launcher();
 
     //Decoraction
-    QLabel* l_title;
+    QLabel* lTitle;
 
     //Loader/Checker
-    QString s_path_GameFile;
-    QString s_path_SaveFolder;
-    QLabel* l_gameFile;
-    QLabel* l_saveFolder;
-    QPushButton* p_setGameFile;
-    QPushButton* p_setSaveFolder;
+    QString sPathGameFile;
+    QString sPathSaveFolder;
+    QLabel* lGameFile;
+    QLabel* lSaveFolder;
+    QPushButton* pSetGameFile;
+    QPushButton* pSetSaveFolder;
 
     //Launch
-    QPushButton* p_newgame;
-    QPushButton* p_loadsave;
-    QListWidget* listWidgetSaves;
-    QPushButton* p_play;
+    QPushButton* pNewGame;
+    QPushButton* pLoadSave;
+    QListWidget* listSaves;
+    QPushButton* pPlay;
     QProcess process;
 
     //Functions
