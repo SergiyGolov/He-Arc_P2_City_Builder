@@ -1,5 +1,7 @@
 #include "Launcher.h"
 
+
+
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
     this->startTimer(1000);
@@ -11,6 +13,30 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     palette.setBrush(QPalette::Background, pix_Background);
     this->setPalette(palette);
 
+    displayWidgets();
+
+
+    connect(pNewGame, &QPushButton::clicked, [=]()
+    {
+        setViewMode(false);
+    });
+    connect(pLoadSave, &QPushButton::clicked, [=]()
+    {
+        setViewMode(true);
+        updateSaves();
+    });
+    connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
+    connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
+    connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
+}
+
+Launcher::~Launcher()
+{
+
+}
+
+void Launcher::displayWidgets()
+{
     lTitle = new QLabel(QString(tr("City Builder")),this);
     lTitle->setGeometry(50,0,600,200);
     lTitle->setStyleSheet("QLabel { color : white; }");
@@ -49,40 +75,6 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     pLoadSave = new QPushButton(QString(tr("Load")),this);
     pLoadSave->setGeometry(1100,550,150,50);
     pLoadSave->setFont(QFont(QString("Segoe UI Semilight"),20));
-
-    /*
-    QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->addWidget(pSetGameFile, 0, 2);
-    gridLayout->addWidget(pSetSaveFolder, 0, 3);
-    gridLayout->addWidget(pNewGame, 4, 2);
-    gridLayout->addWidget(pLoadSave, 4, 3);
-    gridLayout->addWidget(pPlay, 5, 2, 1, 2);
-
-    QWidget* widget = new QWidget(this);
-    widget->setLayout(gridLayout);
-    this->setCentralWidget(widget);
-    */
-
-
-    connect(pNewGame, &QPushButton::clicked, [=]()
-    {
-        setViewMode(false);
-    });
-    connect(pLoadSave, &QPushButton::clicked, [=]()
-    {
-        setViewMode(true);
-        updateSaves();
-    });
-
-
-    connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
-    connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
-    connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
-}
-
-Launcher::~Launcher()
-{
-
 }
 
 void Launcher::timerEvent(QTimerEvent *event)

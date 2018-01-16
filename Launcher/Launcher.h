@@ -1,5 +1,4 @@
-#ifndef LAUNCH_H
-#define LAUNCH_H
+#pragma once
 
 #include <QMainWindow>
 #include <QPushButton>
@@ -14,6 +13,7 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QButtonGroup>
+#include <QSoundEffect>
 
 class Launcher : public QMainWindow
 {
@@ -51,6 +51,8 @@ private:
     void updateListWidget(QStringList sl);
     QStringList getSavesList();
 
+    void displayWidgets();
+
 private slots:
     void play();
     void setViewMode(bool b);
@@ -63,5 +65,3 @@ protected:
 protected slots:
 
 };
-
-#endif // LAUNCH_H
