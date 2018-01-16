@@ -4,11 +4,20 @@
 #include "LoadSaveService.h"
 
 
+
+
 GraphicService::GraphicService(){
-    mainWidget=MainWidget::getMainWidget();
-    mainWidget->showFullScreen();
-    //we have to load the save settings here
-    LoadSaveService::loadGame(new QFile(QString("")));
+    loading=new QMessageBox(QString("Loading"),QString("The game is loading..."),QMessageBox::Information,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);
+
+    loading->setWindowFlag(Qt::WindowStaysOnTopHint);
+
+    MainWidget::getMainWidget()->showFullScreen();
+
+
+    loading->show();
+    LoadSaveService::loadGame(new QFile(QString(""))); //empty string to load a new game
+    loading->hide();
+
 }
 
 GraphicService::~GraphicService(){
@@ -17,34 +26,6 @@ GraphicService::~GraphicService(){
 
 GraphicService* GraphicService::graphicServiceInstance=nullptr;
 
-void  GraphicService::addRoad(int x, int y){
-}
-
-void  GraphicService::addBuilding(int buildingId,int x,int y){
-
-}
-
-void  GraphicService::removeRoad(int x,int y){
-}
-
-void  GraphicService::removeBuilding(int id){
-
-}
-
-QList<Building>* GraphicService::getBuildingList()
-{
-
-}
-QList<QPoint>* GraphicService::getRoadList(){
-
-}
-
-
-void GraphicService::showMap(){
-
-
-
-}
 
 void GraphicService::setKeyboardShortcuts(int key){
     switch(key){
@@ -139,19 +120,12 @@ void GraphicService::setKeyboardShortcuts(int key){
     }
 }
 
-void GraphicService::showBuildingPickerMenu(int tabId){
-    mainWidget->showBuildingPickerMenu(tabId);
-}
 
-void GraphicService::toggleFilter(int filterId){
 
-}
 
 GraphicService* GraphicService::getGraphicService(){
     if(GraphicService::graphicServiceInstance==nullptr){
         GraphicService::graphicServiceInstance=new GraphicService();
     }
-
     return GraphicService::graphicServiceInstance;
-
 }

@@ -19,8 +19,9 @@ void LoadSaveService::loadGameUI()
     loadfile->setFileName(filename);
     loadfile->open(QIODevice::ReadOnly);
 
+    GraphicService::getGraphicService()->enableLoadingMessage();
     loadGame(loadfile);
-
+    GraphicService::getGraphicService()->disableLoadingMessage();
     loadfile->close();
     delete loadfile;
 }
@@ -41,6 +42,7 @@ void LoadSaveService::saveGameUI()
 
 void LoadSaveService::loadGame(QFile* loadFile)
 {
+
     QString s = loadFile->readAll();
 
     if(s.length()>0){
@@ -86,9 +88,6 @@ void LoadSaveService::loadGame(QFile* loadFile)
             MapView::getMapView()->addBuildingFromSave(bId,x,y,angle);
 
         }
-        //We have to call the right setter restore corrects datas
-
-
     }else{
         MapView::getMapView()->generateMap(); //default map generated
     }

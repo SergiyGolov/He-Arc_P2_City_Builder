@@ -23,13 +23,11 @@ MainWidget::MainWidget(QWidget *parent): QWidget(parent)
     pal.setColor(QPalette::Background, Qt::black);
     this->setPalette(pal);
 
-    gui=GuiView::getGuiView();
-    map=MapView::getMapView();
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox->addWidget(TopView::getTopView(),1);
-    vbox->addWidget(map,50);
-    vbox->addWidget(gui,12);
+    vbox->addWidget( MapView::getMapView(),50);
+    vbox->addWidget(GuiView::getGuiView(),12);
 }
 
 MainWidget::~MainWidget()
@@ -39,7 +37,7 @@ MainWidget::~MainWidget()
 
 void MainWidget::showBuildingPickerMenu(int tabId)
 {
-    gui->showBuildingPickerMenu(tabId);
+    GuiView::getGuiView()->showBuildingPickerMenu(tabId);
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *event)

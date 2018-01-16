@@ -106,11 +106,11 @@ private:
     void updateNeighbourRoad(MapTile* tile);
 
 
-   void getNeighbours(MapTile* tile);
+    void getNeighbours(MapTile* tile);
     QList<MapTile*> *neighbourList;
 
 
- QGraphicsEllipseItem *radiusCircle;
+    QGraphicsEllipseItem *radiusCircle;
 
 public slots:
     void blinkRedTileSlot();

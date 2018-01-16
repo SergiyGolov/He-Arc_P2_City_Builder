@@ -94,6 +94,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
 }
 
 void MapView::generateMap(){
+
     this->resetTransform();
     scene->clear();
     tiles->clear();
@@ -109,9 +110,6 @@ void MapView::generateMap(){
 
     scene->addItem(radiusCircle);
     pixelPerTile=((screenHeight-screenHeight/10)/nbTiles)*2;
-
-
-
 
     tiles->resize(nbTiles*nbTiles);
 
