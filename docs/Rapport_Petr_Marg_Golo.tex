@@ -76,15 +76,17 @@
 \thispagestyle{headings}
 
 \section{Génération des sols}
-Pour la gestion du terrain, nous avons décidé d'avoir deux types de sol, l'eau et l'herbe. Sur l'herbe, il est possible d'ajouter des bâtiments et sur l'eau non.
+Pour la gestion du terrain, nous avons décidé d'avoir deux types de sol : l'eau et l'herbe. Sur l'herbe, il est possible d'ajouter des bâtiments et sur l'eau non.
 
-Pour pouvoir avoir des cartes auto-générée, nous avons décide d'utiliser un algorithme de bruit de Perlin. Nous n'allons pas aller dans les détails du fonctionnement du bruit de Perlin, dans ce rapport. Mais principe est le suivant, il permet d'avoir des nombres aléatoires qui sont proche les uns de autres en function d'une seed(initialisé au début) et de 1, 2 ou X dimensions (trois dans celui que nous avons utilisés, mais que 2 utilisés).  Vu que les outputs de la function de bruit de Perlin sont les mêmes quand nous utilisons les mêmes inputs. Nous pouvons la considéré comme une fonction à plusieurs variables (qui sont les dimensions et la seed). 
+Pour pouvoir avoir des cartes auto-générée, nous avons décide d'utiliser un algorithme de bruit de Perlin. Nous n'allons pas aller dans les détails du fonctionnement du bruit de Perlin, dans ce rapport. Mais son principe est le suivant, il permet d'avoir des nombres aléatoires qui sont proche les uns de autres en function d'une seed(pour l'aléatoire, initialisé au début) et de 1, 2 ou X dimensions (trois dans celui que nous avons utilisés, mais que 2 utilisés). Vu que les outputs de la function de bruit de Perlin sont les mêmes quand nous utilisons les mêmes inputs. Nous pouvons la considéré comme une fonction à plusieurs variables (qui sont les dimensions et la seed). Changer la seed donne des résultats complètement différent mais changer les autres variables change peu entre chaque valeurs.
+
+\[bruit = perlin(seed, x, y, z)\]
 
 Les nombres aléatoires que nous récupérons de la function sont des nombres flottant entre 0 et 1.
 Leurs distribution sont sous la forme d'une distribution normal.
 \[y=e^{-x^{2}}\]
 
-Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le function de Perlin" d'un certain offset (qui n'est pas le même que les index des cases).
+Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le function de Perlin" d'un certain offset (qui est un multiple des index des cases).
 
 \section{Routes et bâtiments}
 Pour la gestion des routes et des bâtiments nous sommes parti sur une approche plutôt simple qui est d'avoir divisé en trois classe qui chacune des rôles spécifique. Une qui décrit les caractéristiques propre à chaque bâtiments : les constantes -> ConstantBuilding. Une seconde classe qui décrit une bâtiment spécifique à la partie -> Building. Et une troisième qui sert de gestionnaires de building, 'classe tableau' -> Building Manager. 
@@ -109,10 +111,10 @@ Nous avons choisi d'avoir des objets au lieu d'une liste de constante, pour pouv
 
 Liste des caractéristique dérivé :
 \begin{itemize}
-  \item \(PrixParSecondes = Prix / 4\)
-  \item \(Efficacite = (Prix/10)^{1.4} + 10\) (arrondi au multiple de 25 le plus proche)
-  \item \(RayonDAction = Log10(PrixParSecondes*Efficacite + 1)\) (Arrondi au multiple de 5 le plus proche)
-  \item \(Poids du bâtiment dans les pré-requis = Prix / 10\)
+  \item Prix/Secondes = \(Prix / 4\)
+  \item Efficacité = \((Prix/10)^{1.4} + 10\) (arrondi au multiple de 25 le plus proche)
+  \item Rayon d'action = \(Log10(PrixParSecondes*Efficacite + 1)\) (Arrondi au multiple de 5 le plus proche)
+  \item Poids du Bâtiment dans les pré-requis = \(Prix / 10\)
 \end{itemize}
 
 On remarque donc que le prix du bâtiment influe directement sur tous les caractéristique qui définisse si le bâtiment est performant ou non.
@@ -146,9 +148,8 @@ La liste des bâtiments pré-requis et des poids pour le laboratoire est la suiv
 	\item Caserne de pompier : 1.5
 	\item Quartiers généraux : 5
 \end{itemize}
-
 Il y a donc au moins une possibilité pour arrivé à remplir cette demande, qui est d'avoir une bâtiment de chaque. A noter que dans ce cas, la somme de pré-requis n'influence pas pour ce bâtiment, mais on pourrai imaginer qu'un bâtiment aille une somme plus grande que la somme de chaque bâtiment pré-requis et la la somme aurai une influence.
-	
+
 \subsection{Building}
 La classe building décrit un bâtiment posé dans une partie. Il est décris les caractéristiques suivantes :
 \begin{itemize}
@@ -199,6 +200,10 @@ Les paramètres suivant influence le bonheur global.
 	\item Les impôts en vigueur actuellement
 \end{itemize}
 Concernant les impôts nous avons fixé un multiplicateur à 100% qui est au point neutre des impôts (8.0%). Et qui peut varier entre 0%-200%. Plus le impôts sont bas plus les habitants seront content et à l'inverse plus les impôts sont élevé moins les habitants sont content.
+\newline
+Pour ajouter un effet de lissage sur le temps du bonheur, nous avons implémenté un algorithme assez simple qui est le suivant :
+\[bohneur = 20\% ancienBohneur + 80\% bohneurResidentielMoyen\]
+L'ancien bonheur correspond au bonheur qui était en vigueur la seconde précédente.
 
 \subsection{Population}
 Nous avons actuellement une population fixe mais il avait été prévu d'avoir un accroissement de la population en fonction du bonheur. Ainsi que des logements qui se construisent automatique au bords des routes en conséquence.
@@ -212,14 +217,13 @@ Pour l'argent il y a principalement deux facteurs qui influence les revenus ou n
 Pour les revenus des impôts, nous avons fais une règle un peu fantaisiste qui est que les habitants payent des impôts relatif à leur satisfaction à la ville. Ce qui impose au joueur d'avoir une ville heureuse pour pouvoir avoir de l'argent. Ce qui nous évite permis de contourné le faites que les flux de population ne sont pas géré. Car initialement les revenus n'était pas censé être influencé par le bonheur mais seulement par la population. Ce qui nous apportai une liaison en triangle entre les trois indicateurs.
 Selon ce schéma Bonheur -> Population -> Argent -> Bonheur(Indirectement) et la boucle est fermé.
 
-\subsection{Smoothing et dérivé des indicateurs}
-
+\subsection{Dérivé des indicateurs}
+Lors du déroulement en fonction du temps nous avons trouvé intéressant d'avoir d'affiche la variation de chaque indicateurs entre les deux derniers calculs (la dérivée en fonction du temps). Calculé de cette façon. \[deltaValeur = nouvelleValeur - ancienneValeur\]
 
 \section{Gestion du son}
 Pour la gestion du son nous avons décider de pouvoir traiter facilement les musiques et les bruitages du jeu avec un mixeur. Nous avons donc crée une classe. L'HUD supérieur permet de la piloté à l'aide de trois sliders : Un pour le contrôle du volume de la musique, un pour celui des bruitages et un troisième englobant les deux, appelé master.
 
-
-\section{Launcher et gestion des sauvegardes}
+\subsection{Gestion des sauvegardes}
 Pour la sauvegarde des parties, nous avons opté pour un système de enregistrement par fichier JSON. Ce qui nous permet d'avoir les données répartis sous forme hiérarchique et Qt possède toute une palette de fonction pour gérer des fichier JSON. Nous n'avions aucune connaissance de ce format.
 \newline
 Nous avions prévu deux types de fichier de sauvegarde : Un concernant une partie et un autre pour les configurations, celui-ci est le même pour n'importe quelles parties. Nous n'avons malheureusement pas eu le temps d'implémenter la sauvegarde de la configuration.
@@ -227,6 +231,8 @@ Nous avions prévu deux types de fichier de sauvegarde : Un concernant une parti
 Quand aux données à sauvegarder, nous avons essayer de stocker un minimum d'information, pour éviter toute redondance. Comme par exemple le bonheur de la ville peut-être calculé avec nos fonctions. Il n'est donc pas sauvegarder dans le fichier. Un autre exemple qui est assez 'puissant' et nous permet d'éviter beaucoup d'information est la topographie de la carte, car en effet vu qu'elle est généré aléatoirement il nous suffi de stocker la seed et nous aurons toujours le même résultat.
 \newline
 Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
+
+\section{Launcher}
 
 \chapter{Tests}
 \thispagestyle{headings}
@@ -239,6 +245,13 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 \chapter{Conclusion}
 \thispagestyle{headings}
 
+\chapter{Source}
+Pour le projet en général, nous avons principalement utilisé la documentation en ligne du framework Qt pour le développement.
+\newline
+Pour le utilisation du bruit de Perlin, nous avons consulté une série de vidéo tutoriel en javascript (avec le framework p5) de la chaîne Youtube "the CodingTrain" par Daniel Shiffman qui a couvert le sujet.
+\newline
+Pour ce qui est de l'algorithme de Perlin (en lui même) utilisé, il a été trouvé sur le compte Github de Sol-program :
+\url{https://github.com/sol-prog/Perlin_Noise}
 
 \chapter{Annexes}
 \thispagestyle{headings}
