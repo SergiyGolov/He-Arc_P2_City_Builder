@@ -20,14 +20,13 @@ public:
     void setText(QString newText){this->text->setText(newText);}
     int getUniqueBId(){return uniqueBId;}
     void setUniqueBId(int uBiD){this->uniqueBId=uBiD;}
-    QString getText(){return this->text->text();}
 
     void setMainTile(int x,int y){this->mainTileX=x;this->mainTileY=y;}
-    void setBuildingWidth(int l){this->largeurBat=l;}
-    void setBuildingHeight(int h){this->hauteurBat=h;}
+    void setBuildingWidth(int l){this->buildingWidth=l;}
+    void setBuildingHeight(int h){this->buildingHeight=h;}
 
-    int getBuildingWidth(){return largeurBat;}
-    int getBuildingHeight(){return hauteurBat;}
+    int getBuildingWidth(){return buildingWidth;}
+    int getBuildingHeight(){return buildingHeight;}
     int getMainTileX(){return mainTileX;}
     int getMainTileY(){return mainTileY;}
     int getPixelWidth(){return rect().size().width();}
@@ -66,8 +65,8 @@ private:
 
     int mainTileX;
     int mainTileY;
-    int largeurBat;
-    int hauteurBat;
+    int buildingWidth;
+    int buildingHeight;
 
     bool bPix;
 

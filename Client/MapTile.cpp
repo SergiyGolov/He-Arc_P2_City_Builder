@@ -11,8 +11,8 @@ MapTile::MapTile(int x, int y, int left, int top, int width, int height,QGraphic
     uniqueBId=-10;
     mainTileX=-10;
     mainTileY=-10;
-    largeurBat=-10;
-    hauteurBat=-10;
+    buildingWidth=-10;
+    buildingHeight=-10;
 
 
 
