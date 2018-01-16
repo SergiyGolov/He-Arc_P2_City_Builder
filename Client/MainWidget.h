@@ -16,8 +16,6 @@ public:
 private:
     static MainWidget* mainWidgetInstance;
     MainWidget(QWidget *parent = 0);
-    GuiView *gui;
-    MapView *map;
 
 protected:
     void keyPressEvent(QKeyEvent *event);

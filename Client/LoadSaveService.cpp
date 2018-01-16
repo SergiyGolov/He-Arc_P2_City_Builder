@@ -16,11 +16,14 @@ void LoadSaveService::loadGameUI()
 {
     QFile* loadfile = new QFile();
     QString filename = QFileDialog::getOpenFileName(nullptr, tr("Load file"), QString("."), tr("City Builder Saves (*.cbsave *.save *.cb *.json)"));
-    loadfile->setFileName(filename);
-    loadfile->open(QIODevice::ReadOnly);
+    if(filename.count()>0){
+        loadfile->setFileName(filename);
+        loadfile->open(QIODevice::ReadOnly);
 
-    loadGame(loadfile);
-
+        GraphicService::getGraphicService()->enableLoadingMessage();
+        loadGame(loadfile);
+        GraphicService::getGraphicService()->disableLoadingMessage();
+    }
     loadfile->close();
     delete loadfile;
 }
@@ -28,19 +31,25 @@ void LoadSaveService::loadGameUI()
 void LoadSaveService::saveGameUI()
 {
     QFile* savefile = new QFile();
-    QString filename = QFileDialog::getSaveFileName(nullptr, tr("Save file"), QString("."), tr("City Builder Saves (*.cbsave *.save *.cb *.json)"));
-    savefile->setFileName(filename);
-    savefile->open(QIODevice::WriteOnly);
-
-    saveGame(savefile);
-
+    QString filter = tr("City Builder Saves (*.cbsave)");
+    QString filename = QFileDialog::getSaveFileName(nullptr, tr("Save file"), QString("."),tr("City Builder Saves (*.cbsave *.save *.cb *.json)"),&filter );
+    if(filename.count()>0){
+        savefile->setFileName(filename);
+        savefile->open(QIODevice::WriteOnly);
+        QMessageBox savingMsg(QString("Saving"),QString("The game is saving..."),QMessageBox::Information,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);
+        savingMsg.show();
+        saveGame(savefile);
+        savingMsg.hide();
+    }
     savefile->close();
+
     delete savefile;
 }
 
 
 void LoadSaveService::loadGame(QFile* loadFile)
 {
+
     QString s = loadFile->readAll();
 
     if(s.length()>0){
@@ -86,9 +95,6 @@ void LoadSaveService::loadGame(QFile* loadFile)
             MapView::getMapView()->addBuildingFromSave(bId,x,y,angle);
 
         }
-        //We have to call the right setter restore corrects datas
-
-
     }else{
         MapView::getMapView()->generateMap(); //default map generated
     }

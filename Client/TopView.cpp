@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QtWidgets>
+#include <QMessageBox>
 
 TopView* TopView::topViewInstance=nullptr;
 
@@ -117,7 +118,11 @@ TopView::TopView(QWidget *parent) : QGraphicsView(parent)
     seed->move(screenWidth - seed->width(), 0);
 
     QObject::connect(taxes, SIGNAL(valueChanged(double)), this, SLOT(taxesChanged(void)));
-    QObject::connect(quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
+
+    QObject::connect(quit, &QPushButton::clicked, [=]() {
+        int result=QMessageBox::warning(this,"Quit game?","Are you sure that you want to quit the game?",QDialogButtonBox::Yes,QDialogButtonBox::No);
+        if(result==QDialogButtonBox::Yes)QApplication::quit();
+    });
     QObject::connect(save, &QPushButton::clicked, LoadSaveService::saveGameUI);
     QObject::connect(load, &QPushButton::clicked, LoadSaveService::loadGameUI);
 

@@ -20,8 +20,6 @@
 #include "RandomService.h"
 
 
-
-//TO-DO: use perlinNoise tu generate background with white clouds on blue background
 MapView* MapView::mapViewInstance=nullptr;
 
 MapView* MapView::getMapView()
@@ -94,6 +92,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
 }
 
 void MapView::generateMap(){
+
     this->resetTransform();
     scene->clear();
     tiles->clear();
@@ -109,9 +108,6 @@ void MapView::generateMap(){
 
     scene->addItem(radiusCircle);
     pixelPerTile=((screenHeight-screenHeight/10)/nbTiles)*2;
-
-
-
 
     tiles->resize(nbTiles*nbTiles);
 
@@ -168,7 +164,7 @@ void MapView::generateMap(){
     rotate(45);
 
 
-
+this->translate(cameraX,cameraY);
 
     if(zoomFactor<1){
         this->scale(0.5,0.5);
@@ -178,7 +174,7 @@ void MapView::generateMap(){
         }
     }
 
-    this->translate(cameraX,cameraY);
+
 
 
 }
@@ -382,7 +378,7 @@ void MapView::moveAddBuilding(MapTile *rect){
             break;
         }
 
-        if(pixFilePath!="NOPIX") pixExists=true;
+        if(pixFilePath!="NOPIX")pixExists=true;
 
         if(currentBuild==nullptr && pixExists){
             QTransform trans;
@@ -1137,7 +1133,6 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),9);
             }else if(tile->getX()-1>=0 && tile->getY()-1>=0 && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
                 pixPath=":/ressources/routeL.png";
-                // trans.translate(-pixelPerTile/7,0);
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),10);
             }
             break;
@@ -1228,5 +1223,67 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
                 tiles->at((x+i)+(y+j)*nbTiles)->setBrush(color);
             }
         }
+    }else{
+        buildingCount++;
+        tiles->at(x+y*nbTiles)->setOccupied(true);
+        tiles->at(x+y*nbTiles)->setBId(id);
+        tiles->at(x+y*nbTiles)->setMainTile(x,y);
+        tiles->at(x+y*nbTiles)->setBuildingWidth(1);
+        tiles->at(x+y*nbTiles)->setBuildingHeight(1);
+        tiles->at(x+y*nbTiles)->setUniqueBId(buildingCount);
+
+        QTransform trans;
+        trans.scale(0.19,0.19);
+        QString pixPath;
+
+        switch(angle){
+        case 1:
+            trans.rotate(-90);
+            trans.translate(-5.4*pixelPerTile,0);
+        case 0:
+            pixPath=":/ressources/route.png";
+            break;
+        case 2:
+            pixPath=":/ressources/routeX.png";
+            break;
+        case 4:
+            trans.rotate(180);
+            trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+        case 3:
+            pixPath=":/ressources/routeT.png";
+            break;
+        case 5:
+            trans.rotate(-90);
+            trans.translate(-5.35*pixelPerTile,0);
+            pixPath=":/ressources/routeT.png";
+            break;
+        case 6:
+            trans.rotate(90);
+            trans.translate(0,-5.35*pixelPerTile);
+            pixPath=":/ressources/routeT.png";
+            break;
+        case 7:
+            trans.rotate(-90);
+            trans.translate(-5.35*pixelPerTile,0);
+            pixPath=":/ressources/routeL.png";
+            break;
+        case 8:
+            trans.rotate(90);
+            trans.translate(0,-5.35*pixelPerTile);
+            pixPath=":/ressources/routeL.png";
+            break;
+        case 9:
+            trans.rotate(180);
+            trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+        case 10:
+            pixPath=":/ressources/routeL.png";
+            break;
+        }
+        currentBuild=new QGraphicsPixmapItem(QPixmap(pixPath));
+        currentBuild->setZValue(2);
+        currentBuild->setTransform(trans);
+        scene->addItem(currentBuild);
+        tiles->at(x+y*nbTiles)->addPixRoad(currentBuild);
+        currentBuild=nullptr;
     }
 }
