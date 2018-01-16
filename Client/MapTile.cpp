@@ -16,7 +16,6 @@ MapTile::MapTile(int x, int y, int left, int top, int width, int height,QGraphic
 
 
 
-
     this->setZValue(1);
     bPix=false;
     bOccupied=false;

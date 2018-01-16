@@ -1,0 +1,152 @@
+{
+    "gamedata": {
+        "cityname": "Exemple de sauvegarde",
+        "igtime": "2018-01-21T22:00:00",
+        "lastuid": 17,
+        "money": 98108,
+        "taxes": 11,
+        "uid": {
+            "1": {
+                "angle": 9,
+                "id": 0,
+                "population": 0,
+                "x": 3,
+                "y": 3
+            },
+            "10": {
+                "angle": 0,
+                "id": 0,
+                "population": 0,
+                "x": 7,
+                "y": 3
+            },
+            "11": {
+                "angle": 0,
+                "id": 0,
+                "population": 0,
+                "x": 8,
+                "y": 3
+            },
+            "12": {
+                "angle": 0,
+                "id": 1,
+                "population": 1,
+                "x": 8,
+                "y": 2
+            },
+            "13": {
+                "angle": 0,
+                "id": 2,
+                "population": 1,
+                "x": 7,
+                "y": 2
+            },
+            "14": {
+                "angle": 0,
+                "id": 2,
+                "population": 1,
+                "x": 6,
+                "y": 2
+            },
+            "15": {
+                "angle": 0,
+                "id": 4,
+                "population": 2,
+                "x": 4,
+                "y": 2
+            },
+            "16": {
+                "angle": 0,
+                "id": 24,
+                "population": 0,
+                "x": 4,
+                "y": 4
+            },
+            "17": {
+                "angle": 0,
+                "id": 18,
+                "population": 0,
+                "x": 8,
+                "y": 4
+            },
+            "2": {
+                "angle": 1,
+                "id": 0,
+                "population": 0,
+                "x": 3,
+                "y": 4
+            },
+            "3": {
+                "angle": 1,
+                "id": 0,
+                "population": 0,
+                "x": 3,
+                "y": 5
+            },
+            "4": {
+                "angle": 1,
+                "id": 0,
+                "population": 0,
+                "x": 3,
+                "y": 6
+            },
+            "5": {
+                "angle": 1,
+                "id": 0,
+                "population": 0,
+                "x": 3,
+                "y": 7
+            },
+            "6": {
+                "angle": 1,
+                "id": 0,
+                "population": 0,
+                "x": 3,
+                "y": 8
+            },
+            "7": {
+                "angle": 0,
+                "id": 0,
+                "population": 0,
+                "x": 4,
+                "y": 3
+            },
+            "8": {
+                "angle": 0,
+                "id": 0,
+                "population": 0,
+                "x": 5,
+                "y": 3
+            },
+            "9": {
+                "angle": 0,
+                "id": 0,
+                "population": 0,
+                "x": 6,
+                "y": 3
+            }
+        }
+    },
+    "generation": {
+        "levelsize": {
+            "h": 0,
+            "w": 0
+        },
+        "mapseed": 0
+    },
+    "igconfig": {
+        "camera": {
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "zoom": 0
+        },
+        "timespeed": 0
+    },
+    "savedata": {
+        "countsave": 3,
+        "firstsave": "2018-01-16T08:48:28",
+        "lastsave": "2018-01-16T08:50:53"
+    }
+}
