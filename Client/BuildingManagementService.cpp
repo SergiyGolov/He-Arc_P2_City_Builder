@@ -42,6 +42,13 @@ void BuildingManagementService::addBuilding(int id, int x, int y, int angle)
     }
 }
 
+void BuildingManagementService::addBuildingFromSave(int id, int x, int y, int angle)
+{
+
+        vectorBuildings->append(new Building(id, x, y, angle));
+
+}
+
 void BuildingManagementService::removeBuilding(int uid)
 {
     int idInVector=getVectorId(uid,vectorBuildings);

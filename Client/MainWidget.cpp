@@ -19,6 +19,7 @@ MainWidget* MainWidget::getMainWidget()
 MainWidget::MainWidget(QWidget *parent): QWidget(parent)
 {
     QPalette pal = palette();
+
     pal.setColor(QPalette::Background, Qt::black);
     this->setPalette(pal);
 

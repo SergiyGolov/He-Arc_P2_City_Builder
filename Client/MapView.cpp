@@ -41,9 +41,10 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     bRoad=false;
     bPicker=false;
     bClick=false;
-    grid=false;
+    bGrid=false;
     pickerBId=0;
-
+    cameraX=0;
+    cameraY=0;
     prevRect=nullptr;
     roadDir=0;
     lastTilePix=nullptr;
@@ -82,23 +83,34 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     nbTiles=256;
     lastbId=-1;
     circleWidth=1;
+  tiles=new QVector<MapTile*>();
+     setTransformationAnchor(QGraphicsView::NoAnchor);
+     radiusCircle=new QGraphicsEllipseItem(0,0,1,1);
+     radiusCircle->setVisible(false);
+     radiusCircle->setZValue(5);
+     radiusCircle->setOpacity(0.5);
 
+     scene->addItem(radiusCircle);
+     srand(time(NULL));
+     int seed = rand() ;
+     RandomService::setSeed(seed);
+
+
+}
+
+void MapView::generateMap(){
+    this->resetTransform();
     pixelPerTile=((screenHeight-screenHeight/10)/nbTiles)*2;
 
 
-    radiusCircle=new QGraphicsEllipseItem(0,0,1,1);
-    radiusCircle->setVisible(false);
-    radiusCircle->setZValue(5);
-    radiusCircle->setOpacity(0.5);
 
-    scene->addItem(radiusCircle);
-    tiles=new QVector<MapTile*>();
+
     tiles->resize(nbTiles*nbTiles);
 
     baseColors=new QVector<QColor>(nbTiles*nbTiles);
 
 
-    setTransformationAnchor(QGraphicsView::NoAnchor);
+
     cells = RandomService::generateMap(nbTiles, nbTiles);
 
     for(int j=0;j<nbTiles;j++)
@@ -148,6 +160,17 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     rotate(45);
 
 
+
+
+    if(zoomFactor<1){
+        this->scale(0.5,0.5);
+    }else if(zoomFactor>1){
+        for(int i=0;i<(zoomFactor-1)/0.05;i++){
+            this->scale(2,2);
+        }
+    }
+
+    this->translate(cameraX,cameraY);
 
 
 }
@@ -835,7 +858,7 @@ void MapView::cancelAdd(MapTile* rect){
         foreach(MapTile* tile,*tempRoadList)
         {
             tile->removePix();
-            if(!grid)tile->setPen(QPen(Qt::transparent));
+            if(!bGrid)tile->setPen(QPen(Qt::transparent));
             else tile->setPen(QPen(Qt::black));
             tile->setBrush(QBrush(baseColors->at((tile->getX())+(tile->getY())*nbTiles)));
             tile->setOccupied(false);
@@ -868,14 +891,14 @@ void MapView::cancelAdd(MapTile* rect){
 void MapView::toggleGrid(){
     for(int i=0;i<nbTiles;i++){
         for(int j=0;j<nbTiles;j++){
-            if(grid){
+            if(bGrid){
                 tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::transparent));
-            }else if(!grid){
+            }else if(!bGrid){
                 tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::black));
             }
         }
     }
-    grid=!grid;
+    bGrid=!bGrid;
 }
 
 
@@ -915,15 +938,23 @@ void MapView::translateMeth(int direction){
     switch(direction){
     case -2:
         this->translate(-15/zoomFactor-35/(zoomFactor*zoomFactor),-15/zoomFactor-35/(zoomFactor*zoomFactor));
+        cameraX+=-15/zoomFactor-35/(zoomFactor*zoomFactor);
+        cameraY+=-15/zoomFactor-35/(zoomFactor*zoomFactor);
         break;
     case 2:
         this->translate(15/zoomFactor+35/(zoomFactor*zoomFactor),15/zoomFactor+35/(zoomFactor*zoomFactor));
+        cameraX+=15/zoomFactor+35/(zoomFactor*zoomFactor);
+        cameraY+=15/zoomFactor+35/(zoomFactor*zoomFactor);
         break;
     case 1:
         this->translate(-15/zoomFactor-35/(zoomFactor*zoomFactor),15/zoomFactor+35/(zoomFactor*zoomFactor));
+        cameraX+=-15/zoomFactor-35/(zoomFactor*zoomFactor);
+        cameraY+=15/zoomFactor+35/(zoomFactor*zoomFactor);
         break;
     case -1:
         this->translate(15/zoomFactor+35/(zoomFactor*zoomFactor),-15/zoomFactor-35/(zoomFactor*zoomFactor));
+        cameraX+=15/zoomFactor+35/(zoomFactor*zoomFactor);
+        cameraY+=-15/zoomFactor-35/(zoomFactor*zoomFactor);
         break;
     }
 
@@ -998,7 +1029,7 @@ void MapView::blinkRedTileSlot()
                 }
                 else
                 {
-                    if(grid)
+                    if(bGrid)
                         tiles->at((blinkRedTile->getX()+i)+(blinkRedTile->getY()+j)*nbTiles)->setPen(QPen(Qt::black));
                     else
                         tiles->at((blinkRedTile->getX()+i)+(blinkRedTile->getY()+j)*nbTiles)->setPen(QPen(Qt::transparent));
@@ -1015,7 +1046,7 @@ void MapView::blinkRedTileSlot()
         {
             for(int j=0;j<buildHeight;j++)
             {
-                if(grid)
+                if(bGrid)
                     tiles->at((blinkRedTile->getX()+i)+(blinkRedTile->getY()+j)*nbTiles)->setPen(QPen(Qt::black));
                 else
                     tiles->at((blinkRedTile->getX()+i)+(blinkRedTile->getY()+j)*nbTiles)->setPen(QPen(Qt::transparent));
@@ -1119,59 +1150,11 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
             }
             break;
         }
-        //        if(neighbourCount==2 ){
-        //            if(onlyNeighbour!=tile){
-        //                if(  onlyNeighbour->getY()<tile->getY() && onlyNeighbour->getX()==tile->getX() &&roadDir==2 && onlyNeighbour->getX()-1>0 && tiles->at((onlyNeighbour->getX()-1)+(onlyNeighbour->getY())*nbTiles)->getBId()==0){
-
-        //                qDebug()<<"1";
-        //                trans.rotate(-90);
-        //                trans.translate(-5.35*pixelPerTile,0);
-        //                }
-
-        //                if( onlyNeighbour->getY()<tile->getY() && onlyNeighbour->getX()==tile->getX()  &&roadDir==2 && onlyNeighbour->getX()+1<nbTiles && tiles->at((onlyNeighbour->getX()+1)+(onlyNeighbour->getY())*nbTiles)->getBId()==0 && tempRoadList->indexOf(tiles->at((onlyNeighbour->getX()+1)+(onlyNeighbour->getY())*nbTiles))==-1){
-
-        //                qDebug()<<"2";
-        //                trans.rotate(180);
-        //                trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
-        //                }
-
-        //                if(onlyNeighbour->getX()<tile->getX() && onlyNeighbour->getY()==tile->getY()  && roadDir==1 && tiles->at((onlyNeighbour->getX())+(onlyNeighbour->getY()+1)*nbTiles)->getBId()==0){
-        //                    trans.rotate(180);
-        //                trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
-        //                 qDebug()<<"3";
-        //                }
-
-        //                if( onlyNeighbour->getY()>tile->getY() && onlyNeighbour->getX()==tile->getX()  && roadDir==-2 && tiles->at((onlyNeighbour->getX()+1)+(onlyNeighbour->getY())*nbTiles)->getBId()==0){
-        //                    trans.rotate(90);
-        //                trans.translate(0,-5.35*pixelPerTile);
-        //                  qDebug()<<"4";
-        //                }
-
-        //                if( onlyNeighbour->getX()<tile->getX() && onlyNeighbour->getY()==tile->getY()  && roadDir==1 && tiles->at((onlyNeighbour->getX())+(onlyNeighbour->getY()-1)*nbTiles)->getBId()==0){
-        //                    trans.rotate(90);
-        //                trans.translate(0,-5.35*pixelPerTile);
-        //                 qDebug()<<"5";
-        //                }
-
-        //                if( onlyNeighbour->getX()>tile->getX() && onlyNeighbour->getY()==tile->getY()&& roadDir==-1 && tiles->at((onlyNeighbour->getX())+(onlyNeighbour->getY()+1)*nbTiles)->getBId()==0){
-        //                    trans.rotate(-90);
-        //                    trans.translate(-5.35*pixelPerTile,0);
-        //                 qDebug()<<"6";
-        //                }
-        //            }else{
-        //                //le cas dans le cas une case qu'on vient d'ajouter fait office de virage
-        //            }
-        //        }
-
-
 
         if(pixPath!="NOPIX"){
             QGraphicsPixmapItem *roadPix=new QGraphicsPixmapItem(QPixmap(pixPath));
             scene->addItem(roadPix);
             tile->removePix();
-
-
-
 
             roadPix->setTransform(trans);
             roadPix->setZValue(2);
@@ -1181,3 +1164,62 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
     }
 }
 
+void MapView::addBuildingFromSave(int id, int x, int y, int angle){
+    int buildWidthSave=ConstantBuilding::get(id).getTileWidth();
+    int buildHeightSave=ConstantBuilding::get(id).getTileHeight();
+
+
+    if(id!=0){
+        QColor color;
+        switch(ConstantBuilding::get(id).getCategory()-1)
+        {
+        case -1:
+            color=Qt::darkGray;
+            break;
+        case 0:
+            color=Qt::yellow;
+            break;
+        case 1:
+            color=Qt::red;
+            break;
+        case 2:
+            color=Qt::green;
+            break;
+        case 3:
+            color=Qt::darkRed;
+            break;
+        case 4:
+            color=Qt::magenta;
+            break;
+        case 5:
+            color=Qt::cyan;
+            break;
+        case 6:
+            color=Qt::white;
+            break;
+        case 7:
+            color=Qt::lightGray;
+            break;
+        case 8:
+            color=Qt::darkMagenta;
+            break;
+
+        }
+
+
+
+        buildingCount++;
+        for(int i=0;i<buildWidthSave;i++){
+            for(int j=0;j<buildHeightSave;j++){
+                tiles->at((x+i)+(y+j)*nbTiles)->setOccupied(true);
+                tiles->at((x+i)+(y+j)*nbTiles)->setBId(id);
+                tiles->at((x+i)+(y+j)*nbTiles)->setMainTile(x,y);
+                tiles->at((x+i)+(y+j)*nbTiles)->setBuildingWidth(buildWidthSave);
+                tiles->at((x+i)+(y+j)*nbTiles)->setBuildingHeight(buildHeightSave);
+                tiles->at((x+i)+(y+j)*nbTiles)->setUniqueBId(buildingCount);
+                 tiles->at((x+i)+(y+j)*nbTiles)->setBrush(color);
+                 qDebug()<<id;
+            }
+        }
+    }
+}
