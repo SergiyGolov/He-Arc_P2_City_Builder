@@ -20,8 +20,6 @@
 #include "RandomService.h"
 
 
-
-//TO-DO: use perlinNoise tu generate background with white clouds on blue background
 MapView* MapView::mapViewInstance=nullptr;
 
 MapView* MapView::getMapView()

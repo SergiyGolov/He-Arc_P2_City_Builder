@@ -16,12 +16,14 @@ void LoadSaveService::loadGameUI()
 {
     QFile* loadfile = new QFile();
     QString filename = QFileDialog::getOpenFileName(nullptr, tr("Load file"), QString("."), tr("City Builder Saves (*.cbsave *.save *.cb *.json)"));
-    loadfile->setFileName(filename);
-    loadfile->open(QIODevice::ReadOnly);
+    if(filename.count()>0){
+        loadfile->setFileName(filename);
+        loadfile->open(QIODevice::ReadOnly);
 
-    GraphicService::getGraphicService()->enableLoadingMessage();
-    loadGame(loadfile);
-    GraphicService::getGraphicService()->disableLoadingMessage();
+        GraphicService::getGraphicService()->enableLoadingMessage();
+        loadGame(loadfile);
+        GraphicService::getGraphicService()->disableLoadingMessage();
+    }
     loadfile->close();
     delete loadfile;
 }
@@ -29,13 +31,16 @@ void LoadSaveService::loadGameUI()
 void LoadSaveService::saveGameUI()
 {
     QFile* savefile = new QFile();
-    QString filename = QFileDialog::getSaveFileName(nullptr, tr("Save file"), QString("."), tr("City Builder Saves (*.cbsave *.save *.cb *.json)"));
-    savefile->setFileName(filename);
-    savefile->open(QIODevice::WriteOnly);
-    QMessageBox savingMsg(QString("Saving"),QString("The game is saving..."),QMessageBox::Information,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);
-    savingMsg.show();
-    saveGame(savefile);
-    savingMsg.hide();
+    QString filter = tr("City Builder Saves (*.cbsave)");
+    QString filename = QFileDialog::getSaveFileName(nullptr, tr("Save file"), QString("."),tr("City Builder Saves (*.cbsave *.save *.cb *.json)"),&filter );
+    if(filename.count()>0){
+        savefile->setFileName(filename);
+        savefile->open(QIODevice::WriteOnly);
+        QMessageBox savingMsg(QString("Saving"),QString("The game is saving..."),QMessageBox::Information,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);
+        savingMsg.show();
+        saveGame(savefile);
+        savingMsg.hide();
+    }
     savefile->close();
 
     delete savefile;
