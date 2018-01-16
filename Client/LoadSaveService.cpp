@@ -89,6 +89,8 @@ void LoadSaveService::loadGame(QFile* loadFile)
         //We have to call the right setter restore corrects datas
 
 
+    }else{
+        MapView::getMapView()->generateMap(); //default map generated
     }
 
 }

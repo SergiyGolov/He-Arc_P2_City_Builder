@@ -1,13 +1,14 @@
 
 #include "GraphicService.h"
 
+#include "LoadSaveService.h"
 
 
 GraphicService::GraphicService(){
     mainWidget=MainWidget::getMainWidget();
     mainWidget->showFullScreen();
     //we have to load the save settings here
-    MapView::getMapView()->generateMap();
+    LoadSaveService::loadGame(new QFile(QString("")));
 }
 
 GraphicService::~GraphicService(){

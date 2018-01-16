@@ -6,7 +6,7 @@
 #include "TopView.h"
 #include "GraphicService.h"
 
-//variables statics
+
 MainWidget* MainWidget::mainWidgetInstance=nullptr;
 
 MainWidget* MainWidget::getMainWidget()

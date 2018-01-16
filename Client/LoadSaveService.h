@@ -9,8 +9,9 @@ public:
 public slots:
     static void loadGameUI();
     static void saveGameUI();
-private:
     static void loadGame(QFile* filename);
+private:
+
     static void saveGame(QFile* filename);
     static void saveOptions();
     static void loadOptions();
