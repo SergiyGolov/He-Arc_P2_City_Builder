@@ -32,10 +32,12 @@ void LoadSaveService::saveGameUI()
     QString filename = QFileDialog::getSaveFileName(nullptr, tr("Save file"), QString("."), tr("City Builder Saves (*.cbsave *.save *.cb *.json)"));
     savefile->setFileName(filename);
     savefile->open(QIODevice::WriteOnly);
-
+    QMessageBox savingMsg(QString("Saving"),QString("The game is saving..."),QMessageBox::Information,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);
+    savingMsg.show();
     saveGame(savefile);
-
+    savingMsg.hide();
     savefile->close();
+
     delete savefile;
 }
 
