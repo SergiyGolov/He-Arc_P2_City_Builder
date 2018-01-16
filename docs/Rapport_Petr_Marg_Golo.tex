@@ -84,13 +84,12 @@ Les nombres aléatoires que nous récupérons de la function sont des nombres fl
 Leurs distribution sont sous la forme d'une distribution normal.
 \[y=e^{-x^{2}}\]
 
-Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le function de Perlin" d'un certain offset (qui n'est pas le même que les index des cases). 
-\section{Gestion du  bonheur}
+Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le function de Perlin" d'un certain offset (qui n'est pas le même que les index des cases).
 
 \section{Routes et bâtiments}
 Pour la gestion des routes et des bâtiments nous sommes parti sur une approche plutôt simple qui est d'avoir divisé en trois classe qui chacune des rôles spécifique. Une qui décrit les caractéristiques propre à chaque bâtiments : les constantes -> ConstantBuilding. Une seconde classe qui décrit une bâtiment spécifique à la partie -> Building. Et une troisième qui sert de gestionnaires de building, 'classe tableau' -> Building Manager. 
 
-Constant Building :
+\subsection{Constant Building}
 Constant Building contient une function de construction d'un tableau d'objet de 'soit même'. Chacun de ces objet représente un bâtiment avec toutes ces caractéristiques internes, par exemple : le prix de construction, la liste des bâtiments nécessaires pour sa construction ou encore sa catégorie dans l'affichage de l'HUD.
 
 Liste de caractéristique de base de chaque bâtiment :
@@ -106,14 +105,14 @@ Liste de caractéristique de base de chaque bâtiment :
 	\item La sommes des pré-requis nécessaires. 
 \end{itemize}
 
-Nous avons choisi d'avoir des objets au lieu d'une liste de constante, pour pouvoir avoir la possibilité d'y ajouter des fonctions pour ces objets ce qui nous a permis d'avoir un autre set de valeur basé sur les caractéristiques de base, voir ci-dessous. Cela nous permet ajuster facilement le jeu et d'avoir une sorte de progression linaire du jeu, voir ci-dessous.
+Nous avons choisi d'avoir des objets au lieu d'une liste de constante, pour pouvoir avoir la possibilité d'y ajouter des fonctions pour ces objets ce qui nous a permis d'avoir un autre set de valeur basé sur les caractéristiques de base, voir ci-dessous. Cela nous permet ajuster facilement le jeu et d'avoir une sorte de progression linaire du jeu.
 
 Liste des caractéristique dérivé :
 \begin{itemize}
-  \item Prix par secondes = Prix / 4
-  \item Efficacité = \((Prix/10)^{1.4} + 10\) (arrondi au multiple de 25 le plus proche)
-  \item Rayon d'action = \(Log10((PrixParSecondes*Efficacité + 1))\) (Arrondi au multiple de 5 le plus proche)
-  \item Poids du bâtiment dans les pré-requis = Prix / 10
+  \item \(PrixParSecondes = Prix / 4\)
+  \item \(Efficacite = (Prix/10)^{1.4} + 10\) (arrondi au multiple de 25 le plus proche)
+  \item \(RayonDAction = Log10(PrixParSecondes*Efficacite + 1)\) (Arrondi au multiple de 5 le plus proche)
+  \item \(Poids du bâtiment dans les pré-requis = Prix / 10\)
 \end{itemize}
 
 On remarque donc que le prix du bâtiment influe directement sur tous les caractéristique qui définisse si le bâtiment est performant ou non.
@@ -150,7 +149,7 @@ La liste des bâtiments pré-requis et des poids pour le laboratoire est la suiv
 
 Il y a donc au moins une possibilité pour arrivé à remplir cette demande, qui est d'avoir une bâtiment de chaque. A noter que dans ce cas, la somme de pré-requis n'influence pas pour ce bâtiment, mais on pourrai imaginer qu'un bâtiment aille une somme plus grande que la somme de chaque bâtiment pré-requis et la la somme aurai une influence.
 	
-Building :
+\subsection{Building}
 La classe building décrit un bâtiment posé dans une partie. Il est décris les caractéristiques suivantes :
 \begin{itemize}
 	\item Un identifiant unique
@@ -159,10 +158,9 @@ La classe building décrit un bâtiment posé dans une partie. Il est décris le
 	\item Un angle de rotation (De quel côté est posé le bâtiment, non-implémenté)
 	\item Une population
 \end{itemize}
-
 On peut donc noter que cet objet est rendu assez 'léger' car la plus part de ce qui le décrit est géré par l'identifiant constant building. Nous pouvons donc avoir beaucoup de bâtiment et avoir une emprunte mémoire peu conséquente.
 
-Building Manager :
+\subsection{Building Manager}
 Cette classe permet de gérer une liste de bâtiment de la classe Building. On peut exécuté les actions suivante :
 \begin{itemize}
 	\item Ajouter un bâtiments (qui est ajoutable selon les pré-requis)
@@ -174,11 +172,61 @@ Cette classe permet de gérer une liste de bâtiment de la classe Building. On p
 
 Les fonctions de récupération retournent un valeur stocké mais la valeur stock est recalculé si le besoin l'est, par exemple le bonheur moyen ne varie pas selon le temps mais si un nouveau bâtiment est placé on doit donc recalculer le bonheur moyen.
 
+\section{Déroulement en fonction du temps de la partie}
+Le jeu se déroule en fonction du temps sur divers aspects, cela permet d'avoir une progression. Toute les secondes certain calcules sont effectuer pour donner l'impression au joueur que le temps défile. Voici les trois indicateurs que nous avons choisis de représenté :
+\begin{itemize}
+	\item Bonheur : Représente une satisfaction de la population sur la ville construite.
+	\item Argent : Le solde que la ville a à disposition pour faire de modifications.
+	\item Population : Le nombre d'habitant qui réside actuellement dans la ville.
+\end{itemize}
+Malgré nos efforts à rendre le jeu jouable. Nous avons parfaitement conscience que le jeu n'est pas très bien équilibré à ce niveau.
+\subsection{Temps : Heure et Date}
+Pour pouvoir donner un aspect réaliste au jeu, nous avons choisi de prendre la date du jour comme date du début de jeu. Puis toute les secondes, le temps virtuel augmente de une heure. Nous avons donc pour 60 minutes de jeu effectives correspondent à 150 jours virtuel.
+
+\subsection{Bonheur}
+La jauge de bonheur global est un nombre qui varie entre 0 et 250. Il est basé sur la moyenne du bonheur de toutes la résidence de la ville. 
+\newline
+Pour chaque résidence, un bonheur résidentiel est calculé.
+Les paramètres suivant influence le bonheur résidentiel :
+\begin{itemize}
+	\item Les bâtiments public autours de la résidence.
+	\item La proximité de ce bâtiment public.
+\end{itemize}
+Plus y il a de bâtiment efficace et proche d'un résidence pour le bonheur sera élevé pour cette résidence.
+Les paramètres suivant influence le bonheur global.
+\begin{itemize}
+	\item Le bonheur résidentiel moyen
+	\item Les impôts en vigueur actuellement
+\end{itemize}
+Concernant les impôts nous avons fixé un multiplicateur à 100% qui est au point neutre des impôts (8.0%). Et qui peut varier entre 0%-200%. Plus le impôts sont bas plus les habitants seront content et à l'inverse plus les impôts sont élevé moins les habitants sont content.
+
+\subsection{Population}
+Nous avons actuellement une population fixe mais il avait été prévu d'avoir un accroissement de la population en fonction du bonheur. Ainsi que des logements qui se construisent automatique au bords des routes en conséquence.
+
+\subsection{Argent}
+Pour l'argent il y a principalement deux facteurs qui influence les revenus ou non de la ville.
+\begin{itemize}
+	\item En négatif : Le prix par seconde des bâtiments public installés
+	\item En positif : Le impôts prélevé aux habitants.
+\end{itemize}
+Pour les revenus des impôts, nous avons fais une règle un peu fantaisiste qui est que les habitants payent des impôts relatif à leur satisfaction à la ville. Ce qui impose au joueur d'avoir une ville heureuse pour pouvoir avoir de l'argent. Ce qui nous évite permis de contourné le faites que les flux de population ne sont pas géré. Car initialement les revenus n'était pas censé être influencé par le bonheur mais seulement par la population. Ce qui nous apportai une liaison en triangle entre les trois indicateurs.
+Selon ce schéma Bonheur -> Population -> Argent -> Bonheur(Indirectement) et la boucle est fermé.
+
+\subsection{Smoothing et dérivé des indicateurs}
+
+
 \section{Gestion du son}
 Pour la gestion du son nous avons décider de pouvoir traiter facilement les musiques et les bruitages du jeu avec un mixeur. Nous avons donc crée une classe. L'HUD supérieur permet de la piloté à l'aide de trois sliders : Un pour le contrôle du volume de la musique, un pour celui des bruitages et un troisième englobant les deux, appelé master.
 
-\section{Launcher et gestion des sauvegardes}
 
+\section{Launcher et gestion des sauvegardes}
+Pour la sauvegarde des parties, nous avons opté pour un système de enregistrement par fichier JSON. Ce qui nous permet d'avoir les données répartis sous forme hiérarchique et Qt possède toute une palette de fonction pour gérer des fichier JSON. Nous n'avions aucune connaissance de ce format.
+\newline
+Nous avions prévu deux types de fichier de sauvegarde : Un concernant une partie et un autre pour les configurations, celui-ci est le même pour n'importe quelles parties. Nous n'avons malheureusement pas eu le temps d'implémenter la sauvegarde de la configuration.
+\newline
+Quand aux données à sauvegarder, nous avons essayer de stocker un minimum d'information, pour éviter toute redondance. Comme par exemple le bonheur de la ville peut-être calculé avec nos fonctions. Il n'est donc pas sauvegarder dans le fichier. Un autre exemple qui est assez 'puissant' et nous permet d'éviter beaucoup d'information est la topographie de la carte, car en effet vu qu'elle est généré aléatoirement il nous suffi de stocker la seed et nous aurons toujours le même résultat.
+\newline
+Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 
 \chapter{Tests}
 \thispagestyle{headings}
