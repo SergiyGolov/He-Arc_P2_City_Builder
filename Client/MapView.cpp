@@ -743,13 +743,13 @@ void MapView::finalAddRoad(MapTile* rect){
 
 
                     QTransform trans;
+                    trans.scale(0.19,0.19);
+
                     int angle;
                     if(dir==1 ){
-                        trans.scale(0.19,0.19);
                         angle=0;
                     }
-                    else {
-                        trans.scale(0.19,0.19);
+                    else{
                         trans.rotate(-90);
                         trans.translate(-5.4*pixelPerTile,0);
                         angle=1;
@@ -758,6 +758,7 @@ void MapView::finalAddRoad(MapTile* rect){
                     tile->setUniqueBId(++buildingCount);
                     BuildingManagementService::getBuildingManagementService()->addBuilding(0,tile->getX(),tile->getY(), angle);
                     currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
+                    qDebug()<<currentBuild->pixmap().devicePixelRatio();
 
 
                     currentBuild->setZValue(2);
