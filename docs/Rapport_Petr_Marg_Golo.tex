@@ -78,7 +78,7 @@
 \section{Génération des sols}
 Pour la gestion du terrain, nous avons décidé d'avoir deux types de sol : l'eau et l'herbe. Sur l'herbe, il est possible d'ajouter des bâtiments et sur l'eau non.
 
-Pour pouvoir avoir des cartes auto-générée, nous avons décide d'utiliser un algorithme de bruit de Perlin. Nous n'allons pas aller dans les détails du fonctionnement du bruit de Perlin, dans ce rapport. Mais son principe est le suivant, il permet d'avoir des nombres aléatoires qui sont proche les uns de autres en function d'une seed(pour l'aléatoire, initialisé au début) et de 1, 2 ou X dimensions (trois dans celui que nous avons utilisés, mais que 2 utilisés). Vu que les outputs de la function de bruit de Perlin sont les mêmes quand nous utilisons les mêmes inputs. Nous pouvons la considéré comme une fonction à plusieurs variables (qui sont les dimensions et la seed). Changer la seed donne des résultats complètement différent mais changer les autres variables change peu entre chaque valeurs.
+Pour pouvoir avoir des cartes auto-générée, nous avons décide d'utiliser un algorithme de bruit de Perlin. Nous n'allons pas aller dans les détails du fonctionnement du bruit de Perlin, dans ce rapport. Mais son principe est le suivant: il permet d'avoir des nombres aléatoires qui sont proche les uns de autres en function d'une seed(pour l'aléatoire, initialisé au début) et de 1, 2 ou X dimensions (trois dans celui que nous avons utilisés, mais que 2 utilisés). Vu que les outputs de la function de bruit de Perlin sont les mêmes quand nous utilisons les mêmes inputs. Nous pouvons la considérer comme une fonction à plusieurs variables (qui sont les dimensions et la seed). Changer la seed donne des résultats complètement différent mais changer les autres variables change peu entre chaque valeur.
 
 \[bruit = perlin(seed, x, y, z)\]
 
@@ -86,10 +86,28 @@ Les nombres aléatoires que nous récupérons de la function sont des nombres fl
 Leurs distribution sont sous la forme d'une distribution normal.
 \[y=e^{-x^{2}}\]
 
-Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le function de Perlin" d'un certain offset (qui est un multiple des index des cases).
+Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le fonction de Perlin" d'un certain offset (qui est un multiple des index des cases).
+\section{Gestion des cases de la carte}
+Nous stockons les cases de la carte dans un $QArray$ d'une longueur $nbCases^{2}$
 
+Une case à la coordonnée $X;Y$ dans la grille de cases représentant la carte correspond à l'élément se trouvant à l'indice $X+Y nbCases$ dans le $QArray$
+
+Une case de la carte est représenté par la classe $MapTile$ dérivé de la classe $QGraphicsRectItem$ et contient les attributs suivants:
+\begin{itemize}
+\item bOccupied (boolean): dit si la case est occupée par un bâtiment ou de l'eau ou pas
+\item x (int): coordonnée en x dans la matrice contenant les MapTile
+\item y (int): coordonnée en y dans la matrice contenant les MapTile
+\item bId (int): id du type de bâtiment (tous les hôpitaux ont la même bId p. ex, valeur par défaut: -10)
+\item unique BId (int): id unique du bâtiment (chaque bâtiment posé aura une id unique différente, valeur par défaut: -10)
+\item mainTileX (int): coordonnée en X de la case principale (en haut à gauche), utile pour les bâtiments d'une largeur ou hauteur supérieures à 1 (valeur par défaut: -10)
+\item mainTileY (int): même chose que mainTileX mais la coordonnée Y
+\item buildingWIdth (int): largeur en nombre de cases d'un bâtiment (valeur par défaut: -10)
+\item buildingHeight (int): hauteur en nombre de cases d'un bâtiment (valeur par défaut: -10)
+\item bPix (boolean): indique si la case a une texture ou pas (valeur par défaut: false)
+\item buildImage (QGraphicsPixmapItem*): Pointeur vers la texture du bâtiment/route qui se trouve sur la case
+\end{itemize}
 \section{Routes et bâtiments}
-Pour la gestion des routes et des bâtiments nous sommes parti sur une approche plutôt simple qui est d'avoir divisé en trois classe qui chacune des rôles spécifique. Une qui décrit les caractéristiques propre à chaque bâtiments : les constantes -> ConstantBuilding. Une seconde classe qui décrit une bâtiment spécifique à la partie -> Building. Et une troisième qui sert de gestionnaires de building, 'classe tableau' -> Building Manager. 
+Pour la gestion des routes et des bâtiments nous sommes parti sur une approche plutôt simple qui est d'avoir divisé en trois classe qui chacune des rôles spécifique. Une qui décrit les caractéristiques propre à chaque bâtiments : les constantes -> ConstantBuilding. Une seconde classe qui décrit une bâtiment spécifique à la partie -> Building. Et une troisième qui sert de gestionnaires de building, 'classe tableau' -> BuildingManager. 
 
 \subsection{Constant Building}
 Constant Building contient une function de construction d'un tableau d'objet de 'soit même'. Chacun de ces objet représente un bâtiment avec toutes ces caractéristiques internes, par exemple : le prix de construction, la liste des bâtiments nécessaires pour sa construction ou encore sa catégorie dans l'affichage de l'HUD.
@@ -199,7 +217,7 @@ Les paramètres suivant influence le bonheur global.
 	\item Le bonheur résidentiel moyen
 	\item Les impôts en vigueur actuellement
 \end{itemize}
-Concernant les impôts nous avons fixé un multiplicateur à 100% qui est au point neutre des impôts (8.0%). Et qui peut varier entre 0%-200%. Plus le impôts sont bas plus les habitants seront content et à l'inverse plus les impôts sont élevé moins les habitants sont content.
+Concernant les impôts nous avons fixé un multiplicateur à 100\% qui est au point neutre des impôts (8.0\%). Et qui peut varier entre 0\%-200\%. Plus le impôts sont bas plus les habitants seront content et à l'inverse plus les impôts sont élevé moins les habitants sont content.
 \newline
 Pour ajouter un effet de lissage sur le temps du bonheur, nous avons implémenté un algorithme assez simple qui est le suivant :
 \[bohneur = 20\% ancienBohneur + 80\% bohneurResidentielMoyen\]
@@ -237,7 +255,7 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 \chapter{Tests}
 \thispagestyle{headings}
 \section{Protocoles de tests}
-\section{
+
 
 \chapter{Bilan}
 \thispagestyle{headings}

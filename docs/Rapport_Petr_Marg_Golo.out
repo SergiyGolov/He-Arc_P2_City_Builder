@@ -9,11 +9,23 @@
 \BOOKMARK [1][-]{section.3.5}{Sch\351ma proc\351dural d'utilisation}{chapter.3}% 9
 \BOOKMARK [0][-]{chapter.4}{D\351veloppement}{}% 10
 \BOOKMARK [1][-]{section.4.1}{G\351n\351ration des sols}{chapter.4}% 11
-\BOOKMARK [1][-]{section.4.2}{Gestion du bonheur}{chapter.4}% 12
+\BOOKMARK [1][-]{section.4.2}{Gestion des cases de la carte}{chapter.4}% 12
 \BOOKMARK [1][-]{section.4.3}{Routes et b\342timents}{chapter.4}% 13
-\BOOKMARK [1][-]{section.4.4}{Gestion du son}{chapter.4}% 14
-\BOOKMARK [1][-]{section.4.5}{Launcher et gestion des sauvegardes}{chapter.4}% 15
-\BOOKMARK [0][-]{chapter.5}{Tests}{}% 16
-\BOOKMARK [0][-]{chapter.6}{Bilan}{}% 17
-\BOOKMARK [0][-]{chapter.7}{Conclusion}{}% 18
-\BOOKMARK [0][-]{chapter.8}{Annexes}{}% 19
+\BOOKMARK [2][-]{subsection.4.3.1}{Constant Building}{section.4.3}% 14
+\BOOKMARK [2][-]{subsection.4.3.2}{Building}{section.4.3}% 15
+\BOOKMARK [2][-]{subsection.4.3.3}{Building Manager}{section.4.3}% 16
+\BOOKMARK [1][-]{section.4.4}{D\351roulement en fonction du temps de la partie}{chapter.4}% 17
+\BOOKMARK [2][-]{subsection.4.4.1}{Temps : Heure et Date}{section.4.4}% 18
+\BOOKMARK [2][-]{subsection.4.4.2}{Bonheur}{section.4.4}% 19
+\BOOKMARK [2][-]{subsection.4.4.3}{Population}{section.4.4}% 20
+\BOOKMARK [2][-]{subsection.4.4.4}{Argent}{section.4.4}% 21
+\BOOKMARK [2][-]{subsection.4.4.5}{D\351riv\351 des indicateurs}{section.4.4}% 22
+\BOOKMARK [1][-]{section.4.5}{Gestion du son}{chapter.4}% 23
+\BOOKMARK [2][-]{subsection.4.5.1}{Gestion des sauvegardes}{section.4.5}% 24
+\BOOKMARK [1][-]{section.4.6}{Launcher}{chapter.4}% 25
+\BOOKMARK [0][-]{chapter.5}{Tests}{}% 26
+\BOOKMARK [1][-]{section.5.1}{Protocoles de tests}{chapter.5}% 27
+\BOOKMARK [0][-]{chapter.6}{Bilan}{}% 28
+\BOOKMARK [0][-]{chapter.7}{Conclusion}{}% 29
+\BOOKMARK [0][-]{chapter.8}{Source}{}% 30
+\BOOKMARK [0][-]{chapter.9}{Annexes}{}% 31
