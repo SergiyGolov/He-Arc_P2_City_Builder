@@ -1,68 +1,83 @@
 #include "Launcher.h"
 
-Launcher::Launcher(QWidget *parent) : QWidget(parent)
+Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
-    //double r = 16.0/9.0;
-    //double width = 900;
-    //resize((int)width,(int)(width/r));
-
     this->startTimer(1000);
-    QLabel *l = new QLabel(QString(tr("ALLO")),this);
+    this->setFixedSize(1280, 720);
+
     QPixmap pix_Background(":/img/bg_city.jpg");
-    l->setGeometry(0,0, width(), height());
-    l->setPixmap(pix_Background);
+    pix_Background = pix_Background.scaled(1280, 720);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, pix_Background);
+    this->setPalette(palette);
+
+    lTitle = new QLabel(QString(tr("City Builder")),this);
+    lTitle->setGeometry(50,0,600,200);
+    lTitle->setStyleSheet("QLabel { color : white; }");
+    lTitle->setFont(QFont(QString("Segoe UI Semilight"),40));
+
+    pSetGameFile = new QPushButton(tr("Set game file"), this);
+    pSetGameFile->setGeometry(1100,20,150,30);
+    pSetGameFile->setFont(QFont(QString("Segoe UI Semilight"),8));
+
+    pSetSaveFolder = new QPushButton(tr("Set save folder"), this);
+    pSetSaveFolder->setGeometry(1100,50,150,30);
+    pSetSaveFolder->setFont(QFont(QString("Segoe UI Semilight"),8));
+
+    lGameFile = new QLabel("", this);
+    lGameFile->setGeometry(500,0,200,30);
+    lGameFile->setFont(QFont(QString("Segoe UI Semilight"),8));
+
+    lSaveFolder = new QLabel("", this);
+    lSaveFolder->setGeometry(500,30,200,30);
+    lSaveFolder->setFont(QFont(QString("Segoe UI Semilight"),8));
 
 
-    l_title = new QLabel(QString(tr("CITY BUILDER")),this);
-    l_title->setGeometry(0,0, width(), height());
-    l_title->setFont(QFont(QString("Arial"),40));
+    //Liste des sauvegardes
+    listSaves = new QListWidget(this);
+    listSaves->setGeometry(950, 100, 300, 420);
 
-    p_newgame = new QPushButton(QString(tr("New")),this);
-    p_newgame->setGeometry(0,100,300,100);
-    p_newgame->setFont(QFont(QString("Arial"),20));
+    //Bouton Play
+    pPlay = new QPushButton(QString(tr("Play")), this);
+    pPlay->setGeometry(950,600,300,100);
+    pPlay->setFont(QFont(QString("Segoe UI Semilight"),40));
 
-    p_loadsave = new QPushButton(QString(tr("Load")),this);
-    p_loadsave->setGeometry(0,200,300,100);
-    p_loadsave->setFont(QFont(QString("Arial"),20));
+    pNewGame = new QPushButton(QString(tr("New")),this);
+    pNewGame->setGeometry(950,550,150,50);
+    pNewGame->setFont(QFont(QString("Segoe UI Semilight"),20));
 
-    p_setGameFile = new QPushButton(tr("Set game file"), this);
-    p_setGameFile->setGeometry(700,0,200,30);
-    p_setGameFile->setFont(QFont(QString("Arial"),8));
+    pLoadSave = new QPushButton(QString(tr("Load")),this);
+    pLoadSave->setGeometry(1100,550,150,50);
+    pLoadSave->setFont(QFont(QString("Segoe UI Semilight"),20));
 
-    p_setSaveFolder = new QPushButton(tr("Set save folder"), this);
-    p_setSaveFolder->setGeometry(700,30,200,30);
-    p_setSaveFolder->setFont(QFont(QString("Arial"),8));
+    /*
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->addWidget(pSetGameFile, 0, 2);
+    gridLayout->addWidget(pSetSaveFolder, 0, 3);
+    gridLayout->addWidget(pNewGame, 4, 2);
+    gridLayout->addWidget(pLoadSave, 4, 3);
+    gridLayout->addWidget(pPlay, 5, 2, 1, 2);
 
-    l_gameFile = new QLabel("", this);
-    l_gameFile->setGeometry(500,0,200,30);
-    l_gameFile->setFont(QFont(QString("Arial"),8));
-
-    l_saveFolder = new QLabel("", this);
-    l_saveFolder->setGeometry(500,30,200,30);
-    l_saveFolder->setFont(QFont(QString("Arial"),8));
+    QWidget* widget = new QWidget(this);
+    widget->setLayout(gridLayout);
+    this->setCentralWidget(widget);
+    */
 
 
-    listWidgetSaves = new QListWidget(this);
-    listWidgetSaves->setGeometry(300, 100, 300, 300);
-
-    p_play = new QPushButton(QString(tr("Play")), this);
-    p_play->setGeometry(600,100,300,100);
-    p_play->setFont(QFont(QString("Arial"),20));
-
-    connect(p_newgame, &QPushButton::clicked, [=]()
+    connect(pNewGame, &QPushButton::clicked, [=]()
     {
         setViewMode(false);
     });
-    connect(p_loadsave, &QPushButton::clicked, [=]()
+    connect(pLoadSave, &QPushButton::clicked, [=]()
     {
         setViewMode(true);
         updateSaves();
     });
 
 
-    connect(p_play, &QPushButton::clicked, this, &Launcher::play);
-    connect(p_setGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
-    connect(p_setSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
+    connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
+    connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
+    connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
 }
 
 Launcher::~Launcher()
@@ -80,31 +95,31 @@ void Launcher::updateInfos()
 {
     QStringList sl = getSavesList();
 
-    l_gameFile->setText(QString(tr("Game path : %0")).arg(s_path_GameFile));
-    l_saveFolder->setText(QString(tr("Save path [%0] : %1").arg(sl.count()).arg(s_path_SaveFolder)));
+    lGameFile->setText(QString(tr("Game path : %0")).arg(sPathGameFile));
+    lSaveFolder->setText(QString(tr("Save path [%0] : %1").arg(sl.count()).arg(sPathSaveFolder)));
 
-    if(QFileInfo(s_path_GameFile).exists())
-        l_gameFile->setStyleSheet("color:green;");
+    if(QFileInfo(sPathGameFile).exists())
+        lGameFile->setStyleSheet("color:green;");
     else
-        l_gameFile->setStyleSheet("color:red;");
+        lGameFile->setStyleSheet("color:red;");
 
-    if(QDir(s_path_SaveFolder).exists() && sl.count() > 0)
-        l_saveFolder->setStyleSheet("color:green;");
+    if(QDir(sPathSaveFolder).exists() && sl.count() > 0)
+        lSaveFolder->setStyleSheet("color:green;");
     else
-        l_saveFolder->setStyleSheet("color:red;");
+        lSaveFolder->setStyleSheet("color:red;");
 }
 
 void Launcher::setGameFile()
 {
-    s_path_GameFile.clear();
-    s_path_GameFile.append(QFileDialog::getOpenFileName(this, tr("Select the game file"), QString("C:/"), QString("CityBuilder.exe")));
+    sPathGameFile.clear();
+    sPathGameFile.append(QFileDialog::getOpenFileName(this, tr("Select the game file"), QString("C:/"), QString("CityBuilder.exe")));
     updateInfos();
 }
 
 void Launcher::setSaveFolder()
 {
-    s_path_SaveFolder.clear();
-    s_path_SaveFolder.append(QFileDialog::getExistingDirectory(this, tr("Select the save folder"), QString("C:/"),QFileDialog::ShowDirsOnly));
+    sPathSaveFolder.clear();
+    sPathSaveFolder.append(QFileDialog::getExistingDirectory(this, tr("Select the save folder"), QString("C:/"),QFileDialog::ShowDirsOnly));
     updateSaves();
     updateInfos();
 }
@@ -116,7 +131,7 @@ void Launcher::updateSaves()
 
 QStringList Launcher::getSavesList()
 {
-    QDir dir(s_path_SaveFolder);
+    QDir dir(sPathSaveFolder);
     QStringList filter;
     filter << "*.savecb";
     return dir.entryList(filter, QDir::Files, QDir::Time);
@@ -124,28 +139,28 @@ QStringList Launcher::getSavesList()
 
 void Launcher::updateListWidget(QStringList sl)
 {
-    int irow = listWidgetSaves->currentRow();
-    listWidgetSaves->clear();
+    int irow = listSaves->currentRow();
+    listSaves->clear();
     for(int i = 0; i < sl.count(); i++)
-        listWidgetSaves->addItem(sl.at(i));
-    listWidgetSaves->setCurrentRow(irow);
+        listSaves->addItem(sl.at(i));
+    listSaves->setCurrentRow(irow);
 }
 
 void Launcher::setViewMode(bool b)
 {
-    listWidgetSaves->setVisible(b);
+    listSaves->setVisible(b);
 }
 
 void Launcher::play()
 {
-    QString game = s_path_GameFile;
+    QString game = sPathGameFile;
     QFileInfo infogame(game);
 
     if(infogame.exists())
     {
         game.append(" ");
-        if(listWidgetSaves->currentItem() != nullptr)
-            game.append("-l " + listWidgetSaves->currentItem()->text());
+        if(listSaves->currentItem() != nullptr)
+            game.append("-l " + listSaves->currentItem()->text());
         else
             game.append("-n");
 
