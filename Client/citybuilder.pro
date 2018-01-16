@@ -38,16 +38,14 @@ HEADERS += \
 	PickerElement.h \
 	TickService.h \
 	MapTile.h \
-	Building.h \
-	EffectBuilding.h \
-	HouseBuilding.h \
+        Building.h \
 	TopView.h \
 	BuildingManagementService.h \
 	Services.h \
 	RandomService.h \
 	PerlinNoise.h \
 	AudioService.h \
-    ClickableLabel.h
+        ClickableLabel.h
 	
 SOURCES += \
 	ConstantBuilding.cpp \
@@ -63,15 +61,13 @@ SOURCES += \
 	PickerElement.cpp \
 	TickService.cpp \
 	LauncherService.cpp \
-	Building.cpp \
-	EffectBuilding.cpp \
-	HouseBuilding.cpp \
+        Building.cpp \
 	TopView.cpp \
 	BuildingManagementService.cpp \
 	RandomService.cpp \
 	PerlinNoise.cpp \
 	AudioService.cpp \
-    ClickableLabel.cpp
+        ClickableLabel.cpp
 
 RESOURCES += \
 	images.qrc \
