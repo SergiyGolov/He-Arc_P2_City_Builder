@@ -3,6 +3,7 @@
 
 #include "MainWidget.h"
 #include <QMessageBox>
+#include <QString>
 
 
 class GraphicService
@@ -10,7 +11,7 @@ class GraphicService
 
 private:
     //constructor
-    GraphicService();
+    GraphicService(QString file="");
     static GraphicService* graphicServiceInstance;
     QMessageBox *loading;
 
@@ -18,15 +19,10 @@ public:
     //destructor
     ~GraphicService();
     //methods
-    static GraphicService* getGraphicService();
+    static GraphicService* getGraphicService(QString file="");
     void setKeyboardShortcuts(int key);
     void enableLoadingMessage(){loading->show();}
     void disableLoadingMessage(){loading->hide();}
-
-
-
-
-
 
 
 };

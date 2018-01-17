@@ -5,6 +5,7 @@
 #include <QSpinBox>
 #include <QComboBox>
 
+
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
     se = new QSoundEffect(this); //Doesnt work when executed in the debugger
