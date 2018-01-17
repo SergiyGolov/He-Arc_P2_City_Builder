@@ -51,6 +51,11 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
            pPlay->setEnabled(true);
        }
     });
+    connect(listSaves, &QListWidget::currentItemChanged, [=]()
+    {
+        if(listSaves->currentItem() != nullptr)
+            pPlay->setEnabled(true);
+    });
 
     connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
     connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
@@ -144,6 +149,7 @@ void Launcher::displayWidgets()
     pNewGame = new QPushButton(QString(tr("New")),this);
     pNewGame->setGeometry(950,550,150,50);
     pNewGame->setFont(QFont(QString("Segoe UI Semilight"),20));
+    pNewGame->setEnabled(false);
 
     pLoadSave = new QPushButton(QString(tr("Load")),this);
     pLoadSave->setGeometry(1100,550,150,50);
@@ -223,13 +229,13 @@ void Launcher::setViewMode(bool b)
     cbDifficulty->setVisible(!b);
     if(b)
     {
-        pNewGame->setStyleSheet("QPushButton { background-color : grey; }");
-        pLoadSave->setStyleSheet("QPushButton { background-color : white; font-weigth : bold; }");
+        //pNewGame->setStyleSheet("QPushButton { background-color : grey; }");
+        //pLoadSave->setStyleSheet("QPushButton { background-color : white;}");
     }
     else
     {
-        pNewGame->setStyleSheet("QPushButton { background-color : white; font-weigth : bold; }");
-        pLoadSave->setStyleSheet("QPushButton { background-color : grey; }");
+        //pNewGame->setStyleSheet("QPushButton { background-color : white;}");
+        //pLoadSave->setStyleSheet("QPushButton { background-color : grey; }");
     }
     pPlay->setEnabled(false);
     /*
@@ -253,13 +259,13 @@ void Launcher::play()
         game.append(" ");
 
 
-        if(pNewGame->isEnabled())
+        if(!pNewGame->isEnabled())
         {
-            game.append(sbMapSize->value());
+            game.append(QString::number(sbMapSize->value()));
             game.append(" ");
             game.append(cbDifficulty->currentText());
             game.append(" ");
-            game.append(sbSeed->value());
+            game.append(QString::number(sbSeed->value()));
             game.append(" ");
             game.append(leGameName->text());
         }
