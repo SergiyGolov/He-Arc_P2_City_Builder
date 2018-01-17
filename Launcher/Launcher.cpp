@@ -26,10 +26,16 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 
     connect(pNewGame, &QPushButton::clicked, [=]()
     {
+        pNewGame->setEnabled(false);
+        pLoadSave->setEnabled(true);
         setViewMode(false);
+        updateSaves();
+        updateInfos();
     });
     connect(pLoadSave, &QPushButton::clicked, [=]()
     {
+        pNewGame->setEnabled(true);
+        pLoadSave->setEnabled(false);
         setViewMode(true);
         updateSaves();
         updateInfos();
@@ -37,6 +43,13 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     connect(pRandSeed, &QPushButton::clicked, [=]()
     {
         sbSeed->setValue(qrand() % 10001);
+    });
+    connect(leGameName, &QLineEdit::textChanged, [=]()
+    {
+       if(leGameName->text()!="")
+       {
+           pPlay->setEnabled(true);
+       }
     });
 
     connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
@@ -73,15 +86,19 @@ void Launcher::displayWidgets()
     lMapSize = new QLabel("Map Size :", this);
     lMapSize->setGeometry(950, 100, 200, 50);
     lMapSize->setStyleSheet("QLabel { color : white; }");
-    lMapSize->setFont(QFont(QString("Segoe UI Semilight"),20));
+    lMapSize->setFont(QFont(QString("Segoe UI Semilight"),18));
     lSeed = new QLabel("Seed :", this);
     lSeed->setGeometry(950, 150, 200, 50);
     lSeed->setStyleSheet("QLabel { color : white; }");
-    lSeed->setFont(QFont(QString("Segoe UI Semilight"),20));
+    lSeed->setFont(QFont(QString("Segoe UI Semilight"),18));
     lDifficulty = new QLabel("Difficulty :", this);
     lDifficulty->setGeometry(950, 200, 200, 50);
     lDifficulty->setStyleSheet("QLabel { color : white; }");
-    lDifficulty->setFont(QFont(QString("Segoe UI Semilight"),20));
+    lDifficulty->setFont(QFont(QString("Segoe UI Semilight"),18));
+    lGameName = new QLabel("Game name :", this);
+    lGameName->setGeometry(950, 250, 200, 50);
+    lGameName->setStyleSheet("QLabel { color : white; }");
+    lGameName->setFont(QFont(QString("Segoe UI Semilight"),18));
 
     sbMapSize = new QSpinBox(this);
     sbMapSize->setGeometry(1100, 100, 150, 40);
@@ -100,6 +117,8 @@ void Launcher::displayWidgets()
     cbDifficulty->addItem(QIcon(":img/easy.png"), "Easy");
     cbDifficulty->addItem(QIcon(":img/medium.png"), "Medium");
     cbDifficulty->addItem(QIcon(":img/hard.png"), "Hard");
+    leGameName = new QLineEdit(this);
+    leGameName->setGeometry(1100, 250, 150, 40);
 
 
 
@@ -149,6 +168,11 @@ void Launcher::updateInfos()
         lSaveFolder->setStyleSheet("color:red;");
 }
 
+void Launcher::updateSaves()
+{
+    updateListWidget(getSavesList());
+}
+
 void Launcher::updatePreview() //TODO
 {
 
@@ -159,27 +183,23 @@ void Launcher::setGameFile()
 {
     sPathGameFile.clear();
     sPathGameFile.append(QFileDialog::getOpenFileName(this, tr("Select the game file"), QDir::currentPath(), QString("CityBuilder.exe")));
+    updateSaves();
     updateInfos();
 }
 
 void Launcher::setSaveFolder()
 {
     sPathSaveFolder.clear();
-    sPathSaveFolder.append(QFileDialog::getExistingDirectory(this, tr("Select the save folder"), QString("C:/"),QFileDialog::ShowDirsOnly));
+    sPathSaveFolder.append(QFileDialog::getExistingDirectory(this, tr("Select the save folder"), QDir::currentPath() ,QFileDialog::ShowDirsOnly));
     updateSaves();
     updateInfos();
-}
-
-void Launcher::updateSaves()
-{
-    updateListWidget(getSavesList());
 }
 
 QStringList Launcher::getSavesList()
 {
     QDir dir(sPathSaveFolder);
     QStringList filter;
-    filter << "*.savecb";
+    filter << "*.cbsave";
     return dir.entryList(filter, QDir::Files, QDir::Time);
 }
 
@@ -204,11 +224,11 @@ void Launcher::setViewMode(bool b)
     if(b)
     {
         pNewGame->setStyleSheet("QPushButton { background-color : grey; }");
-        pLoadSave->setStyleSheet("QPushButton { background-color : white; }");
+        pLoadSave->setStyleSheet("QPushButton { background-color : white; font-weigth : bold; }");
     }
     else
     {
-        pNewGame->setStyleSheet("QPushButton { background-color : white; }");
+        pNewGame->setStyleSheet("QPushButton { background-color : white; font-weigth : bold; }");
         pLoadSave->setStyleSheet("QPushButton { background-color : grey; }");
     }
     pPlay->setEnabled(false);
@@ -231,11 +251,23 @@ void Launcher::play()
     if(infogame.exists())
     {
         game.append(" ");
-        if(listSaves->currentItem() != nullptr)
-            game.append("-l " + listSaves->currentItem()->text());
-        else
-            game.append("-n");
 
+
+        if(pNewGame->isEnabled())
+        {
+            game.append(sbMapSize->value());
+            game.append(" ");
+            game.append(cbDifficulty->currentText());
+            game.append(" ");
+            game.append(sbSeed->value());
+            game.append(" ");
+            game.append(leGameName->text());
+        }
+        else
+        {
+            if(listSaves->currentItem() != nullptr)
+                game.append(listSaves->currentItem()->text());
+        }
         process.close();
         qDebug() << "starting :" << game;
         process.start(game);
