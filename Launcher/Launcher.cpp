@@ -261,13 +261,15 @@ void Launcher::play()
 
         if(!pNewGame->isEnabled())
         {
+            game.append("size=");
             game.append(QString::number(sbMapSize->value()));
-            game.append(" ");
+            game.append(" difficulty=");
             game.append(cbDifficulty->currentText());
-            game.append(" ");
+            game.append(" seed=");
             game.append(QString::number(sbSeed->value()));
-            game.append(" ");
+            game.append(" name\"");
             game.append(leGameName->text());
+            game.append("\"");
         }
         else
         {
