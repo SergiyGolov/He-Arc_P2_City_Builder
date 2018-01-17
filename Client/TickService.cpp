@@ -17,6 +17,7 @@ TickService* TickService::getTickService()
 }
 
 //constructors
+
 TickService::TickService()
 {
     QDateTime dt = QDateTime::currentDateTime();

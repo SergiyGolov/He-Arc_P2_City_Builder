@@ -34,6 +34,7 @@ public:
     int getHappiness(){return happiness;}
     int getTotalPopulation(){return totalPopulation;}
     int getTaxes(){return taxes;}
+    int getDifficulty() {return difficulty; }
     int incrementAndGetSaveCount() {return ++saveCount;}
     QString getCityName(){return cityName;}
     //setters
@@ -44,6 +45,7 @@ public:
     void setCityName(QString cityName) { this->cityName = cityName;
                                       TopView::getTopView()->setCityName();}
     void setSaveCount(int saveCount) { this->saveCount = saveCount; }
-    void setDifficulty(int difficulty){this->difficulty=difficulty;}
+    void setDifficulty(int difficulty);
+
 };
 #endif // GAMEMANAGEMENTSERVICE_H

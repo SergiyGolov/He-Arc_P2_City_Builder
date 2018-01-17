@@ -73,7 +73,8 @@ bool BuildingManagementService::isBuildingAddable(int id) //TODO : we have to te
 {
     //Check money
     int price = ConstantBuilding::get(id).getPrice();
-    if(price > GameManagementService::getGameManagementService()->getMoney())
+
+    if(price > GameManagementService::getGameManagementService()->getMoney() && price <= 0)
         return false;
 
     //The constantbuilding construtor array isnt set to handle the requirements
