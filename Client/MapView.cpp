@@ -178,6 +178,7 @@ void MapView::generateMap(){
     }
 
     if(nbTiles>243)translateFactor=5.35*(double)pixelPerTile*(double)nbTiles/256.0;
+    else if(nbTiles>75)translateFactor=4.55*(double)pixelPerTile*(double)nbTiles/256.0;
     else translateFactor=4.275*(double)pixelPerTile*(double)nbTiles/256.0;
 
     if(nbTiles>243)scaleFactor=0.19*256.0/(double)nbTiles;
@@ -377,7 +378,7 @@ void MapView::moveAddBuilding(MapTile *rect){
         QString pixFilePath="NOPIX";
         bool pixExists=false;
 
-        switch(pickerBId)
+        switch(pickerBId)//would be nice to test if the pixPath exists in constantBuilding instead...
         {
         case 1:
             pixFilePath=":/ressources/house.png";
@@ -441,7 +442,7 @@ void MapView::moveAddBuilding(MapTile *rect){
 
                 radiusCircle->setPen(QPen(color));
                 radiusCircle->setBrush(QBrush(color));
-                   lastbId=pickerBId;
+                lastbId=pickerBId;
             }
 
             //            QRadialGradient radialGrad;
@@ -1129,7 +1130,21 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
                 tiles->at((x+i)+(y+j)*nbTiles)->setBuildingWidth(buildWidthSave);
                 tiles->at((x+i)+(y+j)*nbTiles)->setBuildingHeight(buildHeightSave);
                 tiles->at((x+i)+(y+j)*nbTiles)->setUniqueBId(buildingCount);
-                tiles->at((x+i)+(y+j)*nbTiles)->setBrush(color);
+                if(id!=1)tiles->at((x+i)+(y+j)*nbTiles)->setBrush(color); //would be nice to test if the pixPath exists in constantBuilding instead...
+                else {
+                    tiles->at((x+i)+(y+j)*nbTiles)->setBrush(baseColors->at((x+i)+(y+j)*nbTiles));
+                    QTransform trans;
+
+                    trans.scale(1.1*0.04*256/nbTiles,1.2*0.04*256/nbTiles);
+                    trans.rotate(-45);
+                    currentBuild=new QGraphicsPixmapItem( QPixmap(":/ressources/house.png"));
+                    currentBuild->setZValue(2);
+                    currentBuild->setTransform(trans);
+
+                    scene->addItem(currentBuild);
+                    tiles->at((x+i)+(y+j)*nbTiles)->addPix(currentBuild);
+                    currentBuild=nullptr;
+                }
             }
         }
     }else{
