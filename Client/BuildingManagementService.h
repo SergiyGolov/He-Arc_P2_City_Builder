@@ -32,10 +32,10 @@ public:
     void removeBuilding(int uid);
     bool isBuildingAddable(int id);
     int countBuildings() {return vectorBuildings->count();}
-    double getSumPricePerSeconds();
-    int getSumPopulation();
+    double getSumPricePerSeconds(bool everything = false);
+    int getSumPopulation(bool everything = false);
     QJsonObject getJsonBuildings();
-    double getAverageHappiness();
+    double getAverageHappiness(bool everything = false);
     int getVectorId(int uid,QVector<Building*> *v);
     void addBuildingFromSave(int id, int x, int y, int angle);
     void setAngleFromId(int uid,int newAngle){vectorBuildings->at(getVectorId(uid,vectorBuildings))->setAngle(newAngle);}

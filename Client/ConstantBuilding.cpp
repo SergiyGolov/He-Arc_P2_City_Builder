@@ -31,6 +31,11 @@ ConstantBuilding::ConstantBuilding (
     this->REQUIREMENTS = requirements;
     this->SUM_REQUIREMENTS = sumRequirements;
 
+    this->PRICE_PER_SECONDS = PRICE/4.0;
+    this->EFFICIANCY = OursMaths::roundExcel((qPow(PRICE/10.0,1.4)+10)*4.0, -2)/4.0;
+    this->RADIUS = OursMaths::roundExcel(log10(getPricePerSeconds()*getEfficiancy()+1)*10*2.0,-1)/2.0;
+    this->REQUIREMENTS_WEIGHT = PRICE/10.0;
+
     nbBuildings++; //To keep a track of the number of buildings
 }
 
@@ -85,24 +90,6 @@ int ConstantBuilding::getDefaultPopulationFromHouseType(int i){
                 return 4;
         default:
                 return 0;
-    }
-}
-
-void ConstantBuilding::printTab()
-{
-    generate();
-    qDebug() << "displayname" << "\t"
-             << "categories" << "\t"
-             << "efficiancy" << "\t"
-             << "price" << "\t"
-             << "radius";
-    for(int i = 0; i < getNbBuildings(); i++)
-    {
-        qDebug() << get(i).getDisplayName() << "\t"
-                 << get(i).getCategory() << "\t"
-                 << get(i).getEfficiancy() << "\t\t"
-                 << get(i).getPrice() << "\t"
-                 << get(i).getRadius();
     }
 }
 

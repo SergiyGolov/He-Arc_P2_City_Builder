@@ -44,6 +44,12 @@ private:
     QSet<int>* REQUIREMENTS;
     double SUM_REQUIREMENTS;
 	
+    //Calculated attributs
+    double PRICE_PER_SECONDS;
+    double EFFICIANCY;
+    double RADIUS;
+    double REQUIREMENTS_WEIGHT;
+
 	//TODO : Texture...
 
     static void addRequirements(QSet<int>* requirements, int r1, int r2 = -1, int r3 = -1, int r4 = -1, int r5 = -1);
@@ -74,10 +80,10 @@ public:
     int             getCategory()           {return CATEGORY;}
 
     double          getPrice()              {return PRICE;}
-    double          getPricePerSeconds()    {return PRICE/4.0;}
-    double          getEfficiancy()         {return OursMaths::roundExcel((qPow(PRICE/10.0,1.4)+10)*4.0, -2)/4.0;}
-    double          getRadius()             {return OursMaths::roundExcel(log10(getPricePerSeconds()*getEfficiancy()+1)*10*2.0,-1)/2.0;}
-    double          getRequirementsWeight() {return PRICE/10.0;}
+    double          getPricePerSeconds()    {return PRICE_PER_SECONDS;}
+    double          getEfficiancy()         {return EFFICIANCY;}
+    double          getRadius()             {return RADIUS;}
+    double          getRequirementsWeight() {return REQUIREMENTS_WEIGHT;}
 
     int             getTileWidth()          {return TILE_WIDTH;}
     int             getTileHeight()         {return TILE_HEIGHT;}
@@ -90,7 +96,6 @@ public:
 //methods statics
     static bool isHouse(int id);
     static void generate();
-    static void printTab();
 
     static ConstantBuilding get(int i);
     static int getNbBuildings();
