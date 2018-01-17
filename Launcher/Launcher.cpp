@@ -6,7 +6,7 @@
 #include <QComboBox>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-
+#include "../Client/RandomService.h"
 
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
@@ -17,10 +17,6 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     QPalette palette;
     palette.setBrush(QPalette::Background, pmBackground);
     this->setPalette(palette);
-
-
-
-
 
     displayWidgets();
 
@@ -172,6 +168,16 @@ void Launcher::updateInfos()
         lSaveFolder->setStyleSheet("color:green;");
     else
         lSaveFolder->setStyleSheet("color:red;");
+}
+
+Pixmap Launcher::generatePixmap(int size, int seed)
+{
+    RandomService::setSeed(seed);
+    Cell *c;
+    c = RandomService::generateMap(size, size);
+
+
+
 }
 
 void Launcher::updateSaves()

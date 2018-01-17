@@ -25,11 +25,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main_launcher.cpp \
-        Launcher.cpp
+        Launcher.cpp \
+        ../Client/RandomService.cpp
 
 HEADERS += \
         Launcher.h \
         LauncherService.h
+        ../Client/RandomService.h
 
 RESOURCES += \
     ressources/resources.qrc
