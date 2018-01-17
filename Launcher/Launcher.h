@@ -17,6 +17,7 @@
 class QSoundEffect;
 class QComboBox;
 class QSpinBox;
+class QPixMap;
 
 class Launcher : public QMainWindow
 {
@@ -37,15 +38,17 @@ public:
 
     QLabel* lMapSize;
     QLabel* lSeed;
+    QPushButton* pRandSeed;
     QLabel* lDifficulty;
 
-    QSpinBox* sbMapSizeX;
-    QSpinBox* sbMapSizeY;
+    QSpinBox* sbMapSize;
     QSpinBox* sbSeed;
     QComboBox* cbDifficulty;
 
     QPushButton* pSetGameFile;
     QPushButton* pSetSaveFolder;
+
+    QPixMap* preview;
 
     //Sound
     QSoundEffect *se;
@@ -68,6 +71,7 @@ private:
     QStringList getSavesList();
 
     void displayWidgets();
+    void updatePreview();
 
 private slots:
     void play();

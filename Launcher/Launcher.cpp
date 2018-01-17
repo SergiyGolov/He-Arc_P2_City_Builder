@@ -7,13 +7,14 @@
 
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
+    /*
     se = new QSoundEffect(this); //Doesnt work when executed in the debugger
     se->setSource(QUrl::fromLocalFile("./CityBuilderLauncher.wav"));
     se->setLoopCount(QSoundEffect::Infinite);
     se->setVolume(1);
-    se->play();
+    se->play();*/
 
-    this->startTimer(1000);
+    //this->startTimer(1000);
     this->setFixedSize(1280, 720);
 
     QPixmap pix_Background(":/img/bg_city.jpg");
@@ -22,14 +23,9 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     palette.setBrush(QPalette::Background, pix_Background);
     this->setPalette(palette);
 
-    lMapSize = new QLabel("Map Size :", this);
-    lSeed = new QLabel("Seed :", this);
-    lDifficulty = new QLabel("Difficulty :", this);
 
-    sbMapSizeX = new QSpinBox(this);
-    sbMapSizeY = new QSpinBox(this);
-    sbSeed = new QSpinBox(this);
-    cbDifficulty = new QComboBox(this);
+
+
 
     displayWidgets();
 
@@ -42,11 +38,16 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
         setViewMode(true);
         updateSaves();
     });
+    connect(pRandSeed, &QPushButton::clicked, [=]()
+    {
+        sbSeed->setValue(qrand() % 10001);
+    });
+
     connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
     connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
     connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
 
-    setViewMode(true);
+    setViewMode(false);
 }
 
 Launcher::~Launcher()
@@ -57,9 +58,44 @@ Launcher::~Launcher()
 void Launcher::displayWidgets()
 {
     lTitle = new QLabel(QString(tr("City Builder")),this);
-    lTitle->setGeometry(50,0,600,200);
+    lTitle->setGeometry(50,0,600,100);
     lTitle->setStyleSheet("QLabel { color : white; }");
     lTitle->setFont(QFont(QString("Segoe UI Semilight"),40));
+
+    lMapSize = new QLabel("Map Size :", this);
+    lMapSize->setGeometry(950, 100, 200, 50);
+    lMapSize->setStyleSheet("QLabel { color : white; }");
+    lMapSize->setFont(QFont(QString("Segoe UI Semilight"),20));
+
+    lSeed = new QLabel("Seed :", this);
+    lSeed->setGeometry(950, 150, 200, 50);
+    lSeed->setStyleSheet("QLabel { color : white; }");
+    lSeed->setFont(QFont(QString("Segoe UI Semilight"),20));
+
+    pRandSeed = new QPushButton("", this);
+    pRandSeed->setGeometry(1100, 150, 40, 40);
+    pRandSeed->setIcon(QIcon(":/img/rand.png")); //source : https://d30y9cdsu7xlg0.cloudfront.net/png/45441-200.png via Google Images
+
+    lDifficulty = new QLabel("Difficulty :", this);
+    lDifficulty->setGeometry(950, 200, 200, 50);
+    lDifficulty->setStyleSheet("QLabel { color : white; }");
+    lDifficulty->setFont(QFont(QString("Segoe UI Semilight"),20));
+
+    sbMapSize = new QSpinBox(this);
+    sbMapSize->setGeometry(1100, 100, 150, 40);
+    sbMapSize->setMinimum(16);
+    sbMapSize->setMaximum(256);
+
+    sbSeed = new QSpinBox(this);
+    sbSeed->setGeometry(1150, 150, 100, 40);
+    sbSeed->setMinimum(0);
+    sbSeed->setMaximum(99999);
+    sbSeed->setStyleSheet("QSpinBox { size : 14; }");
+
+    cbDifficulty = new QComboBox(this);
+    cbDifficulty->setGeometry(1100, 200, 150, 40);
+
+
 
     pSetGameFile = new QPushButton(tr("Set game file"), this);
     pSetGameFile->setGeometry(1100,20,150,30);
@@ -82,7 +118,7 @@ void Launcher::displayWidgets()
     listSaves = new QListWidget(this);
     listSaves->setGeometry(950, 100, 300, 420);
 
-    //Bouton Play
+    //Boutons
     pPlay = new QPushButton(QString(tr("Play")), this);
     pPlay->setGeometry(950,600,300,100);
     pPlay->setFont(QFont(QString("Segoe UI Semilight"),40));
@@ -118,6 +154,11 @@ void Launcher::updateInfos()
         lSaveFolder->setStyleSheet("color:green;");
     else
         lSaveFolder->setStyleSheet("color:red;");
+}
+
+void Launcher::updatePreview()
+{
+
 }
 
 void Launcher::setGameFile()
@@ -160,14 +201,22 @@ void Launcher::updateListWidget(QStringList sl)
 void Launcher::setViewMode(bool b)
 {
     listSaves->setVisible(b);
-
     lMapSize->setVisible(!b);
     lSeed->setVisible(!b);
     lDifficulty->setVisible(!b);
-    sbMapSizeX->setVisible(!b);
-    sbMapSizeY->setVisible(!b);
+    sbMapSize->setVisible(!b);
     sbSeed->setVisible(!b);
     cbDifficulty->setVisible(!b);
+    if(b)
+    {
+        pNewGame->setStyleSheet("QPushButton { background-color : grey; }");
+        pLoadSave->setStyleSheet("QPushButton { background-color : white; }");
+    }
+    else
+    {
+        pNewGame->setStyleSheet("QPushButton { background-color : white; }");
+        pLoadSave->setStyleSheet("QPushButton { background-color : grey; }");
+    }
 }
 
 void Launcher::play()

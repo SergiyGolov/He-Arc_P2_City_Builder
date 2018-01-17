@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>img/bg_city.jpg</file>
+        <file>img/rand.png</file>
     </qresource>
 </RCC>
