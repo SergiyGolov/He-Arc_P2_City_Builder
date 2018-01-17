@@ -11,12 +11,12 @@
 #include <QDir>
 #include <QProcess>
 #include <QMessageBox>
-#include <QPixmap>
 #include <QButtonGroup>
 
 class QSoundEffect;
 class QComboBox;
 class QSpinBox;
+class QPixmap;
 
 class Launcher : public QMainWindow
 {
@@ -37,16 +37,19 @@ public:
 
     QLabel* lMapSize;
     QLabel* lSeed;
+    QPushButton* pRandSeed;
     QLabel* lDifficulty;
+    QLabel* lGameName;
 
-    QSpinBox* sbMapSizeX;
-    QSpinBox* sbMapSizeY;
+    QSpinBox* sbMapSize;
     QSpinBox* sbSeed;
     QComboBox* cbDifficulty;
+    QLineEdit* leGameName;
 
     QPushButton* pSetGameFile;
     QPushButton* pSetSaveFolder;
 
+    QPixmap pmPreview;
     //Sound
     QSoundEffect *se;
 
@@ -68,6 +71,7 @@ private:
     QStringList getSavesList();
 
     void displayWidgets();
+    void updatePreview();
 
 private slots:
     void play();
@@ -77,7 +81,7 @@ private slots:
     void setSaveFolder();
 
 protected:
-    void timerEvent(QTimerEvent *event);
+    //void timerEvent(QTimerEvent *event);
 protected slots:
 
 };

@@ -31,6 +31,7 @@ MapView* MapView::getMapView()
 
 MapView::MapView(QWidget *parent): QGraphicsView(parent)
 {
+
     currentBuild=nullptr;
     nbTimeTick=0;
     timeTick=false;
@@ -174,8 +175,11 @@ this->translate(cameraX,cameraY);
         }
     }
 
+    if(nbTiles>243)translateFactor=5.35*(double)pixelPerTile*(double)nbTiles/256.0;
+    else translateFactor=4.275*(double)pixelPerTile*(double)nbTiles/256.0;
 
-
+    if(nbTiles>243)scaleFactor=0.19*256.0/(double)nbTiles;
+    else scaleFactor=0.235*256.0/(double)nbTiles;
 
 }
 
@@ -383,7 +387,7 @@ void MapView::moveAddBuilding(MapTile *rect){
         if(currentBuild==nullptr && pixExists){
             QTransform trans;
 
-            trans.scale(1.1*0.04,1.2*0.04);
+            trans.scale(1.1*0.04*256/nbTiles,1.2*0.04*256/nbTiles);
             trans.rotate(-45);
             currentBuild=new QGraphicsPixmapItem( QPixmap(pixFilePath));
 
@@ -774,7 +778,7 @@ void MapView::finalAddRoad(MapTile* rect){
 
 
                     QTransform trans;
-                    trans.scale(0.19,0.19);
+                    trans.scale(scaleFactor,scaleFactor);
 
                     int angle;
                     if(dir==1 ){
@@ -782,7 +786,7 @@ void MapView::finalAddRoad(MapTile* rect){
                     }
                     else{
                         trans.rotate(-90);
-                        trans.translate(-5.4*pixelPerTile,0);
+                        trans.translate(-translateFactor,0);
                         angle=1;
                     }
 
@@ -1112,23 +1116,23 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
             break;
         }
 
-        trans.scale(0.19,0.19);
+        trans.scale(scaleFactor,scaleFactor);
 
         switch(neighbourCount){
         case 2:
             if(tile->getX()-1>=0 && tile->getY()+1<nbTiles && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0){
                 trans.rotate(-90);
-                trans.translate(-5.35*pixelPerTile,0);
+                trans.translate(-translateFactor,0);
                 pixPath=":/ressources/routeL.png";
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),7);
             }else if(tile->getX()+1<nbTiles && tile->getY()-1>=0 && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
                 trans.rotate(90);
-                trans.translate(0,-5.35*pixelPerTile);
+                trans.translate(0,-translateFactor);
                 pixPath=":/ressources/routeL.png";
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),8);
             }else if(tile->getX()+1<nbTiles && tile->getY()+1<nbTiles && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0){
                 trans.rotate(180);
-                trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+                trans.translate(-translateFactor,-translateFactor);
                 pixPath=":/ressources/routeL.png";
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),9);
             }else if(tile->getX()-1>=0 && tile->getY()-1>=0 && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
@@ -1140,17 +1144,17 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
         case 3:
             if(tile->getX()-1 >=0 && tile->getY()-1>=0 && tile->getX()+1<nbTiles&&tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
                 trans.rotate(180);
-                trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+                trans.translate(-translateFactor,-translateFactor);
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),4);
             }
             if(tile->getX()+1 <nbTiles && tile->getY()-1>=0 && tile->getY()+1<nbTiles&&tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
                 trans.rotate(-90);
-                trans.translate(-5.35*pixelPerTile,0);
+                trans.translate(-translateFactor,0);
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),5);
             }
             if(tile->getX()-1>=0 && tile->getY()-1>=0 && tile->getY()+1<nbTiles&&tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
                 trans.rotate(90);
-                trans.translate(0,-5.35*pixelPerTile);
+                trans.translate(0,-translateFactor);
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),6);
             }
             break;
@@ -1233,13 +1237,13 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
         tiles->at(x+y*nbTiles)->setUniqueBId(buildingCount);
 
         QTransform trans;
-        trans.scale(0.19,0.19);
+        trans.scale(scaleFactor,scaleFactor);
         QString pixPath;
 
         switch(angle){
         case 1:
             trans.rotate(-90);
-            trans.translate(-5.4*pixelPerTile,0);
+            trans.translate(-translateFactor,0);
         case 0:
             pixPath=":/ressources/route.png";
             break;
@@ -1248,33 +1252,33 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
             break;
         case 4:
             trans.rotate(180);
-            trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+            trans.translate(-translateFactor,-translateFactor);
         case 3:
             pixPath=":/ressources/routeT.png";
             break;
         case 5:
             trans.rotate(-90);
-            trans.translate(-5.35*pixelPerTile,0);
+            trans.translate(-translateFactor,0);
             pixPath=":/ressources/routeT.png";
             break;
         case 6:
             trans.rotate(90);
-            trans.translate(0,-5.35*pixelPerTile);
+            trans.translate(0,-translateFactor);
             pixPath=":/ressources/routeT.png";
             break;
         case 7:
             trans.rotate(-90);
-            trans.translate(-5.35*pixelPerTile,0);
+            trans.translate(-translateFactor,0);
             pixPath=":/ressources/routeL.png";
             break;
         case 8:
             trans.rotate(90);
-            trans.translate(0,-5.35*pixelPerTile);
+            trans.translate(0,-translateFactor);
             pixPath=":/ressources/routeL.png";
             break;
         case 9:
             trans.rotate(180);
-            trans.translate(-5.35*pixelPerTile,-5.35*pixelPerTile);
+            trans.translate(-translateFactor,-translateFactor);
         case 10:
             pixPath=":/ressources/routeL.png";
             break;
