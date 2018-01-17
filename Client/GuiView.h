@@ -1,9 +1,24 @@
-#ifndef GUI_H
-#define GUI_H
+/*
+ * ************************************* Project *************************************
+ * School              : Haute Ecole Arc
+ * Module              : Projet P2
+ * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
+ *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
+ * Group               : CityBuilder
+ * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
+ *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
+ *                       - Petroff Damian <damian.petroff@he-arc.ch>
+ * ************************************ File spec ************************************
+ * Workpackage manager :
+ * Description         :
+ * ***********************************************************************************
+ */
+#pragma once
+
+#include "Client/MapView.h"
+#include "Client/PickerElement.h"
 
 #include <QGraphicsView>
-#include "MapView.h"
-#include "PickerElement.h"
 
 class QGraphicsScene;
 class ConstantBuilding;
@@ -39,5 +54,3 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
 };
-
-#endif // GUI_H

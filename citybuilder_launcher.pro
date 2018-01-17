@@ -24,18 +24,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main_launcher.cpp \
-        Launcher.cpp \
-        ../Client/RandomService.cpp \
-    ../Client/OursMaths.cpp \
-    ../Client/PerlinNoise.cpp
+Launcher/main_launcher.cpp \
+Launcher/Launcher.cpp \
+general/RandomService.cpp \
+general/OurMath.cpp \
+general/PerlinNoise.cpp
 
 HEADERS += \
-        Launcher.h \
-        LauncherService.h \
-        ../Client/RandomService.h \
-    ../Client/OursMaths.h \
-    ../Client/PerlinNoise.h
+Launcher/Launcher.h \
+Launcher/LauncherService.h \
+general/RandomService.h \
+general/OurMath.h \
+general/PerlinNoise.h
 
 RESOURCES += \
-    ressources/resources.qrc
+Launcher/ressources/resources.qrc

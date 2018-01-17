@@ -1,10 +1,11 @@
+#include "Client/MainWidget.h"
+
+#include "Client/TopView.h"
+#include "Client/GraphicService.h"
+
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QKeyEvent>
-
-#include "MainWidget.h"
-#include "TopView.h"
-#include "GraphicService.h"
 
 
 MainWidget* MainWidget::mainWidgetInstance=nullptr;

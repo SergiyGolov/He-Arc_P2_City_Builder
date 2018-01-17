@@ -1,6 +1,6 @@
-#include "Building.h"
+#include "Client/Building.h"
 
-#include "ConstantBuilding.h"
+#include "Client/ConstantBuilding.h"
 
 int Building::uIDCpt=0;
 

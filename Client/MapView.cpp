@@ -1,4 +1,13 @@
-#include "MapView.h"
+#include "Client/MapView.h"
+
+#include "Client/ConstantBuilding.h"
+#include "Client/GameManagementService.h"
+#include "Client/BuildingManagementService.h"
+#include "Client/GraphicService.h"
+#include "Client/GuiView.h"
+
+#include "general/RandomService.h"
+
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -11,14 +20,7 @@
 #include <QPointF>
 #include <QKeyEvent>
 #include <QPointF>
-#include <GuiView.h>
 #include <QTimer>
-#include "ConstantBuilding.h"
-#include "GameManagementService.h"
-#include "BuildingManagementService.h"
-#include "GraphicService.h"
-#include "RandomService.h"
-
 
 MapView* MapView::mapViewInstance=nullptr;
 

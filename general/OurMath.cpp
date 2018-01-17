@@ -1,4 +1,4 @@
-#include "OursMaths.h"
+#include "general/OurMath.h"
 
 OursMaths::OursMaths()
 {

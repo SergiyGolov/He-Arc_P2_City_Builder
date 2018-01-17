@@ -1,12 +1,24 @@
 #include "Launcher.h"
-#include <QPixmap>
-#include <QSoundEffect>
-#include <QLineEdit>
-#include <QSpinBox>
+
+#include "general/RandomService.h"
+
+#include <QButtonGroup>
 #include <QComboBox>
+#include <QDebug>
+#include <QDir>
+#include <QFileDialog>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include "../Client/RandomService.h"
+#include <QLabel>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QPainter>
+#include <QPixmap>
+#include <QPushButton>
+#include <QSoundEffect>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {

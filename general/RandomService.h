@@ -15,50 +15,22 @@
  */
 #pragma once
 
-class QSound;
-class QSoundEffect;
+#include <QColor>
 
-class AudioService
+struct Cell
 {
-public:
-    static AudioService* getAudioService();
-    void playMusic();
-    void stopMusic();
-
-    void setVolumeMaster(double);
-    double getVolumeMaster();
-
-    void setVolumeMusic(double);
-    double getVolumeMusic();
-
-    void setVolumeSfx(double);
-    double getVolumeSfx();
-
-    void playSfx(int s);
-private:
-    static AudioService* audioService;
-    AudioService();
-
-    void applyMaster();
-
-    double volumeMaster;
-    double volumeMusic;
-    double volumeSfx;
-
-    double logTolinear(double v);
-    double linearTolog(double v);
-
-    QSoundEffect* music;
-
-    const int NBSFX = 7;
-    QSoundEffect* sfx;
+    int id;
+    QColor color;
 };
 
-namespace sfxID
+
+class RandomService
 {
-    enum
-    {
-        buildingAdded,
-        buildingRemoved,
-    };
-}
+private:
+    static int seed;
+public:
+    static Cell* generateMap(int sizex, int sizey);
+    static Cell* generateSky(int sizex, int sizey);
+    static int getSeed() {return seed;}
+    static int setSeed(int newSeed) {RandomService::seed = newSeed;}
+};

@@ -15,9 +15,7 @@
  * mainly used in the BuildingManagmentService
  * ***********************************************************************************
  */
-
-#ifndef BUILDING_H
-#define BUILDING_H
+#pragma once
 #include <QWidget>
 
 class ConstantBuilding;
@@ -54,5 +52,3 @@ public:
     int getPopulation(){return population;}
     void setAngle(int newAngle){this->angle=newAngle;}
 };
-
-#endif // BUILDING_H

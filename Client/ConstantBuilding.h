@@ -16,16 +16,12 @@
  * namespace bID.
  * ***********************************************************************************
  */
-
-#ifndef CONSTANTBUILDING_H
-#define CONSTANTBUILDING_H
+#pragma once
 
 #include <QString>
 #include <QList>
 #include <QPoint>
-#include <QDebug>
 #include <QSet>
-#include "OursMaths.h"
 
 class ConstantBuilding
 {
@@ -167,5 +163,3 @@ namespace bID
         Fountains,
     };
 }
-
-#endif

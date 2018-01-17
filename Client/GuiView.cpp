@@ -1,4 +1,10 @@
-#include "GuiView.h"
+#include "Client/GuiView.h"
+
+#include "Client/GameManagementService.h"
+#include "Client/GraphicService.h"
+#include "Client/BuildingManagementService.h"
+#include "Client/ConstantBuilding.h"
+
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -11,11 +17,7 @@
 #include <QPointF>
 #include <QKeyEvent>
 #include <QPointF>
-#include <ConstantBuilding.h>
 #include <QDebug>
-#include <GameManagementService.h>
-#include "GraphicService.h"
-#include "BuildingManagementService.h"
 
 GuiView::GuiView(QWidget *parent)
     : QGraphicsView(parent)

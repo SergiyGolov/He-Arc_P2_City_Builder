@@ -1,4 +1,12 @@
-#include "ConstantBuilding.h"
+#include "Client/ConstantBuilding.h"
+
+#include "general/OurMath.h"
+
+#include <QString>
+#include <QList>
+#include <QPoint>
+#include <QDebug>
+#include <QSet>
 
 int ConstantBuilding::nbBuildings = 0;
 ConstantBuilding* ConstantBuilding::tabGet = nullptr;

@@ -1,7 +1,11 @@
-#include "Services.h"
-#include "ConstantBuilding.h"
-#include "TopView.h"
-#include "GuiView.h"
+#include "Client/GameManagementService.h"
+
+#include "Client/Services.h"
+#include "Client/ConstantBuilding.h"
+#include "Client/TopView.h"
+#include "Client/GuiView.h"
+#include <Client/Building.h>
+#include <Client/TopView.h>
 
 #include <QSound>
 
