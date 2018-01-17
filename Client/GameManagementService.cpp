@@ -48,3 +48,25 @@ void GameManagementService::setTaxes(double newTaxes)
 {
     this->taxes=newTaxes;
 }
+
+void GameManagementService::setDifficulty(int difficulty)
+{
+    this->difficulty = difficulty;
+    switch (difficulty)
+    {
+    case 0:
+        this->money = 2000000000;
+        break;
+    case 1:
+        this->money = 100000;
+        break;
+    case 2:
+        this->money = 10000;
+        break;
+    case 3:
+        this->money = 1000;
+        break;
+    default:
+        break;
+    }
+}
