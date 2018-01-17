@@ -68,28 +68,26 @@ Launcher::~Launcher()
 void Launcher::displayWidgets()
 {
     lGameFile = new QLabel("", this);
-    lGameFile->setGeometry(470,20,800,30);
+    lGameFile->setGeometry(440,20,800,30);
     lGameFile->setFont(QFont(QString("Segoe UI Semilight"),8));
     lSaveFolder = new QLabel("", this);
-    lSaveFolder->setGeometry(470,50,800,30);
+    lSaveFolder->setGeometry(440,50,800,30);
     lSaveFolder->setFont(QFont(QString("Segoe UI Semilight"),8));
     pSetGameFile = new QPushButton(tr("Set game file"), this);
-    pSetGameFile->setGeometry(320,20,150,30);
-    pSetGameFile->setFont(QFont(QString("Segoe UI Semilight"),8));
-    sPathGameFile = QDir::currentPath() + "/debug/citybuilder.exe";
-    //sPathSaveFolder = QDir::currentPath() + "/citybuilder.exe";
+    pSetGameFile->setGeometry(320,20,100,30);
+    pSetGameFile->setFont(QFont(QString("Segoe UI Semilight"),10));
+    sPathGameFile = QDir::currentPath() + "/citybuilder.exe";
 
     pSetSaveFolder = new QPushButton(tr("Set save folder"), this);
-    pSetSaveFolder->setGeometry(320,50,150,30);
-    pSetSaveFolder->setFont(QFont(QString("Segoe UI Semilight"),8));
-    sPathSaveFolder = QDir::currentPath() + "/debug/saves"; ///TODO
-    //sPathSaveFolder = QDir::currentPath() + "/saves";
+    pSetSaveFolder->setGeometry(320,50,100,30);
+    pSetSaveFolder->setFont(QFont(QString("Segoe UI Semilight"),10));
+    sPathSaveFolder = QDir::currentPath() + "/saves";
 
     lTitle = new QLabel(QString(tr("City Builder")),this);
-    lTitle->setGeometry(20,0,600,100);
+    lTitle->setGeometry(30,0,270,100);
     lTitle->setStyleSheet("QLabel { color : white; }");
     lTitle->setFont(QFont(QString("Segoe UI Semilight"),40));
-    lMapSize = new QLabel("Map Size :", this);
+    lMapSize = new QLabel("Map size :", this);
     lMapSize->setGeometry(950, 100, 200, 50);
     lMapSize->setStyleSheet("QLabel { color : white; }");
     lMapSize->setFont(QFont(QString("Segoe UI Semilight"),18));
@@ -110,6 +108,7 @@ void Launcher::displayWidgets()
     sbMapSize->setGeometry(1100, 100, 150, 40);
     sbMapSize->setMinimum(16);
     sbMapSize->setMaximum(256);
+    sbMapSize->setFont(QFont(QString("Segoe UI Semilight"),18));
     pRandSeed = new QPushButton("", this);
     pRandSeed->setGeometry(1100, 150, 40, 40);
     pRandSeed->setIcon(QIcon(":/img/rand.png")); //source : https://d30y9cdsu7xlg0.cloudfront.net/png/45441-200.png via Google Images
@@ -117,14 +116,17 @@ void Launcher::displayWidgets()
     sbSeed->setGeometry(1150, 150, 100, 40);
     sbSeed->setMinimum(0);
     sbSeed->setMaximum(10000);
+    sbSeed->setFont(QFont(QString("Segoe UI Semilight"),18));
     sbSeed->setStyleSheet("QSpinBox { size : 14; }");
     cbDifficulty = new QComboBox(this);
     cbDifficulty->setGeometry(1100, 200, 150, 40);
     cbDifficulty->addItem(QIcon(":img/easy.png"), "Easy");
     cbDifficulty->addItem(QIcon(":img/medium.png"), "Medium");
     cbDifficulty->addItem(QIcon(":img/hard.png"), "Hard");
+    cbDifficulty->setFont(QFont(QString("Segoe UI Semilight"),18));
     leGameName = new QLineEdit(this);
     leGameName->setGeometry(1100, 250, 150, 40);
+    leGameName->setFont(QFont(QString("Segoe UI Semilight"),18));
 
 
 
