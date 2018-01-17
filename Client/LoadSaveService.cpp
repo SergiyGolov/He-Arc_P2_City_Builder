@@ -14,18 +14,15 @@
 //methods
 void LoadSaveService::loadGameUI()
 {
-    QFile* loadfile = new QFile();
+
     QString filename = QFileDialog::getOpenFileName(nullptr, tr("Load file"), QString("."), tr("City Builder Saves (*.cbsave *.save *.cb *.json)"));
     if(filename.count()>0){
-        loadfile->setFileName(filename);
-        loadfile->open(QIODevice::ReadOnly);
 
         GraphicService::getGraphicService()->enableLoadingMessage();
-        loadGame(loadfile);
+        loadGame(filename);
         GraphicService::getGraphicService()->disableLoadingMessage();
     }
-    loadfile->close();
-    delete loadfile;
+
 }
 
 void LoadSaveService::saveGameUI()
@@ -47,12 +44,20 @@ void LoadSaveService::saveGameUI()
 }
 
 
-void LoadSaveService::loadGame(QFile* loadFile)
+void LoadSaveService::loadGame(QString filename)
 {
 
-    QString s = loadFile->readAll();
 
-    if(s.length()>0){
+    if(filename.length()>0){
+
+        QFile* loadfile = new QFile();
+
+        loadfile->setFileName(filename);
+        loadfile->open(QIODevice::ReadOnly);
+
+
+        QString s = loadfile->readAll();
+
         QJsonDocument jd = QJsonDocument::fromJson(s.toUtf8());
         QJsonObject jo = jd.object();
         QJsonObject generation = jo.value(QString("generation")).toObject();
@@ -95,6 +100,9 @@ void LoadSaveService::loadGame(QFile* loadFile)
             MapView::getMapView()->addBuildingFromSave(bId,x,y,angle);
 
         }
+
+        loadfile->close();
+        delete loadfile;
     }else{
         MapView::getMapView()->generateMap(); //default map generated
     }

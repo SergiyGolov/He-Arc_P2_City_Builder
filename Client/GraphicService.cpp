@@ -15,7 +15,7 @@ GraphicService::GraphicService(QString file){
 
 
     loading->show();
-    LoadSaveService::loadGame(new QFile(file)); //empty string to load a new game
+    LoadSaveService::loadGame(file); //empty string to load a new game
     loading->hide();
 
 }

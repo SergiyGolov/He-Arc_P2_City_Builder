@@ -9,7 +9,7 @@ public:
 public slots:
     static void loadGameUI();
     static void saveGameUI();
-    static void loadGame(QFile* filename);
+    static void loadGame(QString filename);
 private:
 
     static void saveGame(QFile* filename);

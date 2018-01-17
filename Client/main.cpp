@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
     QString file="";
     if(argc==2){
         file=argv[1];
-
     }else if(argc>2){
         int mapSize=atoi(argv[1]);
         int difficulty=atoi(argv[2]);
