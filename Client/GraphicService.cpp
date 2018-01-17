@@ -6,7 +6,7 @@
 
 
 
-GraphicService::GraphicService(){
+GraphicService::GraphicService(QString file){
     loading=new QMessageBox(QString("Loading"),QString("The game is loading..."),QMessageBox::Information,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);
 
     loading->setWindowFlag(Qt::WindowStaysOnTopHint);
@@ -15,7 +15,7 @@ GraphicService::GraphicService(){
 
 
     loading->show();
-    LoadSaveService::loadGame(new QFile(QString(""))); //empty string to load a new game
+    LoadSaveService::loadGame(new QFile(file)); //empty string to load a new game
     loading->hide();
 
 }
@@ -25,6 +25,7 @@ GraphicService::~GraphicService(){
 }
 
 GraphicService* GraphicService::graphicServiceInstance=nullptr;
+
 
 
 void GraphicService::setKeyboardShortcuts(int key){
@@ -123,9 +124,9 @@ void GraphicService::setKeyboardShortcuts(int key){
 
 
 
-GraphicService* GraphicService::getGraphicService(){
+GraphicService* GraphicService::getGraphicService(QString file){
     if(GraphicService::graphicServiceInstance==nullptr){
-        GraphicService::graphicServiceInstance=new GraphicService();
+        GraphicService::graphicServiceInstance=new GraphicService(file);
     }
     return GraphicService::graphicServiceInstance;
 }

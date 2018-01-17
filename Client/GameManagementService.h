@@ -22,6 +22,7 @@ private:
     double taxes;
     QString cityName;
     int saveCount;
+    int difficulty;
 public:
     static GameManagementService* getGameManagementService();
     //destructor
@@ -43,5 +44,6 @@ public:
     void setCityName(QString cityName) { this->cityName = cityName;
                                       TopView::getTopView()->setCityName();}
     void setSaveCount(int saveCount) { this->saveCount = saveCount; }
+    void setDifficulty(int difficulty){this->difficulty=difficulty;}
 };
 #endif // GAMEMANAGEMENTSERVICE_H
