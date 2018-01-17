@@ -13,7 +13,10 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QButtonGroup>
-#include <QSoundEffect>
+
+class QSoundEffect;
+class QComboBox;
+class QSpinBox;
 
 class Launcher : public QMainWindow
 {
@@ -31,8 +34,21 @@ public:
     QString sPathSaveFolder;
     QLabel* lGameFile;
     QLabel* lSaveFolder;
+
+    QLabel* lMapSize;
+    QLabel* lSeed;
+    QLabel* lDifficulty;
+
+    QSpinBox* sbMapSizeX;
+    QSpinBox* sbMapSizeY;
+    QSpinBox* sbSeed;
+    QComboBox* cbDifficulty;
+
     QPushButton* pSetGameFile;
     QPushButton* pSetSaveFolder;
+
+    //Sound
+    QSoundEffect *se;
 
     //Launch
     QPushButton* pNewGame;

@@ -6,3 +6,4 @@ build*/**
 *.gz
 *.toc
 *.pdf
+*.dvi

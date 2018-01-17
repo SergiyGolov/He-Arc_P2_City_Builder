@@ -1,9 +1,18 @@
 #include "Launcher.h"
 
-
+#include <QSoundEffect>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QComboBox>
 
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
+    se = new QSoundEffect(this); //Doesnt work when executed in the debugger
+    se->setSource(QUrl::fromLocalFile("./CityBuilderLauncher.wav"));
+    se->setLoopCount(QSoundEffect::Infinite);
+    se->setVolume(1);
+    se->play();
+
     this->startTimer(1000);
     this->setFixedSize(1280, 720);
 
@@ -13,8 +22,16 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     palette.setBrush(QPalette::Background, pix_Background);
     this->setPalette(palette);
 
-    displayWidgets();
+    lMapSize = new QLabel("Map Size :", this);
+    lSeed = new QLabel("Seed :", this);
+    lDifficulty = new QLabel("Difficulty :", this);
 
+    sbMapSizeX = new QSpinBox(this);
+    sbMapSizeY = new QSpinBox(this);
+    sbSeed = new QSpinBox(this);
+    cbDifficulty = new QComboBox(this);
+
+    displayWidgets();
 
     connect(pNewGame, &QPushButton::clicked, [=]()
     {
@@ -28,6 +45,8 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
     connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
     connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
+
+    setViewMode(true);
 }
 
 Launcher::~Launcher()
@@ -141,6 +160,14 @@ void Launcher::updateListWidget(QStringList sl)
 void Launcher::setViewMode(bool b)
 {
     listSaves->setVisible(b);
+
+    lMapSize->setVisible(!b);
+    lSeed->setVisible(!b);
+    lDifficulty->setVisible(!b);
+    sbMapSizeX->setVisible(!b);
+    sbMapSizeY->setVisible(!b);
+    sbSeed->setVisible(!b);
+    cbDifficulty->setVisible(!b);
 }
 
 void Launcher::play()
