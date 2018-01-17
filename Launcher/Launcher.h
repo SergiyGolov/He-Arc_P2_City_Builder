@@ -50,6 +50,7 @@ public:
     QPushButton* pSetSaveFolder;
 
     QPixmap pmPreview;
+    QLabel* lbl;
     //Sound
     QSoundEffect *se;
 
@@ -66,12 +67,12 @@ public:
 public slots:
 
 private:
+    const int randomRange = 10001;
     void updateSaves();
     void updateListWidget(QStringList sl);
     QStringList getSavesList();
 
     void displayWidgets();
-    void updatePreview();
 
 private slots:
     void play();
@@ -79,7 +80,7 @@ private slots:
 
     void setGameFile();
     void setSaveFolder();
-
+    void updatePreview();
 protected:
     //void timerEvent(QTimerEvent *event);
 protected slots:

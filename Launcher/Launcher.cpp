@@ -36,10 +36,17 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
         updateSaves();
         updateInfos();
     });
+
+
+    sbSeed->setValue(qrand() % randomRange);
     connect(pRandSeed, &QPushButton::clicked, [=]()
     {
-        sbSeed->setValue(qrand() % 10001);
+        sbSeed->setValue(qrand() % randomRange);
     });
+
+    connect(sbMapSize, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
+    connect(sbSeed, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
+
     connect(leGameName, &QLineEdit::textChanged, [=]()
     {
        if(leGameName->text()!="")
@@ -57,7 +64,9 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
     connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
 
+
     setViewMode(false);
+    updatePreview();
 }
 
 Launcher::~Launcher()
@@ -68,17 +77,22 @@ Launcher::~Launcher()
 void Launcher::displayWidgets()
 {
     lGameFile = new QLabel("", this);
-    lGameFile->setGeometry(500,0,200,30);
+    lGameFile->setGeometry(470,20,800,30);
     lGameFile->setFont(QFont(QString("Segoe UI Semilight"),8));
     lSaveFolder = new QLabel("", this);
-    lSaveFolder->setGeometry(500,30,200,30);
+    lSaveFolder->setGeometry(470,50,800,30);
     lSaveFolder->setFont(QFont(QString("Segoe UI Semilight"),8));
     pSetGameFile = new QPushButton(tr("Set game file"), this);
-    pSetGameFile->setGeometry(1100,20,150,30);
+    pSetGameFile->setGeometry(320,20,150,30);
     pSetGameFile->setFont(QFont(QString("Segoe UI Semilight"),8));
+    sPathGameFile = QDir::currentPath() + "/debug/citybuilder.exe";
+    //sPathSaveFolder = QDir::currentPath() + "/citybuilder.exe";
+
     pSetSaveFolder = new QPushButton(tr("Set save folder"), this);
-    pSetSaveFolder->setGeometry(1100,50,150,30);
+    pSetSaveFolder->setGeometry(320,50,150,30);
     pSetSaveFolder->setFont(QFont(QString("Segoe UI Semilight"),8));
+    sPathSaveFolder = QDir::currentPath() + "/debug/saves"; ///TODO
+    //sPathSaveFolder = QDir::currentPath() + "/saves";
 
     lTitle = new QLabel(QString(tr("City Builder")),this);
     lTitle->setGeometry(20,0,600,100);
@@ -105,6 +119,7 @@ void Launcher::displayWidgets()
     sbMapSize->setGeometry(1100, 100, 150, 40);
     sbMapSize->setMinimum(16);
     sbMapSize->setMaximum(256);
+    sbMapSize->setValue(128);
     pRandSeed = new QPushButton("", this);
     pRandSeed->setGeometry(1100, 150, 40, 40);
     pRandSeed->setIcon(QIcon(":/img/rand.png")); //source : https://d30y9cdsu7xlg0.cloudfront.net/png/45441-200.png via Google Images
@@ -129,9 +144,7 @@ void Launcher::displayWidgets()
     listSaves->setGeometry(950, 100, 300, 420);
 
     //Preview
-    pmPreview.load(":img/easy.png");
-    pmPreview = pmPreview.scaled(600, 600);
-    QLabel* lbl = new QLabel("Preview",this);
+    lbl = new QLabel("Preview",this);
     lbl->setPixmap(pmPreview);
     lbl->setGeometry(320, 100, 600, 600);
 
@@ -150,6 +163,9 @@ void Launcher::displayWidgets()
     pLoadSave = new QPushButton(QString(tr("Load")),this);
     pLoadSave->setGeometry(1100,550,150,50);
     pLoadSave->setFont(QFont(QString("Segoe UI Semilight"),20));
+
+    updateInfos();
+    updateSaves();
 }
 
 void Launcher::updateInfos()
@@ -170,25 +186,29 @@ void Launcher::updateInfos()
         lSaveFolder->setStyleSheet("color:red;");
 }
 
-Pixmap Launcher::generatePixmap(int size, int seed)
-{
-    RandomService::setSeed(seed);
-    Cell *c;
-    c = RandomService::generateMap(size, size);
-
-
-
-}
-
 void Launcher::updateSaves()
 {
     updateListWidget(getSavesList());
 }
 
-void Launcher::updatePreview() //TODO
+void Launcher::updatePreview()
 {
+    int size = this->sbMapSize->text().toInt();
+    int seed = this->sbSeed->text().toInt();
 
+    RandomService::setSeed(seed);
+    Cell* c = RandomService::generateMap(size, size);
 
+    QImage i(size, size, QImage::Format_ARGB32);
+
+    for(int x = 0; x < size; x++)
+    {
+        for(int y = 0; y < size; y++)
+        {
+            i.setPixel(x,y, c[x + y * size].color.rgba());
+        }
+    }
+    lbl->setPixmap(QPixmap::fromImage(i).scaled(600,600));
 }
 
 void Launcher::setGameFile()
@@ -235,13 +255,13 @@ void Launcher::setViewMode(bool b)
     cbDifficulty->setVisible(!b);
     if(b)
     {
-        //pNewGame->setStyleSheet("QPushButton { background-color : grey; }");
-        //pLoadSave->setStyleSheet("QPushButton { background-color : white;}");
+        pNewGame->setStyleSheet("QPushButton { background-color : grey; }");
+        pLoadSave->setStyleSheet("QPushButton { background-color : white; color : black}");
     }
     else
     {
-        //pNewGame->setStyleSheet("QPushButton { background-color : white;}");
-        //pLoadSave->setStyleSheet("QPushButton { background-color : grey; }");
+        pNewGame->setStyleSheet("QPushButton { background-color : white; color : black }");
+        pLoadSave->setStyleSheet("QPushButton { background-color : grey; }");
     }
     pPlay->setEnabled(false);
     /*
