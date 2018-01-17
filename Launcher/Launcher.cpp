@@ -1,12 +1,24 @@
 #include "Launcher.h"
-#include <QPixmap>
-#include <QSoundEffect>
-#include <QLineEdit>
-#include <QSpinBox>
+
+#include "general/RandomService.h"
+
+#include <QButtonGroup>
 #include <QComboBox>
+#include <QDebug>
+#include <QDir>
+#include <QFileDialog>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-
+#include <QLabel>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QPainter>
+#include <QPixmap>
+#include <QPushButton>
+#include <QSoundEffect>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
@@ -36,10 +48,17 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
         updateSaves();
         updateInfos();
     });
+
+
+    sbSeed->setValue(qrand() % randomRange);
     connect(pRandSeed, &QPushButton::clicked, [=]()
     {
-        sbSeed->setValue(qrand() % 10001);
+        sbSeed->setValue(qrand() % randomRange);
     });
+
+    connect(sbMapSize, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
+    connect(sbSeed, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
+
     connect(leGameName, &QLineEdit::textChanged, [=]()
     {
        if(leGameName->text()!="")
@@ -57,7 +76,9 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
     connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
 
+
     setViewMode(false);
+    updatePreview();
 }
 
 Launcher::~Launcher()
@@ -108,6 +129,7 @@ void Launcher::displayWidgets()
     sbMapSize->setGeometry(1100, 100, 150, 40);
     sbMapSize->setMinimum(16);
     sbMapSize->setMaximum(256);
+    sbMapSize->setValue(128);
     sbMapSize->setFont(QFont(QString("Segoe UI Semilight"),18));
     pRandSeed = new QPushButton("", this);
     pRandSeed->setGeometry(1100, 150, 40, 40);
@@ -136,9 +158,7 @@ void Launcher::displayWidgets()
     listSaves->setGeometry(950, 100, 300, 420);
 
     //Preview
-    pmPreview.load(":img/easy.png");
-    pmPreview = pmPreview.scaled(600, 600);
-    QLabel* lbl = new QLabel("Preview",this);
+    lbl = new QLabel("Preview",this);
     lbl->setPixmap(pmPreview);
     lbl->setGeometry(320, 100, 600, 600);
 
@@ -185,10 +205,24 @@ void Launcher::updateSaves()
     updateListWidget(getSavesList());
 }
 
-void Launcher::updatePreview() //TODO
+void Launcher::updatePreview()
 {
+    int size = this->sbMapSize->text().toInt();
+    int seed = this->sbSeed->text().toInt();
 
+    RandomService::setSeed(seed);
+    Cell* c = RandomService::generateMap(size, size);
 
+    QImage i(size, size, QImage::Format_ARGB32);
+
+    for(int x = 0; x < size; x++)
+    {
+        for(int y = 0; y < size; y++)
+        {
+            i.setPixel(x,y, c[x + y * size].color.rgba());
+        }
+    }
+    lbl->setPixmap(QPixmap::fromImage(i).scaled(600,600));
 }
 
 void Launcher::setGameFile()
@@ -273,8 +307,9 @@ void Launcher::play()
             game.append(cbDifficulty->currentText());
             game.append(" seed=");
             game.append(QString::number(sbSeed->value()));
-            game.append(" name=");
+            game.append(" name\"");
             game.append(leGameName->text());
+            game.append("\"");
         }
         else
         {

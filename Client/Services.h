@@ -1,10 +1,26 @@
+/*
+ * ************************************* Project *************************************
+ * School              : Haute Ecole Arc
+ * Module              : Projet P2
+ * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
+ *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
+ * Group               : CityBuilder
+ * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
+ *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
+ *                       - Petroff Damian <damian.petroff@he-arc.ch>
+ * ************************************ File spec ************************************
+ * Workpackage manager :
+ * Description         :
+ * ***********************************************************************************
+ */
 #pragma once
 
-#include "AudioService.h"
-#include "BuildingManagementService.h"
-#include "GameManagementService.h"
-#include "GraphicService.h"
-#include "LauncherService.h"
-#include "LoadSaveService.h"
-#include "RandomService.h"
-#include "TickService.h"
+#include "Client/AudioService.h"
+#include "Client/BuildingManagementService.h"
+#include "Client/GameManagementService.h"
+#include "Client/GraphicService.h"
+#include "Client/LauncherService.h"
+#include "Client/LoadSaveService.h"
+#include "Client/TickService.h"
+
+#include "general/RandomService.h"

@@ -1,7 +1,7 @@
-#include "TopView.h"
+#include "Client/TopView.h"
 
-#include "Services.h"
-#include "ClickableLabel.h"
+#include "Client/Services.h"
+#include "Client/ClickableLabel.h"
 
 #include <QTime>
 #include <QGraphicsScene>

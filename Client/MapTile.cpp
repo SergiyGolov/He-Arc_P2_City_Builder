@@ -1,4 +1,5 @@
-#include "MapTile.h"
+#include "Client/MapTile.h"
+
 #include <QFont>
 #include <QDebug>
 

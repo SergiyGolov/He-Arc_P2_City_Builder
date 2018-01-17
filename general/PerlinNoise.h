@@ -1,6 +1,22 @@
 /*
+ * ************************************* Project *************************************
+ * School              : Haute Ecole Arc
+ * Module              : Projet P2
+ * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
+ *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
+ * Group               : CityBuilder
+ * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
+ *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
+ *                       - Petroff Damian <damian.petroff@he-arc.ch>
+ * ************************************ File spec ************************************
+ * Workpackage manager :
+ * Description         :
+ * ***********************************************************************************
+ */
+/*
  Source : https://github.com/sol-prog/Perlin_Noise
 */
+#pragma once
 
 #include <vector>
 
@@ -9,9 +25,6 @@
 // THE ORIGINAL JAVA IMPLEMENTATION IS COPYRIGHT 2002 KEN PERLIN
 
 // I ADDED AN EXTRA METHOD THAT GENERATES A NEW PERMUTATION VECTOR (THIS IS NOT PRESENT IN THE ORIGINAL IMPLEMENTATION)
-
-#ifndef PERLINNOISE_H
-#define PERLINNOISE_H
 
 class PerlinNoise {
 	// The permutation vector
@@ -30,5 +43,3 @@ private:
 	double lerp(double t, double a, double b);
 	double grad(int hash, double x, double y, double z);
 };
-
-#endif

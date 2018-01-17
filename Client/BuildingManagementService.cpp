@@ -1,8 +1,11 @@
-#include "ConstantBuilding.h"
-#include "GameManagementService.h"
-#include "BuildingManagementService.h"
-#include "GuiView.h"
-#include "AudioService.h"
+#include "Client/BuildingManagementService.h"
+
+#include "Client/ConstantBuilding.h"
+#include "Client/GameManagementService.h"
+#include "Client/GuiView.h"
+#include "Client/AudioService.h"
+
+#include "general/OurMath.h"
 
 #include <QJsonObject>
 

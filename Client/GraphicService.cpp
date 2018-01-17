@@ -1,10 +1,6 @@
+#include "Client/GraphicService.h"
 
-#include "GraphicService.h"
-
-#include "LoadSaveService.h"
-
-
-
+#include "Client/LoadSaveService.h"
 
 GraphicService::GraphicService(QString file){
     loading=new QMessageBox(QString("Loading"),QString("The game is loading..."),QMessageBox::Information,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);

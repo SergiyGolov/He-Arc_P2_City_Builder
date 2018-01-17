@@ -1,5 +1,6 @@
-#include "Launcher.h"
 #include <QApplication>
+
+#include "Launcher.h"
 
 int main(int argc, char *argv[])
 {
@@ -7,7 +8,5 @@ int main(int argc, char *argv[])
     Launcher w;
 
     w.show();
-
-    //AudioService::getAudioService()->playMusic();
     return a.exec();
 }

@@ -1,6 +1,7 @@
-#include "RandomService.h"
-#include "OursMaths.h"
-#include "PerlinNoise.h"
+#include "general/RandomService.h"
+
+#include "general/OurMath.h"
+#include "general/PerlinNoise.h"
 
 int RandomService::seed = 0;
 

@@ -1,11 +1,13 @@
-#include <QDateTime>
+#include "Client/TickService.h"
 
-#include "TickService.h"
-#include "TopView.h"
-#include "GuiView.h"
-#include "GameManagementService.h"
-#include "BuildingManagementService.h"
-#include "OursMaths.h"
+#include "Client/TopView.h"
+#include "Client/GuiView.h"
+#include "Client/GameManagementService.h"
+#include "Client/BuildingManagementService.h"
+
+#include "general/OurMath.h"
+
+#include <QDateTime>
 
 TickService* TickService::tickService = nullptr;
 

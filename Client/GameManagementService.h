@@ -1,14 +1,25 @@
-#ifndef GAMEMANAGEMENTSERVICE_H
-#define GAMEMANAGEMENTSERVICE_H
+/*
+ * ************************************* Project *************************************
+ * School              : Haute Ecole Arc
+ * Module              : Projet P2
+ * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
+ *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
+ * Group               : CityBuilder
+ * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
+ *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
+ *                       - Petroff Damian <damian.petroff@he-arc.ch>
+ * ************************************ File spec ************************************
+ * Workpackage manager :
+ * Description         :
+ * ***********************************************************************************
+ */
+#pragma once
 
 #include <QList>
-#include <Building.h>
-#include <TopView.h>
-
+#include "Client/TopView.h"
 
 class ConstantBuilding;
 class TickService;
-
 
 class GameManagementService
 {
@@ -48,4 +59,3 @@ public:
     void setDifficulty(int difficulty);
 
 };
-#endif // GAMEMANAGEMENTSERVICE_H

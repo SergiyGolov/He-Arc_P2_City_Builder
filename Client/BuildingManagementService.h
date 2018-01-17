@@ -15,13 +15,12 @@
  * specifics function to handle the array and have so calculus with it
  * ***********************************************************************************
  */
-
-#ifndef BUILDINGMANAGEMENTSERVICE_H
-#define BUILDINGMANAGEMENTSERVICE_H
+#pragma once
 
 class ConstantBuilding;
 class QJsonObject;
-#include "Building.h"
+
+#include "Client/Building.h"
 #include <QVector>
 
 class BuildingManagementService
@@ -55,5 +54,3 @@ private:
     int sumPopulation;
     double averageHappiness;
 };
-
-#endif // BUILDINGMANAGEMENTSERVICE_H

@@ -1,4 +1,4 @@
-#include "ClickableLabel.h"
+#include "Client/ClickableLabel.h"
 
 ClickableLabel::ClickableLabel(QString s, QWidget* parent)
     : QLabel(s, parent) {

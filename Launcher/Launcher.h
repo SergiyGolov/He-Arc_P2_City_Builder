@@ -1,22 +1,39 @@
+/*
+ * ************************************* Project *************************************
+ * School              : Haute Ecole Arc
+ * Module              : Projet P2
+ * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
+ *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
+ * Group               : CityBuilder
+ * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
+ *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
+ *                       - Petroff Damian <damian.petroff@he-arc.ch>
+ * ************************************ File spec ************************************
+ * Workpackage manager :
+ * Description         :
+ * ***********************************************************************************
+ */
 #pragma once
 
-#include <QMainWindow>
-#include <QPushButton>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QPainter>
-#include <QFileDialog>
-#include <QDebug>
-#include <QListWidget>
-#include <QDir>
-#include <QProcess>
-#include <QMessageBox>
-#include <QButtonGroup>
-
-class QSoundEffect;
+class QButtonGroup;
 class QComboBox;
-class QSpinBox;
+class QDir;
+class QFileDialog;
+class QGraphicsScene;
+class QGraphicsView;
+class QLabel;
+class QLineEdit;
+class QListWidget;
+class QMessageBox;
+class QPainter;
 class QPixmap;
+class QPushButton;
+class QSoundEffect;
+class QSpinBox;
+class QVBoxLayout;
+
+#include <QMainWindow>
+#include <QProcess>
 
 class Launcher : public QMainWindow
 {
@@ -50,6 +67,7 @@ public:
     QPushButton* pSetSaveFolder;
 
     QPixmap pmPreview;
+    QLabel* lbl;
     //Sound
     QSoundEffect *se;
 
@@ -66,12 +84,12 @@ public:
 public slots:
 
 private:
+    const int randomRange = 10001;
     void updateSaves();
     void updateListWidget(QStringList sl);
     QStringList getSavesList();
 
     void displayWidgets();
-    void updatePreview();
 
 private slots:
     void play();
@@ -79,7 +97,7 @@ private slots:
 
     void setGameFile();
     void setSaveFolder();
-
+    void updatePreview();
 protected:
     //void timerEvent(QTimerEvent *event);
 protected slots:
