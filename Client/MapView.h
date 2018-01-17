@@ -16,7 +16,7 @@
 #pragma once
 
 #include <QGraphicsView>
-#include <client/MapTile.h>
+#include <Client/MapTile.h>
 #include <QList>
 
 class QTimer;

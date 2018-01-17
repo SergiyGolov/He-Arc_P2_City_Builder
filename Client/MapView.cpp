@@ -167,7 +167,7 @@ void MapView::generateMap(){
     rotate(45);
 
 
-this->translate(cameraX,cameraY);
+    this->translate(cameraX,cameraY);
 
     if(zoomFactor<1){
         this->scale(0.5,0.5);
@@ -370,8 +370,8 @@ void MapView::moveAddBuilding(MapTile *rect){
     if(rect->getX()+buildWidth-1<nbTiles && rect->getY()+buildHeight-1<nbTiles && !occuppiedTile )
     {
 
+        QColor color=GraphicService::getColorFromBuildingCategory( ConstantBuilding::get(pickerBId).getCategory()-1);
 
-        QColor color;
 
 
         QString pixFilePath="NOPIX";
@@ -414,40 +414,7 @@ void MapView::moveAddBuilding(MapTile *rect){
 
 
         if(currentBuild==nullptr){
-            switch(ConstantBuilding::get(pickerBId).getCategory()-1)
-            {
-            case -1:
-                color=Qt::darkGray;
-                break;
-            case 0:
-                color=Qt::yellow;
-                break;
-            case 1:
-                color=Qt::red;
-                break;
-            case 2:
-                color=Qt::green;
-                break;
-            case 3:
-                color=Qt::darkRed;
-                break;
-            case 4:
-                color=Qt::magenta;
-                break;
-            case 5:
-                color=Qt::cyan;
-                break;
-            case 6:
-                color=Qt::white;
-                break;
-            case 7:
-                color=Qt::lightGray;
-                break;
-            case 8:
-                color=Qt::darkMagenta;
-                break;
 
-            }
         }else{
             color=baseColors->at((rect->getX())+(rect->getY())*nbTiles);
         }
@@ -639,44 +606,12 @@ void MapView::finalAddBuilding(MapTile* rect){
         }
         prevRect=nullptr;
         if(checkIfNearRoad(rect) || bRoad ){
-            QColor color;
+            QColor color=GraphicService::getColorFromBuildingCategory(ConstantBuilding::get(pickerBId).getCategory()-1);
 
             //TODO: set the real image of the building instead of colorizing the tiles => switch on the buildingId instead of the category
             if(currentBuild==nullptr){
-                switch(ConstantBuilding::get(pickerBId).getCategory()-1)
-                {
-                case -1:
-                    color=Qt::darkGray;
-                    break;
-                case 0:
-                    color=Qt::yellow;
-                    break;
-                case 1:
-                    color=Qt::red;
-                    break;
-                case 2:
-                    color=Qt::green;
-                    break;
-                case 3:
-                    color=Qt::darkRed;
-                    break;
-                case 4:
-                    color=Qt::magenta;
-                    break;
-                case 5:
-                    color=Qt::cyan;
-                    break;
-                case 6:
-                    color=Qt::white;
-                    break;
-                case 7:
-                    color=Qt::lightGray;
-                    break;
-                case 8:
-                    color=Qt::darkMagenta;
-                    break;
 
-                }
+
             }else{
                 color=baseColors->at((rect->getX())+(rect->getY())*nbTiles);
             }
@@ -946,27 +881,27 @@ void MapView::addRoadMode(){
 
 //1: right -1: left 2: up -2: down
 void MapView::translateMeth(int direction){
-    int zoomFactor=5;
+    int zoomFactorAdapter=5;
     switch(direction){
     case -2:
-        this->translate(-15/zoomFactor-35/(zoomFactor*zoomFactor),-15/zoomFactor-35/(zoomFactor*zoomFactor));
-        cameraX+=-15/zoomFactor-35/(zoomFactor*zoomFactor);
-        cameraY+=-15/zoomFactor-35/(zoomFactor*zoomFactor);
+        this->translate(-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter),-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter));
+        cameraX+=-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter);
+        cameraY+=-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter);
         break;
     case 2:
-        this->translate(15/zoomFactor+35/(zoomFactor*zoomFactor),15/zoomFactor+35/(zoomFactor*zoomFactor));
-        cameraX+=15/zoomFactor+35/(zoomFactor*zoomFactor);
-        cameraY+=15/zoomFactor+35/(zoomFactor*zoomFactor);
+        this->translate(15/zoomFactor+35/(zoomFactor*zoomFactorAdapter),15/zoomFactor+35/(zoomFactor*zoomFactorAdapter));
+        cameraX+=15/zoomFactor+35/(zoomFactor*zoomFactorAdapter);
+        cameraY+=15/zoomFactor+35/(zoomFactor*zoomFactorAdapter);
         break;
     case 1:
-        this->translate(-15/zoomFactor-35/(zoomFactor*zoomFactor),15/zoomFactor+35/(zoomFactor*zoomFactor));
-        cameraX+=-15/zoomFactor-35/(zoomFactor*zoomFactor);
-        cameraY+=15/zoomFactor+35/(zoomFactor*zoomFactor);
+        this->translate(-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter),15/zoomFactor+35/(zoomFactor*zoomFactorAdapter));
+        cameraX+=-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter);
+        cameraY+=15/zoomFactor+35/(zoomFactor*zoomFactorAdapter);
         break;
     case -1:
-        this->translate(15/zoomFactor+35/(zoomFactor*zoomFactor),-15/zoomFactor-35/(zoomFactor*zoomFactor));
-        cameraX+=15/zoomFactor+35/(zoomFactor*zoomFactor);
-        cameraY+=-15/zoomFactor-35/(zoomFactor*zoomFactor);
+        this->translate(15/zoomFactor+35/(zoomFactor*zoomFactorAdapter),-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter));
+        cameraX+=15/zoomFactor+35/(zoomFactor*zoomFactorAdapter);
+        cameraY+=-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter);
         break;
     }
 
@@ -1181,41 +1116,8 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
 
 
     if(id!=0){
-        QColor color;
-        switch(ConstantBuilding::get(id).getCategory()-1)
-        {
-        case -1:
-            color=Qt::darkGray;
-            break;
-        case 0:
-            color=Qt::yellow;
-            break;
-        case 1:
-            color=Qt::red;
-            break;
-        case 2:
-            color=Qt::green;
-            break;
-        case 3:
-            color=Qt::darkRed;
-            break;
-        case 4:
-            color=Qt::magenta;
-            break;
-        case 5:
-            color=Qt::cyan;
-            break;
-        case 6:
-            color=Qt::white;
-            break;
-        case 7:
-            color=Qt::lightGray;
-            break;
-        case 8:
-            color=Qt::darkMagenta;
-            break;
+        QColor color=GraphicService::getColorFromBuildingCategory(ConstantBuilding::get(id).getCategory()-1);
 
-        }
 
         buildingCount++;
         for(int i=0;i<buildWidthSave;i++){

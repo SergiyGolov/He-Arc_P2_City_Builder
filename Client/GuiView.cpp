@@ -1,10 +1,4 @@
-#include "Client/GuiView.h"
-
-#include "Client/GameManagementService.h"
-#include "Client/GraphicService.h"
-#include "Client/BuildingManagementService.h"
-#include "Client/ConstantBuilding.h"
-
+#include "GuiView.h"
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -17,7 +11,11 @@
 #include <QPointF>
 #include <QKeyEvent>
 #include <QPointF>
+#include <Client/ConstantBuilding.h>
 #include <QDebug>
+#include <Client/GameManagementService.h>
+#include "GraphicService.h"
+#include "BuildingManagementService.h"
 
 GuiView::GuiView(QWidget *parent)
     : QGraphicsView(parent)
@@ -39,7 +37,7 @@ GuiView::GuiView(QWidget *parent)
     screenHeight=QApplication::desktop()->screenGeometry().height();
 
     this->setGeometry(0,screenHeight-screenHeight/10,screenWidth,screenHeight/10);
-    tab=this->scene->addRect(0,0,screenWidth,screenHeight/6,QPen(Qt::transparent),QBrush(Qt::yellow));
+    tab=this->scene->addRect(0,0,screenWidth,screenHeight/6,QPen(Qt::transparent),QBrush(Qt::lightGray));
     tab->setZValue(0);
 
 
@@ -71,20 +69,29 @@ GuiView::GuiView(QWidget *parent)
 
     tabCat=new std::vector<PickerElement*>(9,nullptr);
     for(int i=0;i<9;i++){
-         tabCat->at(i)= new PickerElement();
-         tabCat->at(i)->setText(QString("Category %1 [F%2]").arg(i+1).arg(i+1));
-         tabCat->at(i)->bouger(screenWidth/10*i,3);
-         tabCat->at(i)->setRect(0,0,105,20);
-         tabCat->at(i)->setBId(-10-i*10);
+        tabCat->at(i)= new PickerElement();
+        tabCat->at(i)->setText(QString("Category %1 [F%2]").arg(i+1).arg(i+1));
+        tabCat->at(i)->setBrush(QBrush(Qt::transparent));
 
-         this->scene->addItem(tabCat->at(i));
+        QColor color=GraphicService::getColorFromBuildingCategory(i);
+
+        tabCat->at(i)->setBrush(QBrush(Qt::transparent));
+        tabCat->at(i)->setPen(QPen(Qt::transparent));
+        tabCat->at(i)->changeTextColor(color);
+        tabCat->at(i)->moveThis(screenWidth/10*i,3);
+        tabCat->at(i)->setRect(0,0,105,20);
+        tabCat->at(i)->setBId(-10-i*10);
+
+
+
+        this->scene->addItem(tabCat->at(i));
     }
 
     road=new PickerElement();
-    road->setText("Road[Q]");
+    road->setText("Road [Q]");
     road->setBId(0);
 
-    road->bouger(3,150);
+    road->moveThis(3,150);
     road->setRect(0,0,55,20);
 
     this->scene->addItem(road);
@@ -92,8 +99,8 @@ GuiView::GuiView(QWidget *parent)
 
     remove=new PickerElement();
 
-    remove->setText("Remove[R]");
-    remove->bouger(screenWidth-100,150);
+    remove->setText("Remove [R]");
+    remove->moveThis(screenWidth-110,150);
     remove->setRect(0,0,70,20);
     remove->setBId(-1);
     this->scene->addItem(remove);
@@ -119,58 +126,14 @@ GuiView::~GuiView()
 
 
 void GuiView::showBuildingPickerMenu(int tabId){
-
-
-
-    switch(tabId){
-    case 0:
-        tab->setBrush(QBrush(Qt::yellow));
-
-        activeTabId=0;
-        break;
-    case 1:
-        tab->setBrush(QBrush(Qt::red));
-
-        activeTabId=1;
-        break;
-    case 2:
-        tab->setBrush(QBrush(Qt::green));
-
-        activeTabId=2;
-        break;
-    case 3:
-        tab->setBrush(QBrush(Qt::darkRed));
-
-        activeTabId=3;
-        break;
-    case 4:
-        tab->setBrush(QBrush(Qt::magenta));
-
-        activeTabId=4;
-        break;
-    case 5:
-        tab->setBrush(QBrush(Qt::cyan));
-
-        activeTabId=5;
-        break;
-    case 6:
-        tab->setBrush(QBrush(Qt::white));
-
-        activeTabId=6;
-        break;
-    case 7:
-        tab->setBrush(QBrush(Qt::lightGray));
-
-        activeTabId=7;
-        break;
-
-    case 8:
-        tab->setBrush(QBrush(Qt::darkMagenta));
-
-        activeTabId=8;
-        break;
+    for(int i=0;i<9;i++){
+        tabCat->at(i)->setPen(QPen(Qt::transparent));
     }
 
+
+    QColor color=GraphicService::getColorFromBuildingCategory(tabId);
+    activeTabId=tabId;
+    tabCat->at(tabId)->setPen(QPen(color));
 
 
     int nbElem=0;
@@ -184,16 +147,14 @@ void GuiView::showBuildingPickerMenu(int tabId){
         for(int i=0;i<ConstantBuilding::getNbBuildings();i++){
             if(ConstantBuilding::get(i).getCategory()==activeTabId+1) {
 
-                if(ptrElem<9)tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+QString("[%1]\n").arg(ptrElem+1)+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
+                if(ptrElem<9)tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+QString(" [%1]\n").arg(ptrElem+1)+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
                 else if(ptrElem==9)tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+"[0]\n"+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
                 else tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+"\n"+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
-                if(nbElem==0)tabText->at(ptrElem)->bouger(screenWidth/(nbElem+1)*ptrElem+3,50);
-                else tabText->at(ptrElem)->bouger(screenWidth/(nbElem)*ptrElem+3,50);
+                if(nbElem==0)tabText->at(ptrElem)->moveThis(screenWidth/(nbElem+1)*ptrElem+3,50);
+                else tabText->at(ptrElem)->moveThis(screenWidth/(nbElem)*ptrElem+3,50);
 
-                tabText->at(ptrElem)->setRect(0,0,ConstantBuilding::get(i).getDisplayName().count()*8+6,60);
-                tabText->at(ptrElem)->setBrush(QBrush(Qt::transparent));
+                tabText->at(ptrElem)->setRect(0,0,(ConstantBuilding::get(i).getDisplayName().count())*9+8,60);
 
-                tabText->at(ptrElem)->setPen(QPen(Qt::black));
                 tabText->at(ptrElem)->setBId(i);
 
 
@@ -222,12 +183,18 @@ void GuiView::selectBuilding(int n){
 
 void GuiView::mousePressEvent(QMouseEvent *event){
 
-    if(PickerElement *pick=dynamic_cast<PickerElement*>(itemAt(event->pos()))){
-        if(pick->getBId()>=-1&& BuildingManagementService::getBuildingManagementService()->isBuildingAddable(pick->getBId()) && ( GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ||ConstantBuilding::get(pick->getBId()).getCategory()<=2) ){ //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
-            MapView::getMapView()->callPicker(pick->getBId());
+    QList<QGraphicsItem *> itemsList=items(event->pos());
 
-        }else if(pick->getBId()<-1){
-            showBuildingPickerMenu(-1*(pick->getBId()/10)-1);
+    if(!itemsList.isEmpty() && itemsList.size()==3){
+
+        if(PickerElement *pick=dynamic_cast<PickerElement*>(itemsList.at(itemsList.size()-2))){
+
+            if(pick->getBId()>=-1 && (pick->getBId()==-1 || (BuildingManagementService::getBuildingManagementService()->isBuildingAddable(pick->getBId()) && GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ) || ConstantBuilding::get(pick->getBId()).getCategory()<=2) ){ //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
+                MapView::getMapView()->callPicker(pick->getBId());
+
+            }else if(pick->getBId()<-1){
+                showBuildingPickerMenu(-1*(pick->getBId()/10)-1);
+            }
         }
     }
 }
@@ -245,3 +212,5 @@ GuiView* GuiView::getGuiView(){
     return GuiView::guiViewInstance;
 
 }
+
+

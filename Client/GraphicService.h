@@ -38,6 +38,7 @@ public:
     void setKeyboardShortcuts(int key);
     void enableLoadingMessage(){loading->show();}
     void disableLoadingMessage(){loading->hide();}
+    static QColor getColorFromBuildingCategory(int cat);
 
 
 };

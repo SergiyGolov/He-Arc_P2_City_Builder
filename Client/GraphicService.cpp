@@ -117,7 +117,44 @@ void GraphicService::setKeyboardShortcuts(int key){
     }
 }
 
+QColor GraphicService::getColorFromBuildingCategory(int cat){
+    QColor color;
+    switch(cat)
+    {
+    case -1:
+        color=Qt::darkGray;
+        break;
+    case 0:
+        color=Qt::yellow;
+        break;
+    case 1:
+        color=Qt::red;
+        break;
+    case 2:
+        color=Qt::green;
+        break;
+    case 3:
+        color=Qt::darkRed;
+        break;
+    case 4:
+        color=Qt::magenta;
+        break;
+    case 5:
+        color=Qt::cyan;
+        break;
+    case 6:
+        color=Qt::white;
+        break;
+    case 7:
+        color=Qt::darkYellow;
+        break;
+    case 8:
+        color=Qt::darkMagenta;
+        break;
 
+    }
+    return color;
+}
 
 
 GraphicService* GraphicService::getGraphicService(QString file){

@@ -1,26 +1,14 @@
-/*
- * ************************************* Project *************************************
- * School              : Haute Ecole Arc
- * Module              : Projet P2
- * Teachers            : - Beurret Stéphane <Stephane.Beurret@he-arc.ch>
- *                       - Grunenwald David <David.Grunenwald@he-arc.ch>
- * Group               : CityBuilder
- * Group participant   : - Goloviatinski Sergiy <sergiy.goloviatinski@he-arc.ch>
- *                       - Margueron Raphael <raphael.margueron@he-arc.ch>
- *                       - Petroff Damian <damian.petroff@he-arc.ch>
- * ************************************ File spec ************************************
- * Workpackage manager :
- * Description         :
- * ***********************************************************************************
- */
-#pragma once
+#ifndef PICKERELEMENT_H
+#define PICKERELEMENT_H
+
 
 #include <QGraphicsRectItem>
 #include <QDebug>
 #include <QGraphicsScene>
 #include <QColor>
 
-class QGraphicsSimpleTextItem;
+
+class QGraphicsTextItem;
 
 
 
@@ -32,18 +20,23 @@ public:
     ~PickerElement();
     int getBId(){return bId;}
     void setBId(int bId){this->bId=bId;}
-    void setText(QString newText){this->text->setText(newText);}
-    QString getText(){return this->text->text();}
-    void setTextBrush(QBrush brush){this->text->setBrush(brush);}
+    void setText(QString newText){this->text->setPlainText(newText);}
+    QString getText(){return this->text->toPlainText();}
+
 
      static void setScene(QGraphicsScene *scene);
-    void bouger(qreal x, qreal y);
-    void changeTextColor(QColor c){this->text->setPen(QPen(c));}
+    void moveThis(qreal x, qreal y);
+    void changeTextColor(QColor c){this->text->setDefaultTextColor(c);}
 private:
     int bId;
     static QGraphicsScene *scene;
-    QGraphicsSimpleTextItem* text;
+    QGraphicsTextItem* text;
 
 
 
 };
+
+
+
+
+#endif // PICKERELEMENT_H
