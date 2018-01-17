@@ -428,7 +428,7 @@ void MapView::moveAddBuilding(MapTile *rect){
             }
         }
 
-        if(buildRadius>0 && rect!=prevRect) //if the selected building has an effect radius
+        if(buildRadius>0 && (lastbId!=pickerBId ||rect!=prevRect)) //if the selected building has an effect radius
         {
 
             radiusCircle->setVisible(true);
@@ -441,6 +441,7 @@ void MapView::moveAddBuilding(MapTile *rect){
 
                 radiusCircle->setPen(QPen(color));
                 radiusCircle->setBrush(QBrush(color));
+                   lastbId=pickerBId;
             }
 
             //            QRadialGradient radialGrad;
@@ -487,7 +488,7 @@ void MapView::moveAddBuilding(MapTile *rect){
         radiusCircle->setVisible(false);
     }
 
-    lastbId=pickerBId;
+
 }
 
 void MapView::moveAddRoad(MapTile* rect){
@@ -873,7 +874,7 @@ void MapView::removeBuildingMode(){
 }
 
 void MapView::addRoadMode(){
-    if(!bPicker){
+    if(!bPicker && !bRoad){
         MapView::getMapView()->callPicker(0);
     }
 }

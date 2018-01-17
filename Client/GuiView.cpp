@@ -70,7 +70,36 @@ GuiView::GuiView(QWidget *parent)
     tabCat=new std::vector<PickerElement*>(9,nullptr);
     for(int i=0;i<9;i++){
         tabCat->at(i)= new PickerElement();
-        tabCat->at(i)->setText(QString("Category %1 [F%2]").arg(i+1).arg(i+1));
+        switch(i){
+        case 0:
+            tabCat->at(i)->setText(QString("Houses [F%1]").arg(i+1));
+            break;
+        case 1:
+            tabCat->at(i)->setText(QString("Public function [F%1]").arg(i+1));
+            break;
+        case 2:
+            tabCat->at(i)->setText(QString("Healthcare [F%1]").arg(i+1));
+            break;
+        case 3:
+            tabCat->at(i)->setText(QString("Emergency [F%1]").arg(i+1));
+            break;
+        case 4:
+            tabCat->at(i)->setText(QString("Security [F%1]").arg(i+1));
+            break;
+        case 5:
+            tabCat->at(i)->setText(QString("Education [F%1]").arg(i+1));
+            break;
+        case 6:
+            tabCat->at(i)->setText(QString("Public transport [F%1]").arg(i+1));
+            break;
+        case 7:
+            tabCat->at(i)->setText(QString("Entertainement [F%1]").arg(i+1));
+            break;
+        case 8:
+            tabCat->at(i)->setText(QString("Monuments [F%1]").arg(i+1));
+            break;
+        }
+
         tabCat->at(i)->setBrush(QBrush(Qt::transparent));
 
         QColor color=GraphicService::getColorFromBuildingCategory(i);
@@ -79,7 +108,7 @@ GuiView::GuiView(QWidget *parent)
         tabCat->at(i)->setPen(QPen(Qt::transparent));
         tabCat->at(i)->changeTextColor(color);
         tabCat->at(i)->moveThis(screenWidth/10*i,3);
-        tabCat->at(i)->setRect(0,0,105,20);
+        tabCat->at(i)->setRect(0,0, tabCat->at(i)->getText().length()*8,20);
         tabCat->at(i)->setBId(-10-i*10);
 
 
