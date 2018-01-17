@@ -17,6 +17,7 @@ public:
     //Dont add setters for these variables. To set them get the pointer and set it with functions (like setHMS)
     QDateTime* getStartTime() { return startDateTime; }
     QDateTime* getGameTime() { return gameDateTime; }
+    void triggerUpdate(bool everything = false);
 private:
     static TickService *tickService;
     TickService();
@@ -24,9 +25,9 @@ private:
 
     void timerEvent(QTimerEvent *);
 
-    int updatePopulation();
-    double updateHappiness();
-    double updateMoney();
+    int updatePopulation(bool everything = false);
+    double updateHappiness(bool everything = false);
+    double updateMoney(bool everything = false);
 
     int oldPopulation;
     double oldHappiness;

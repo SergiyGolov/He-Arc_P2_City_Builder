@@ -46,6 +46,54 @@ void LoadSaveService::saveGameUI()
     delete savefile;
 }
 
+void LoadSaveService::loadGame(int argc, char *argv[])
+{
+    QString file="";
+
+    if(argc == 2)
+    {
+        file = argv[1];
+    }
+    else if(argc > 2)
+    {
+        Params* p = parse(argc, argv);
+
+        int mapSize = p->size;
+        int difficulty = p->difficulty;
+        int seed = p->seed;
+        QString name = p->name;
+
+        MapView::getMapView()->setNbTiles(mapSize);
+        GameManagementService::getGameManagementService()->setCityName(name);
+        GameManagementService::getGameManagementService()->setDifficulty(difficulty);
+        RandomService::setSeed(seed);
+
+        delete p;
+    }
+
+    GraphicService::getGraphicService(file);
+}
+
+Params* LoadSaveService::parse(int argc, char *argv[])
+{
+    Params* p = new Params();
+    for(int i = 1; i < argc; i++)
+    {
+        QStringList sl = QString(argv[i]).split('=');
+        QString key = sl.at(0);
+        QString value = sl.at(1);
+
+        if(key == "size")
+            p->size = value.toInt();
+        else if(key == "difficulty")
+            p->difficulty = value.toInt();
+        else if(key == "seed")
+            p->seed = value.toInt();
+        else if(key == "name")
+            p->name = value;
+    }
+    return p;
+}
 
 void LoadSaveService::loadGame(QFile* loadFile)
 {
@@ -95,6 +143,9 @@ void LoadSaveService::loadGame(QFile* loadFile)
             MapView::getMapView()->addBuildingFromSave(bId,x,y,angle);
 
         }
+
+        TickService::getTickService()->triggerUpdate(true);
+
     }else{
         MapView::getMapView()->generateMap(); //default map generated
     }

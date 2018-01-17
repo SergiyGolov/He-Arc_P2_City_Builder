@@ -13,24 +13,8 @@ int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
-    QString file="";
-    if(argc==2){
-        file=argv[1];
 
-    }else if(argc>2){
-        int mapSize=atoi(argv[1]);
-        int difficulty=atoi(argv[2]);
-        int seed=atoi(argv[3]);
-        QString name=argv[4];
-
-        MapView::getMapView()->setNbTiles(mapSize);
-        GameManagementService::getGameManagementService()->setCityName(name);
-        GameManagementService::getGameManagementService()->setDifficulty(difficulty);
-        RandomService::setSeed(seed);
-    }
-
-    GraphicService::getGraphicService(file);
-
+    LoadSaveService::loadGame(argc, argv);
 
     return a.exec();
 }

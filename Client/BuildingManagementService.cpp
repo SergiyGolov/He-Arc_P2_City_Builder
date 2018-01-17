@@ -123,9 +123,9 @@ bool BuildingManagementService::isBuildingAddable(int id) //TODO : we have to te
     }
 }
 
-double BuildingManagementService::getSumPricePerSeconds()
+double BuildingManagementService::getSumPricePerSeconds(bool everything)
 {
-    if(bSumPricePerSeconds)
+    if(bSumPricePerSeconds || everything)
     {
         pricePerSeconds = 0.0;
         for(int i = 0; i < vectorBuildings->size(); i++)
@@ -135,9 +135,9 @@ double BuildingManagementService::getSumPricePerSeconds()
     return pricePerSeconds;
 }
 
-int BuildingManagementService::getSumPopulation()
+int BuildingManagementService::getSumPopulation(bool everything)
 {
-    if(bSumPopulation)
+    if(bSumPopulation || everything)
     {
         sumPopulation = 0;
         for(int i = 0; i < vectorBuildings->size(); i++)
@@ -187,9 +187,9 @@ double BuildingManagementService::getHappiness(Building* b)
     return sumHappiness;
 }
 
-double BuildingManagementService::getAverageHappiness()
+double BuildingManagementService::getAverageHappiness(bool everything)
 {
-    if(bAverageHappiness)
+    if(bAverageHappiness || everything)
     {
         int houseCount = 0;
         double averageHappiness_loc = 0.0;

@@ -44,20 +44,20 @@ TickService::~TickService()
 }
 
 //methods
-int TickService::updatePopulation()
+int TickService::updatePopulation(bool everything)
 {
     int population = BuildingManagementService::getBuildingManagementService()->getSumPopulation();
 
     return population;
 }
 
-double TickService::updateHappiness()
+double TickService::updateHappiness(bool everything)
 {
     double happiness = GameManagementService::getGameManagementService()->getHappiness();
 
 
     //Smoothing of the happiness
-    happiness = (happiness * 20 + BuildingManagementService::getBuildingManagementService()->getAverageHappiness() * 80) / 100;
+    happiness = (happiness * 20 + BuildingManagementService::getBuildingManagementService()->getAverageHappiness(everything) * 80) / 100;
 
     double taxesratio = GameManagementService::getGameManagementService()->getTaxes();
 
@@ -86,7 +86,7 @@ double TickService::updateHappiness()
     return happiness;
 }
 
-double TickService::updateMoney()
+double TickService::updateMoney(bool everything)
 {
     double money = GameManagementService::getGameManagementService()->getMoney();
     double diff = 0;
@@ -95,10 +95,10 @@ double TickService::updateMoney()
     diff += 1.0;
 
     //Building price per seconds
-    diff -= BuildingManagementService::getBuildingManagementService()->getSumPricePerSeconds();
+    diff -= BuildingManagementService::getBuildingManagementService()->getSumPricePerSeconds(everything);
 
     //Taxes fonds
-    diff += BuildingManagementService::getBuildingManagementService()->getSumPopulation()*(newHappiness/100.0) * 1.5 * GameManagementService::getGameManagementService()->getTaxes();
+    diff += BuildingManagementService::getBuildingManagementService()->getSumPopulation(everything)*(newHappiness/100.0) * 1.5 * GameManagementService::getGameManagementService()->getTaxes();
 
     money += diff;
 
@@ -108,6 +108,11 @@ double TickService::updateMoney()
 //methods
 void TickService::timerEvent(QTimerEvent *tevent)
 {
+    triggerUpdate();
+}
+
+void TickService::triggerUpdate(bool everything)
+{
     gameDateTime->setTime(gameDateTime->time().addSecs(60*60));
     if(gameDateTime->time().hour() == 0)
         gameDateTime->setDate(gameDateTime->date().addDays(1));
@@ -116,9 +121,9 @@ void TickService::timerEvent(QTimerEvent *tevent)
     oldHappiness = newHappiness;
     oldMoney = newMoney;
 
-    newPopulation = updatePopulation();
-    newHappiness = updateHappiness();
-    newMoney = updateMoney();
+    newPopulation = updatePopulation(everything);
+    newHappiness = updateHappiness(everything);
+    newMoney = updateMoney(everything);
 
     GameManagementService::getGameManagementService()->setTotalPopulation(newPopulation);
     GameManagementService::getGameManagementService()->setHappiness(newHappiness);
