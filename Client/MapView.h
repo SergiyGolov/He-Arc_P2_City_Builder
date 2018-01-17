@@ -40,6 +40,8 @@ public:
     void addBuildingFromSave(int id, int x, int y, int angle);
 
 private:
+    double translateFactor;
+    double scaleFactor;
     int cameraX;
     int cameraY;
     int nbTiles;
