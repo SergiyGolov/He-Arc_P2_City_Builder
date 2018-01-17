@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>img/bg_city.jpg</file>
         <file>img/rand.png</file>
+        <file>img/easy.png</file>
+        <file>img/medium.png</file>
+        <file>img/hard.png</file>
     </qresource>
 </RCC>
