@@ -33,50 +33,7 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 
     displayWidgets();
 
-    connect(pNewGame, &QPushButton::clicked, [=]()
-    {
-        pNewGame->setEnabled(false);
-        pLoadSave->setEnabled(true);
-        setViewMode(false);
-        updateSaves();
-        updateInfos();
-    });
-    connect(pLoadSave, &QPushButton::clicked, [=]()
-    {
-        pNewGame->setEnabled(true);
-        pLoadSave->setEnabled(false);
-        setViewMode(true);
-        updateSaves();
-        updateInfos();
-    });
-
-
-
-    connect(pRandSeed, &QPushButton::clicked, [=]()
-    {
-        sbSeed->setValue(QTime::currentTime().msec() * 10 + QTime::currentTime().second() % 10);
-    });
-
-    connect(sbMapSize, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
-    connect(sbSeed, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
-
-    connect(leGameName, &QLineEdit::textChanged, [=]()
-    {
-       if(leGameName->text()!="")
-       {
-           pPlay->setEnabled(true);
-       }
-    });
-    connect(listSaves, &QListWidget::currentItemChanged, [=]()
-    {
-        if(listSaves->currentItem() != nullptr)
-            pPlay->setEnabled(true);
-    });
-
-    connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
-    connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
-    connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
-
+    connections();
 
     setViewMode(false);
     updatePreview();
@@ -161,9 +118,9 @@ void Launcher::displayWidgets()
     listSaves->setGeometry(950, 100, 300, 420);
 
     //Preview
-    lbl = new QLabel("Preview",this);
-    lbl->setPixmap(pmPreview);
-    lbl->setGeometry(320, 100, 600, 600);
+    lPixmap = new QLabel("Preview",this);
+    lPixmap->setPixmap(pmPreview);
+    lPixmap->setGeometry(320, 100, 600, 600);
 
 
     //Boutons
@@ -183,6 +140,52 @@ void Launcher::displayWidgets()
 
     updateInfos();
     updateSaves();
+}
+
+void Launcher::connections()
+{
+    connect(pNewGame, &QPushButton::clicked, [=]()
+    {
+        pNewGame->setEnabled(false);
+        pLoadSave->setEnabled(true);
+        setViewMode(false);
+        updateSaves();
+        updateInfos();
+    });
+
+    connect(pLoadSave, &QPushButton::clicked, [=]()
+    {
+        pNewGame->setEnabled(true);
+        pLoadSave->setEnabled(false);
+        setViewMode(true);
+        updateSaves();
+        updateInfos();
+    });
+
+    connect(pRandSeed, &QPushButton::clicked, [=]()
+    {
+        sbSeed->setValue(QTime::currentTime().msec() * 10 + QTime::currentTime().second() % 10);
+    });
+
+    connect(leGameName, &QLineEdit::textChanged, [=]()
+    {
+       if(leGameName->text()!="")
+       {
+           pPlay->setEnabled(true);
+       }
+    });
+
+    connect(listSaves, &QListWidget::currentItemChanged, [=]()
+    {
+        if(listSaves->currentItem() != nullptr)
+            pPlay->setEnabled(true);
+    });
+
+    connect(sbMapSize, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
+    connect(sbSeed, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
+    connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
+    connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
+    connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
 }
 
 void Launcher::updateInfos()
@@ -225,7 +228,7 @@ void Launcher::updatePreview()
             i.setPixel(x,y, c[x + y * size].color.rgba());
         }
     }
-    lbl->setPixmap(QPixmap::fromImage(i).scaled(600,600));
+    lPixmap->setPixmap(QPixmap::fromImage(i).scaled(600,600));
 }
 
 void Launcher::setGameFile()

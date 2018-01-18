@@ -43,63 +43,53 @@ public:
     Launcher(QMainWindow *parent = 0);
     ~Launcher();
 
-    //Decoraction
-    QLabel* lTitle;
+    QLabel* lTitle;                 //Title
 
     //Loader/Checker
-    QString sPathGameFile;
-    QString sPathSaveFolder;
-    QLabel* lGameFile;
-    QLabel* lSaveFolder;
+    QString sPathGameFile;          //Contains the path to gameclient.exe
+    QString sPathSaveFolder;        //Contains the path to the saves folder
+    QLabel* lGameFile;              //Displays the game client path
+    QLabel* lSaveFolder;            //Displays the saves folder path
+    QPushButton* pSetGameFile;      //Opens a filedialog to select gameclient.exe
+    QPushButton* pSetSaveFolder;    //Opens a folderdialog to select the saves folder
 
-    QLabel* lMapSize;
+    //Display
+    QLabel* lMapSize;               //"New Game" menu labels
     QLabel* lSeed;
-    QPushButton* pRandSeed;
     QLabel* lDifficulty;
     QLabel* lGameName;
+    QSpinBox* sbMapSize;            //Where the desired map size is to be entered
+    QPushButton* pRandSeed;         //Generates "random" map seed when clicked on
+    QSpinBox* sbSeed;               //Where a custom map seed can be chosen
+    QComboBox* cbDifficulty;        //Allows to chose between 4 different game difficulties
+    QLineEdit* leGameName;          //Where the game name should be entered
 
-    QSpinBox* sbMapSize;
-    QSpinBox* sbSeed;
-    QComboBox* cbDifficulty;
-    QLineEdit* leGameName;
+    //Map preview
+    QPixmap pmPreview;              //Contains the map preview image
+    QLabel* lPixmap;                //Used to display the QPixmap above
 
-    QPushButton* pSetGameFile;
-    QPushButton* pSetSaveFolder;
-
-    QPixmap pmPreview;
-    QLabel* lbl;
-    //Sound
-    QSoundEffect *se;
-
-    //Launch
-    QPushButton* pNewGame;
-    QPushButton* pLoadSave;
-    QListWidget* listSaves;
-    QPushButton* pPlay;
-    QProcess process;
-
-    //Functions
-    void loadSaves();
-    void updateInfos();
-public slots:
+    //Launch menu
+    QPushButton* pNewGame;          //Shows the "New game" menu
+    QPushButton* pLoadSave;         //Shows the saves list
+    QListWidget* listSaves;         //Saves list
+    QPushButton* pPlay;             //Attempts to enter the game
+    QProcess process;               //Launches the game client
 
 private:
-    const int randomRange = 10001;
-    void updateSaves();
+    const int randomRange = 10001;  //Used to limit the random generations
+    //Functions
+    void displayWidgets();          //Regroups all the widgets properties to set at launch
+    void connections();             //Regroups signals to slots connections
+
+    void updateInfos();             //Updates the checking tools about save and game folders
+    void updateSaves();             //Loads .cbsave files from the file system to the saves list to be able to select them
     void updateListWidget(QStringList sl);
     QStringList getSavesList();
 
-    void displayWidgets();
-
 private slots:
-    void play();
-    void setViewMode(bool b);
-
-    void setGameFile();
-    void setSaveFolder();
-    void updatePreview();
-protected:
-    //void timerEvent(QTimerEvent *event);
-protected slots:
-
+    void setGameFile();             //Opens a filedialog to select gameclient.exe
+    void setSaveFolder();           //Opens a folderdialog to select the saves folder
+    void updatePreview();           //Updates the map preview
+    void setViewMode(bool b);       //Displays either "New game" or "Load game" view
+    void play();                    //Takes infos from the fields and attempt to launch the client
 };
