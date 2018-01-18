@@ -25,6 +25,12 @@ GraphicService::~GraphicService()
 GraphicService* GraphicService::graphicServiceInstance=nullptr;
 
 
+/**
+* setKeyboardShortcuts
+* Handles the keyboard shortcut for all the views
+*
+* @param int key : pressed keyboard key
+*/
 
 void GraphicService::setKeyboardShortcuts(int key)
 {

@@ -5,7 +5,6 @@
 
 MapTile::MapTile(int x, int y, int left, int top, int width, int height,QGraphicsItem* parent):QGraphicsRectItem(left,top,width,height,parent)
 {
-
     this->x=x;
     this->y=y;
 
@@ -16,14 +15,11 @@ MapTile::MapTile(int x, int y, int left, int top, int width, int height,QGraphic
     buildingWidth=-10;
     buildingHeight=-10;
 
-
-
     this->setZValue(1);
     bPix=false;
     bOccupied=false;
     buildImage=nullptr;
 }
-
 
 MapTile::~MapTile()
 {
@@ -39,6 +35,13 @@ void MapTile::setScene(QGraphicsScene *scene)
 }
 
 
+/**
+* addPixMove
+* adds a pixmap to the tile while it is "moving" on the map
+*
+* @param QGraphicsPixmapItem *pix : the pixmap to add
+*/
+
 void MapTile::addPixMove(QGraphicsPixmapItem *pix)
 {
 
@@ -48,8 +51,12 @@ void MapTile::addPixMove(QGraphicsPixmapItem *pix)
 
 }
 
-
-
+/**
+* addPix
+* adds the final pixmap to the tile
+*
+* @param QGraphicsPixmapItem *pix : the pixmap to add
+*/
 void MapTile::addPix(QGraphicsPixmapItem *pix)
 {
 
@@ -57,33 +64,41 @@ void MapTile::addPix(QGraphicsPixmapItem *pix)
     buildImage->setVisible(true);
     buildImage->setPos(pos().x()-rect().width()/4,pos().y()+rect().height()/2);
     buildImage->setOpacity(1);
-
-
     bPix=true;
-
 }
 
 
-
+/**
+* addPixRoad
+* adds the final pixmap to the tile if it is a road
+*
+* @param QGraphicsPixmapItem *pix : the pixmap to add
+*/
 void MapTile::addPixRoad(QGraphicsPixmapItem *pix)
 {
-
     if(buildImage==nullptr)
     {
 
         buildImage=pix;
         buildImage->setPos(pos());
-
         bPix=true;
     }
 }
 
+/**
+* removePixMove
+* removes temporary pixmap
+*/
 void MapTile::removePixMove()
 {
     if(buildImage!=nullptr)buildImage->setVisible(false);
     buildImage=nullptr;
 }
 
+/**
+* removePix
+* removes permanent pixmap
+*/
 void MapTile::removePix()
 {
     if(buildImage!=nullptr && bPix)
