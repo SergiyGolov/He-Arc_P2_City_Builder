@@ -10,6 +10,8 @@
 #include <QFileDialog>
 #include <QDateTime>
 
+#include <iostream>
+
 //methods
 void LoadSaveService::loadGameUI()
 {
@@ -46,13 +48,34 @@ void LoadSaveService::loadGame(int argc, char *argv[])
 {
     QString file="";
 
-    if(argc == 2)
+    QFileInfo* fi = new QFileInfo(QString(argv[1]));
+
+    if(fi->isFile())
     {
-        file = argv[1];
+        file = fi->filePath();
     }
-    else if(argc > 2)
+    else
     {
-        Params* p = parse(argc, argv);
+        Params* p = new Params();
+
+        for(int i = 1; i < argc; i++)
+        {
+            QStringList sl = QString(argv[i]).split('=');
+            if(sl.length() > 1)
+            {
+                QString key = sl.at(0);
+                QString value = sl.at(1);
+
+                if(key == "size")
+                    p->size = value.toInt();
+                else if(key == "difficulty")
+                    p->difficulty = value.toInt();
+                else if(key == "seed")
+                    p->seed = value.toInt();
+                else if(key == "name")
+                    p->name = value;
+            }
+        }
 
         int mapSize = p->size;
         int difficulty = p->difficulty;
@@ -70,32 +93,10 @@ void LoadSaveService::loadGame(int argc, char *argv[])
     GraphicService::getGraphicService(file);
 }
 
-Params* LoadSaveService::parse(int argc, char *argv[])
-{
-    Params* p = new Params();
-    for(int i = 1; i < argc; i++)
-    {
-        QStringList sl = QString(argv[i]).split('=');
-        QString key = sl.at(0);
-        QString value = sl.at(1);
-
-        if(key == "size")
-            p->size = value.toInt();
-        else if(key == "difficulty")
-            p->difficulty = value.toInt();
-        else if(key == "seed")
-            p->seed = value.toInt();
-        else if(key == "name")
-            p->name = value;
-    }
-    return p;
-}
-
 void LoadSaveService::loadGame(QString filename)
 {
-
-    if(filename.length()>0){
-
+    if(filename.length()>0)
+    {
         QFile* loadfile = new QFile();
 
         loadfile->setFileName(filename);
@@ -105,56 +106,68 @@ void LoadSaveService::loadGame(QString filename)
         QString s = loadfile->readAll();
 
         QJsonDocument jd = QJsonDocument::fromJson(s.toUtf8());
-        QJsonObject jo = jd.object();
-        QJsonObject generation = jo.value(QString("generation")).toObject();
-        QJsonObject mapsize = generation.value(QString("mapsize")).toObject();
-        QJsonObject igconfig = jo.value(QString("igconfig")).toObject();
-        QJsonObject camera = igconfig.value(QString("camera")).toObject();
-        QJsonObject position = camera.value(QString("position")).toObject();
-
-        QJsonObject gamedata = jo.value(QString("gamedata")).toObject();
-        QJsonObject savedata = jo.value(QString("savedata")).toObject();
-
-        MapView::getMapView()->setNbTiles(mapsize.value(QString("h")).toInt());
-        MapView::getMapView()->setZoomFactor(camera.value(QString("zoom")).toDouble());
-        MapView::getMapView()->setCameraX(position.value(QString("x")).toInt());
-        MapView::getMapView()->setCameraY(position.value(QString("y")).toInt());
-
-
-        GameManagementService::getGameManagementService()->setCityName(gamedata.value(QString("cityname")).toString());
-        GameManagementService::getGameManagementService()->setMoney(gamedata.value(QString("money")).toInt());
-        GameManagementService::getGameManagementService()->setTaxes(gamedata.value(QString("taxes")).toDouble());
-
-        Building::setUIDCpt(gamedata.value(QString("lastuid")).toInt());
-
-        RandomService::setSeed(generation.value(QString("mapseed")).toInt());
-
-        MapView::getMapView()->generateMap();
-
-        QJsonObject buildings=gamedata.value(QString("uid")).toObject();
-
-        foreach(const QString& key,buildings.keys())
+        if(jd.isObject())
         {
-            QJsonObject building=buildings.value(key).toObject();
-            int bId=building.value(QString("id")).toInt();
-            int x=building.value(QString("x")).toInt();
-            int y=building.value(QString("y")).toInt();
-            int angle=building.value(QString("angle")).toInt();
-            int population=building.value(QString("population")).toInt();
+            QJsonObject jo = jd.object();
+            QJsonObject generation = jo.value(QString("generation")).toObject();
+            QJsonObject mapsize = generation.value(QString("mapsize")).toObject();
+            QJsonObject igconfig = jo.value(QString("igconfig")).toObject();
+            QJsonObject camera = igconfig.value(QString("camera")).toObject();
+            QJsonObject position = camera.value(QString("position")).toObject();
 
-            BuildingManagementService::getBuildingManagementService()->addBuildingFromSave(bId,x,y,angle);
-            MapView::getMapView()->addBuildingFromSave(bId,x,y,angle);
+            QJsonObject gamedata = jo.value(QString("gamedata")).toObject();
+            QJsonObject savedata = jo.value(QString("savedata")).toObject();
 
+            int nbtile = mapsize.value(QString("h")).toInt();
+            if(nbtile != 0)
+                MapView::getMapView()->setNbTiles(mapsize.value(QString("h")).toInt());
+            MapView::getMapView()->setZoomFactor(camera.value(QString("zoom")).toDouble());
+            MapView::getMapView()->setCameraX(position.value(QString("x")).toInt());
+            MapView::getMapView()->setCameraY(position.value(QString("y")).toInt());
+
+
+            GameManagementService::getGameManagementService()->setCityName(gamedata.value(QString("cityname")).toString());
+            GameManagementService::getGameManagementService()->setMoney(gamedata.value(QString("money")).toInt());
+            GameManagementService::getGameManagementService()->setTaxes(gamedata.value(QString("taxes")).toDouble());
+
+            Building::setUIDCpt(gamedata.value(QString("lastuid")).toInt());
+
+            RandomService::setSeed(generation.value(QString("mapseed")).toInt());
+
+            MapView::getMapView()->generateMap();
+
+            QJsonObject buildings=gamedata.value(QString("uid")).toObject();
+
+            foreach(const QString& key,buildings.keys())
+            {
+                QJsonObject building=buildings.value(key).toObject();
+                int bId=building.value(QString("id")).toInt();
+                int x=building.value(QString("x")).toInt();
+                int y=building.value(QString("y")).toInt();
+                int angle=building.value(QString("angle")).toInt();
+                int population=building.value(QString("population")).toInt();
+
+                BuildingManagementService::getBuildingManagementService()->addBuildingFromSave(bId,x,y,angle);
+                MapView::getMapView()->addBuildingFromSave(bId,x,y,angle);
+
+            }
+
+            loadfile->close();
+            delete loadfile;
+            TickService::getTickService()->triggerUpdate(true);
         }
-
-        loadfile->close();
-        delete loadfile;
-        TickService::getTickService()->triggerUpdate(true);
-
-    }else{
+        else
+        {
+            QMessageBox error(QString("File corrupted"), QString("Save file corrupted try to load another one"), QMessageBox::Critical,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);
+            error.setWindowFlags(Qt::WindowStaysOnTopHint);
+            error.exec();
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
         MapView::getMapView()->generateMap(); //default map generated
     }
-
 }
 
 void LoadSaveService::saveGame(QFile* savefile)

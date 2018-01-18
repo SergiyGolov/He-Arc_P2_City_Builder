@@ -27,7 +27,8 @@ struct Params
     {
         size = 100;
         difficulty = 1;
-        seed = rand() % 100;
+        srand(time(NULL));
+        seed = rand() % 1000;
         name = "No name specified";
     }
 };
@@ -46,5 +47,4 @@ private:
     static void saveGame(QFile* filename);
     static void saveOptions();
     static void loadOptions();
-    static Params* parse(int argc, char *argv[]);
 };
