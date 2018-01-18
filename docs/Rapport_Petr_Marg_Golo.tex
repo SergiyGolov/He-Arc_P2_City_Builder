@@ -13,7 +13,9 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm,headsep=1cm]{geometry}
+\usepackage{enumitem}
+\setitemize{topsep=5pt}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -74,6 +76,32 @@
 
 \chapter{Développement}
 \thispagestyle{headings}
+\section{Interface graphique}
+L'interface graphique se divise en 3 parties:
+\begin{itemize}
+\item $TopView$ : Vue fixe se trouvant toujours en haut de l'interface et qui contient:
+\begin{itemize}
+\item L'heure et la date dans le jeu
+\item Des indicateurs d'argent, de bonheur et de population disponible pour le joueur avec le delta entre chaque seconde
+\item Une $SpinBox$ permettant de régler le niveau d'impôts
+\item Le nom de la carte, pouvant être modifié si on clique dessus
+\item Des $Slider$ pour régler le volume de la musique et des effets
+\item Des boutons pour charger,sauvegarder et quitter la partie
+\item La valeur de la seed utilisée pour générer la carte
+\end{itemize}
+\item $MapView$ : Contient le terrain de jeu, les différents raccourcis claviers (même quand cette vue n'a pas le focus) et actions de souris qui sont dans son focus influencent sur cette vue:
+\begin{itemize}
+\item Translation dans la vue (Raccourcis: A S D W ou flèches directionnelles)
+\item Zoom dans la vue (Raccourcis : + - ou molette de la souris)
+\end{itemize}
+\item $GuiView$ : Vue contenant les boutons permettant de:
+\begin{itemize}
+\item Choisir la catégorie de bâtiment à poser (Raccourcis clavier disponible depuis n'importe quelle vue: F1 à F9)
+\item Les différents bâtiments à poser selon la catégorie choisie (Raccourcis claviers de 1 à 0)
+\item Un bouton pour poser des routes disponibles dans toutes les catégories (Raccourci: Q)
+\item Un bouton pour supprimer un bâtiment/route disponible dans toutes les catégories (Raccourci: R)
+\end{itemize}
+\end{itemize}
 
 \section{Génération des sols}
 Pour la gestion du terrain, nous avons décidé d'avoir deux types de sol : l'eau et l'herbe. Sur l'herbe, il est possible d'ajouter des bâtiments et sur l'eau non.
@@ -97,14 +125,14 @@ Une case de la carte est représenté par la classe $MapTile$ dérivé de la cla
 \item bOccupied (boolean): dit si la case est occupée par un bâtiment ou de l'eau ou pas
 \item x (int): coordonnée en x dans la matrice contenant les MapTile
 \item y (int): coordonnée en y dans la matrice contenant les MapTile
-\item bId (int): id du type de bâtiment (tous les hôpitaux ont la même bId p. ex, valeur par défaut: -10)
-\item unique BId (int): id unique du bâtiment (chaque bâtiment posé aura une id unique différente, valeur par défaut: -10)
-\item mainTileX (int): coordonnée en X de la case principale (en haut à gauche), utile pour les bâtiments d'une largeur ou hauteur supérieures à 1 (valeur par défaut: -10)
+\item bId (int): id du type de bâtiment (tous les hôpitaux ont la même bId p. ex)
+\item unique BId (int): id unique du bâtiment (chaque bâtiment posé aura une id unique différente)
+\item mainTileX (int): coordonnée en X de la case principale (en haut à gauche), utile pour les bâtiments d'une largeur ou hauteur supérieures à 1
 \item mainTileY (int): même chose que mainTileX mais la coordonnée Y
-\item buildingWIdth (int): largeur en nombre de cases d'un bâtiment (valeur par défaut: -10)
-\item buildingHeight (int): hauteur en nombre de cases d'un bâtiment (valeur par défaut: -10)
-\item bPix (boolean): indique si la case a une texture ou pas (valeur par défaut: false)
-\item buildImage (QGraphicsPixmapItem*): Pointeur vers la texture du bâtiment/route qui se trouve sur la case
+\item buildingWIdth (int): largeur en nombre de cases d'un bâtiment
+\item buildingHeight (int): hauteur en nombre de cases d'un bâtiment
+\item bPix (boolean): indique si la case a une texture ou pas
+\item buildImage ($QGraphicsPixmapItem*$): Pointeur vers la texture du bâtiment/route qui se trouve sur la case
 \end{itemize}
 \section{Routes et bâtiments}
 Pour la gestion des routes et des bâtiments nous sommes parti sur une approche plutôt simple qui est d'avoir divisé en trois classe qui chacune des rôles spécifique. Une qui décrit les caractéristiques propre à chaque bâtiments : les constantes -> ConstantBuilding. Une seconde classe qui décrit une bâtiment spécifique à la partie -> Building. Et une troisième qui sert de gestionnaires de building, 'classe tableau' -> BuildingManager. 
