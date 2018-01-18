@@ -1,13 +1,10 @@
 #include "Client/MapView.h"
-
 #include "Client/ConstantBuilding.h"
 #include "Client/GameManagementService.h"
 #include "Client/BuildingManagementService.h"
 #include "Client/GraphicService.h"
 #include "Client/GuiView.h"
-
 #include "general/RandomService.h"
-
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -95,7 +92,8 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
 
 }
 
-void MapView::generateMap(){
+void MapView::generateMap()
+{
 
     this->resetTransform();
     scene->clear();
@@ -150,17 +148,6 @@ void MapView::generateMap(){
 
     }
 
-
-    //    QGraphicsRectItem *darkDirt=new QGraphicsRectItem(0,screenHeight*1.0075,screenWidth*0.5675,screenHeight*1.4);
-    //    scene->addItem(darkDirt);
-    //    darkDirt->setBrush(QBrush(QColor::fromRgb(40,26,13)));
-    //    darkDirt->setRotation(-45);
-
-    //    QGraphicsRectItem *lightDirt=new QGraphicsRectItem(-screenWidth*0.5675,screenHeight*1.0075,screenWidth*0.5675,screenHeight*1.4);
-    //    scene->addItem(lightDirt);
-    //    lightDirt->setBrush(QBrush(QColor::fromRgb(153,101,21)));
-    //    lightDirt->setRotation(-45);
-
     translate(screenWidth/2,0);
 
 
@@ -170,10 +157,13 @@ void MapView::generateMap(){
 
     this->translate(cameraX,cameraY);
 
-    if(zoomFactor<1){
+    if(zoomFactor<1)
+    {
         this->scale(0.5,0.5);
-    }else if(zoomFactor>1){
-        for(int i=0;i<(zoomFactor-1)/0.05;i++){
+    }else if(zoomFactor>1)
+    {
+        for(int i=0;i<(zoomFactor-1)/0.05;i++)
+        {
             this->scale(2,2);
         }
     }
@@ -192,9 +182,11 @@ MapView::~MapView()
 
 }
 
-void MapView::callPicker(int bId){
+void MapView::callPicker(int bId)
+{
 
-    if(!bPicker){
+    if(!bPicker)
+    {
         bPicker=true;
         prevRect=nullptr;
         pickerBId=bId;
@@ -233,26 +225,11 @@ void MapView::wheelEvent(QWheelEvent *event)
 void MapView::mouseMoveEvent(QMouseEvent *event)
 {
 
-    //1: right -1: left 2: up -2: down
-    //     if(event->pos().x()<20 && event->pos().x()>0){
-    //       translateMeth(-1);
 
-
-    //    }else if(event->pos().x()>width()-20 && event->pos().x()<width()){
-    //       translateMeth(1);
-
-
-    //    }else if(event->pos().y()<20 && event->pos().y()>0){
-    //          translateMeth(2);
-
-    //    }
-    //    else if(event->pos().y()>height()-20 && event->pos().y()<height()){
-    //          translateMeth(-2);
-
-    //    }
 
     QList<QGraphicsItem *> itemsList=items(event->pos());
-    if(!itemsList.isEmpty()){
+    if(!itemsList.isEmpty())
+    {
         if(MapTile *rect=dynamic_cast<MapTile*>(itemsList.last()))
         {
             if(bPicker)
@@ -280,19 +257,24 @@ void MapView::mousePressEvent(QMouseEvent *event)
 {
 
     QList<QGraphicsItem *> itemsList=items(event->pos());
-    if(!itemsList.isEmpty()){
+    if(!itemsList.isEmpty())
+    {
         if(MapTile *rect=dynamic_cast<MapTile*>(itemsList.last()))
         {
             if (event->button()==Qt::RightButton && (bPicker || bRoad) )
             {
                 cancelAdd(rect);
-            }else if(event->button()==Qt::LeftButton){
+            }else if(event->button()==Qt::LeftButton)
+            {
                 radiusCircle->setVisible(false);
-                if(bRoad){
+                if(bRoad)
+                {
                     finalAddRoad(rect);
-                }else if(bPicker){
+                }else if(bPicker)
+                {
                     bPicker=false;
-                    if(pickerBId!=-1){
+                    if(pickerBId!=-1)
+                    {
                         finalAddBuilding(rect);
                     }else{
                         finalRemove(rect);
@@ -308,13 +290,15 @@ void MapView::mousePressEvent(QMouseEvent *event)
 
 
 
-void MapView::keyPressEvent(QKeyEvent *event){
+void MapView::keyPressEvent(QKeyEvent *event)
+{
     GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
 
 
 }
 
-void MapView::moveRemoveBuilding(MapTile *rect){
+void MapView::moveRemoveBuilding(MapTile *rect)
+{
     foreach(MapTile* tile,*tempRemoveList)
     {
         tile->setBrush(QBrush(prevRemoveColor));
@@ -330,7 +314,8 @@ void MapView::moveRemoveBuilding(MapTile *rect){
         {
             for(int j=0;j<rect->getBuildingHeight();j++)
             {
-                if( tiles->at((rect->getMainTileX()+i)+( rect->getMainTileY()+j)*nbTiles)->getBId()==rect->getBId()){
+                if( tiles->at((rect->getMainTileX()+i)+( rect->getMainTileY()+j)*nbTiles)->getBId()==rect->getBId())
+                {
                     tempRemoveList->append(tiles->at((rect->getMainTileX()+i)+( rect->getMainTileY()+j)*nbTiles));
                     tiles->at((rect->getMainTileX()+i)+( rect->getMainTileY()+j)*nbTiles)->setBrush(QBrush(Qt::black));
                     tiles->at((rect->getMainTileX()+i)+( rect->getMainTileY()+j)*nbTiles)->setPixOpacity(0.65);
@@ -342,7 +327,8 @@ void MapView::moveRemoveBuilding(MapTile *rect){
 
 }
 
-void MapView::moveAddBuilding(MapTile *rect){
+void MapView::moveAddBuilding(MapTile *rect)
+{
 
 
 
@@ -391,34 +377,33 @@ void MapView::moveAddBuilding(MapTile *rect){
 
         if(pixFilePath!="NOPIX")pixExists=true;
 
-        if(currentBuild==nullptr && pixExists){
+        if(currentBuild==nullptr && pixExists)
+        {
             QTransform trans;
 
             trans.scale(1.1*0.04*256/nbTiles,1.2*0.04*256/nbTiles);
             trans.rotate(-45);
             currentBuild=new QGraphicsPixmapItem( QPixmap(pixFilePath));
 
-            //currentBuild->setFlag(QGraphicsItem::ItemIgnoresTransformations,true);
             currentBuild->setOpacity(0.65);
-            //currentBuild->setScale(0.04);
-
-
             currentBuild->setZValue(2);
-            //currentBuild->setRotation(-45);
+
             currentBuild->setTransform(trans);
 
             scene->addItem(currentBuild);
 
         }
         if(prevRect!=nullptr && prevRect!=rect && pixExists)prevRect->removePixMove();
-        if(prevRect!=rect && pixExists){
+        if(prevRect!=rect && pixExists)
+        {
             rect->addPixMove(currentBuild);
             lastTilePix=rect;
         }
 
 
 
-        if(currentBuild==nullptr){
+        if(currentBuild==nullptr)
+        {
 
         }else{
             color=baseColors->at((rect->getX())+(rect->getY())*nbTiles);
@@ -454,7 +439,8 @@ void MapView::moveAddBuilding(MapTile *rect){
         if(prevRect!=rect && !bRoad)
             prevRect=rect;
 
-    }else if(lastTilePix!=nullptr){
+    }else if(lastTilePix!=nullptr)
+    {
 
         lastTilePix->removePixMove();
         lastTilePix=nullptr;
@@ -464,7 +450,8 @@ void MapView::moveAddBuilding(MapTile *rect){
 
 }
 
-void MapView::moveAddRoad(MapTile* rect){
+void MapView::moveAddRoad(MapTile* rect)
+{
     if(rect->getX()==roadStartX || rect->getY()==roadStartY)
     {
         if(roadDir==0)
@@ -496,36 +483,46 @@ void MapView::moveAddRoad(MapTile* rect){
 
             int tileDistanceX=0;
             int tileDistanceY=0;
-            if(prevRect!=nullptr){
+            if(prevRect!=nullptr)
+            {
                 tileDistanceX=(int)qFabs((double)rect->getX() - (double)prevRect->getX());
                 tileDistanceY=(int)qFabs((double)rect->getY() - (double)prevRect->getY());
 
             }
             int multDirection=1;
 
-            if(tileDistanceX>1 || tileDistanceY>1){
+            if(tileDistanceX>1 || tileDistanceY>1)
+            {
                 if((rect->getX()<prevRect->getX() && dir==1 )|| (rect->getY()<prevRect->getY() && (int)qFabs(roadDir)==2))multDirection=-1;
             }
+            //if the mouse "jumped" more than one tile in X
+            if(tileDistanceX > 1 && dir==1)
+            {
 
-            if(tileDistanceX > 1 && dir==1){ //if the mouse "jumped" more than one tile in X
-
-                for(int i=0;i<tileDistanceX+1;i++){
-                    if(!tiles->at((prevRect->getX()+i*multDirection)+(prevRect->getY())*nbTiles)->isOccupied()){
+                for(int i=0;i<tileDistanceX+1;i++)
+                {
+                    if(!tiles->at((prevRect->getX()+i*multDirection)+(prevRect->getY())*nbTiles)->isOccupied())
+                    {
                         tiles->at((prevRect->getX()+i*multDirection)+(prevRect->getY())*nbTiles)->setBrush(QBrush(Qt::darkGray));
 
                         tempRoadList->append(tiles->at((prevRect->getX()+i*multDirection)+(prevRect->getY())*nbTiles));
                     }
                 }
-            }else if(tileDistanceY > 1 && dir==2){ //same thing but in y
+            }//same thing but in y
+            else if(tileDistanceY > 1 && dir==2)
+            {
 
-                for(int i=0;i<tileDistanceY+1;i++){
-                    if(!tiles->at((prevRect->getX())+(prevRect->getY()+i*multDirection)*nbTiles)->isOccupied()){
+                for(int i=0;i<tileDistanceY+1;i++)
+                {
+                    if(!tiles->at((prevRect->getX())+(prevRect->getY()+i*multDirection)*nbTiles)->isOccupied())
+                    {
                         tiles->at((prevRect->getX())+(prevRect->getY()+i*multDirection)*nbTiles)->setBrush(QBrush(Qt::darkGray));
 
                         tempRoadList->append(tiles->at((prevRect->getX())+(prevRect->getY()+i*multDirection)*nbTiles));
                     }
                 }
-            }else if(!rect->isOccupied()){
+            }else if(!rect->isOccupied())
+            {
                 tempRoadList->append(rect);
                 rect->setBrush(QBrush(Qt::darkGray));
 
@@ -538,14 +535,20 @@ void MapView::moveAddRoad(MapTile* rect){
     }
 }
 
-void MapView::finalRemove(MapTile* rect){
+void MapView::finalRemove(MapTile* rect)
+{
     int initialBid=rect->getBId();
-    if(initialBid!=-10){ //if it is not a default tile (no building/road on it)
+    //if it is not a default tile (no building/road on it)
+    if(initialBid!=-10)
+    {
         if(rect->getUniqueBId()!=-10)BuildingManagementService::getBuildingManagementService()->removeBuilding(rect->getUniqueBId());
 
-        for(int i=0;i<rect->getBuildingWidth();i++){
-            for(int j=0;j<rect->getBuildingHeight();j++){
-                if( tiles->at((rect->getMainTileX()+i)+(rect->getMainTileY()+j)*nbTiles)->getBId()==initialBid){
+        for(int i=0;i<rect->getBuildingWidth();i++)
+        {
+            for(int j=0;j<rect->getBuildingHeight();j++)
+            {
+                if( tiles->at((rect->getMainTileX()+i)+(rect->getMainTileY()+j)*nbTiles)->getBId()==initialBid)
+                {
                     tiles->at((rect->getMainTileX()+i)+(rect->getMainTileY()+j)*nbTiles)->removePix();
                     tiles->at((rect->getMainTileX()+i)+(rect->getMainTileY()+j)*nbTiles)->setOccupied(false);
                     tiles->at((rect->getMainTileX()+i)+(rect->getMainTileY()+j)*nbTiles)->setBId(-10);
@@ -560,16 +563,21 @@ void MapView::finalRemove(MapTile* rect){
     }
 }
 
-void MapView::finalAddBuilding(MapTile* rect){
+void MapView::finalAddBuilding(MapTile* rect)
+{
     bool caseOccupe=false;
-    for(int i=0;i<buildWidth;i++){
-        for(int j=0;j<buildHeight;j++){
+    for(int i=0;i<buildWidth;i++)
+    {
+        for(int j=0;j<buildHeight;j++)
+        {
             if(tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->isOccupied())caseOccupe=true;
         }
     }
 
-    if(rect->getX()+buildWidth-1<nbTiles && rect->getX()+buildHeight-1<nbTiles && caseOccupe==false){
-        if(pickerBId==0 && !bRoad){
+    if(rect->getX()+buildWidth-1<nbTiles && rect->getX()+buildHeight-1<nbTiles && caseOccupe==false)
+    {
+        if(pickerBId==0 && !bRoad)
+        {
             bRoad=true;
             roadDir=0;
             roadStartX=rect->getX();
@@ -578,11 +586,13 @@ void MapView::finalAddBuilding(MapTile* rect){
 
         }
         prevRect=nullptr;
-        if(checkIfNearRoad(rect) || bRoad ){
+        if(checkIfNearRoad(rect) || bRoad )
+        {
             QColor color=GraphicService::getColorFromBuildingCategory(ConstantBuilding::get(pickerBId).getCategory()-1);
 
             //TODO: set the real image of the building instead of colorizing the tiles => switch on the buildingId instead of the category
-            if(currentBuild==nullptr){
+            if(currentBuild==nullptr)
+            {
 
 
             }else{
@@ -593,15 +603,19 @@ void MapView::finalAddBuilding(MapTile* rect){
             int mainTileX=rect->getX();
             int mainTileY=rect->getY();
 
-            if(currentBuild!=nullptr){
+            if(currentBuild!=nullptr)
+            {
                 rect->addPix(currentBuild);
                 currentBuild=nullptr;
             }
 
-            if(pickerBId!=0){
+            if(pickerBId!=0)
+            {
                 buildingCount++;
-                for(int i=0;i<buildWidth;i++){
-                    for(int j=0;j<buildHeight;j++){
+                for(int i=0;i<buildWidth;i++)
+                {
+                    for(int j=0;j<buildHeight;j++)
+                    {
                         tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->setOccupied(true);
                         tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->setBId(pickerBId);
                         tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->setMainTile(mainTileX,mainTileY);
@@ -613,12 +627,16 @@ void MapView::finalAddBuilding(MapTile* rect){
                 }
                 BuildingManagementService::getBuildingManagementService()->addBuilding(pickerBId,mainTileX,mainTileY, 0); //TODO : set 0 to 3 angles
             }
-        }else if(!bRoad){
+        }else if(!bRoad)
+        {
 
 
-            for(int i=0;i<buildWidth;i++){
-                for(int j=0;j<buildHeight;j++){
-                    if(rect->getX()+i<nbTiles && rect->getY()+j<nbTiles){
+            for(int i=0;i<buildWidth;i++)
+            {
+                for(int j=0;j<buildHeight;j++)
+                {
+                    if(rect->getX()+i<nbTiles && rect->getY()+j<nbTiles)
+                    {
                         tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->setBrush(QBrush(baseColors->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)));
 
                     }
@@ -630,44 +648,54 @@ void MapView::finalAddBuilding(MapTile* rect){
     }
 }
 
-void MapView::finalAddRoad(MapTile* rect){
+void MapView::finalAddRoad(MapTile* rect)
+{
 
     bRoad=false;
     int dir=(int)qFabs(roadDir);
 
-    if(rect->getBId()!=0){
-        if(((rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX))){
+    if(rect->getBId()!=0)
+    {
+        if(((rect->getX()>roadStartX &&roadDir==1 && rect->getY()==roadStartY || rect->getX()<roadStartX &&roadDir==-1&& rect->getY()==roadStartY || rect->getY()>roadStartY && roadDir==2 && rect->getX()==roadStartX|| rect->getY()<roadStartY && roadDir==-2&& rect->getX()==roadStartX)))
+        {
 
             int lastX=-1;
             int lastY=-1;
 
             int aNeighbourCount[tempRoadList->count()];
             bool bNeighbour=false;
-            foreach(MapTile* tile, *tempRoadList){
+            foreach(MapTile* tile, *tempRoadList)
+            {
                 int neighbourCount=countNeighbourRoads(tile);
                 aNeighbourCount[tempRoadList->indexOf(tile)]=neighbourCount;
                 if(neighbourCount>0)bNeighbour=true;
             }
 
-            foreach(MapTile* tile, *tempRoadList){
-                if(tile->getBId()==-10 && tile->getX()!=lastX && dir==1 || tile->getY()!=lastY && dir==2){
+            foreach(MapTile* tile, *tempRoadList)
+            {
+                if(tile->getBId()==-10 && tile->getX()!=lastX && dir==1 || tile->getY()!=lastY && dir==2)
+                {
 
                     tile->setOccupied(true);
                     tile->setBId(0);
 
                     tile->setMainTile(roadStartX,roadStartY);
-                    if(roadDir==1){
+                    if(roadDir==1)
+                    {
                         tile->setBuildingWidth(rect->getX()-roadStartX+1);
                         tile->setBuildingHeight(1);
-                    }else if(roadDir==-1){
+                    }else if(roadDir==-1)
+                    {
                         tile->setBuildingWidth(roadStartX-rect->getX()+1);
                         tile->setBuildingHeight(1);
                         tile->setMainTile(rect->getX(),rect->getY());
                         rect->setMainTile(rect->getX(),rect->getY());
-                    }else if(roadDir==2){
+                    }else if(roadDir==2)
+                    {
                         tile->setBuildingWidth(1);
                         tile->setBuildingHeight(rect->getY()-roadStartY+1);
-                    }else if(roadDir==-2){
+                    }else if(roadDir==-2)
+                    {
                         tile->setBuildingWidth(1);
                         tile->setBuildingHeight(roadStartY-rect->getY()+1);
                         tile->setMainTile(rect->getX(),rect->getY());
@@ -679,7 +707,8 @@ void MapView::finalAddRoad(MapTile* rect){
                     trans.scale(scaleFactor,scaleFactor);
 
                     int angle;
-                    if(dir==1 ){
+                    if(dir==1 )
+                    {
                         angle=0;
                     }
                     else{
@@ -704,9 +733,12 @@ void MapView::finalAddRoad(MapTile* rect){
 
             }
 
-            if(bNeighbour){
-                for(int i=0;i<tempRoadList->count();i++){
-                    if(aNeighbourCount[i]>0){
+            if(bNeighbour)
+            {
+                for(int i=0;i<tempRoadList->count();i++)
+                {
+                    if(aNeighbourCount[i]>0)
+                    {
                         updateNeighbourRoad(tempRoadList->at(i));
                     }
                 }
@@ -744,9 +776,11 @@ void MapView::finalAddRoad(MapTile* rect){
     }
 }
 
-void MapView::cancelAdd(MapTile* rect){
+void MapView::cancelAdd(MapTile* rect)
+{
 
-    if(currentBuild!=nullptr){
+    if(currentBuild!=nullptr)
+    {
         delete currentBuild;
         currentBuild=nullptr;
     }
@@ -759,7 +793,8 @@ void MapView::cancelAdd(MapTile* rect){
                 occupiedTile=true;
         }
     }
-    if(!occupiedTile || falseRoadAdd){
+    if(!occupiedTile || falseRoadAdd)
+    {
         falseRoadAdd=false;
         bRoad=false;
         bPicker=false;
@@ -796,12 +831,17 @@ void MapView::cancelAdd(MapTile* rect){
 
 
 
-void MapView::toggleGrid(){
-    for(int i=0;i<nbTiles;i++){
-        for(int j=0;j<nbTiles;j++){
-            if(bGrid){
+void MapView::toggleGrid()
+{
+    for(int i=0;i<nbTiles;i++)
+    {
+        for(int j=0;j<nbTiles;j++)
+        {
+            if(bGrid)
+            {
                 tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::transparent));
-            }else if(!bGrid){
+            }else if(!bGrid)
+            {
                 tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::black));
             }
         }
@@ -813,13 +853,16 @@ void MapView::toggleGrid(){
 //true: zoom in false: zoom out
 void MapView::zoomMeth(bool plusMinus)
 {
-    if(plusMinus){
-        if(zoomFactor<1.25){
+    if(plusMinus)
+    {
+        if(zoomFactor<1.25)
+        {
             zoomFactor+=0.05;
             this->scale(2,2);
         }
     }else{
-        if(zoomFactor>0.95){
+        if(zoomFactor>0.95)
+        {
             zoomFactor-=0.05;
             this->scale(0.5,0.5);
         }
@@ -827,23 +870,29 @@ void MapView::zoomMeth(bool plusMinus)
 }
 
 
-void MapView::removeBuildingMode(){
-    if(!bPicker){
+void MapView::removeBuildingMode()
+{
+    if(!bPicker)
+    {
         MapView::getMapView()->callPicker(-1);
     }
 }
 
-void MapView::addRoadMode(){
-    if(!bPicker && !bRoad){
+void MapView::addRoadMode()
+{
+    if(!bPicker && !bRoad)
+    {
         MapView::getMapView()->callPicker(0);
     }
 }
 
 
 //1: right -1: left 2: up -2: down
-void MapView::translateMeth(int direction){
+void MapView::translateMeth(int direction)
+{
     int zoomFactorAdapter=5;
-    switch(direction){
+    switch(direction)
+    {
     case -2:
         this->translate(-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter),-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter));
         cameraX+=-15/zoomFactor-35/(zoomFactor*zoomFactorAdapter);
@@ -885,7 +934,7 @@ bool MapView::checkIfNearRoad(MapTile* tile)
     return false;
 }
 
-//TO-DO: RETURN TILE CONTAINING NEIGHTBOUR ROAD TO CHANGE HIS PIXMAP OR NULLPTR IF NOT FOUND
+
 bool MapView::checkIfNearRoadX(MapTile* tile)
 {
 
@@ -897,21 +946,13 @@ bool MapView::checkIfNearRoadX(MapTile* tile)
 }
 
 
-
-
-
-
-//TO-DO: RETURN TILE CONTAINING NEIGHTBOUR ROAD TO CHANGE HIS PIXMAP OR NULLPTR IF NOT FOUND
 bool MapView::checkIfNearRoadY(MapTile* tile)
 {
-
     if(tile->getY()-1>=0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)return true;
     if(tile->getY()+1<nbTiles && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0)return true;
 
-
     return false;
 }
-
 
 
 void MapView::blinkTileRed(MapTile* tile)
@@ -963,7 +1004,8 @@ void MapView::blinkRedTileSlot()
     }
 }
 
-int MapView::countNeighbourRoads(MapTile* tile){
+int MapView::countNeighbourRoads(MapTile* tile)
+{
     int n=0;
 
     if(tile->getX()-1>=0 && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0)n++;
@@ -976,7 +1018,8 @@ int MapView::countNeighbourRoads(MapTile* tile){
 
 
 
-void MapView::getNeighbours(MapTile* tile){
+void MapView::getNeighbours(MapTile* tile)
+{
     neighbourList->clear();
     if(tile->getX()-1>=0 && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0)neighbourList->append(tiles->at((tile->getX()-1)+(tile->getY())*nbTiles));
     if(tile->getY()-1>=0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)neighbourList->append(tiles->at((tile->getX())+(tile->getY()-1)*nbTiles));
@@ -986,19 +1029,22 @@ void MapView::getNeighbours(MapTile* tile){
 
 }
 
-void  MapView::updateNeighbourRoad(MapTile* tileIn){
+void  MapView::updateNeighbourRoad(MapTile* tileIn)
+{
 
 
     getNeighbours(tileIn);
 
-    foreach(MapTile* tile,*neighbourList){
+    foreach(MapTile* tile,*neighbourList)
+    {
 
         int neighbourCount=countNeighbourRoads(tile);
 
         QString pixPath="NOPIX";
         QTransform trans;
 
-        switch(neighbourCount){
+        switch(neighbourCount)
+        {
         //"T"
         case 3:
             pixPath=":/ressources/routeT.png";
@@ -1016,41 +1062,49 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
 
         trans.scale(scaleFactor,scaleFactor);
 
-        switch(neighbourCount){
+        switch(neighbourCount)
+        {
         case 2:
-            if(tile->getX()-1>=0 && tile->getY()+1<nbTiles && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0){
+            if(tile->getX()-1>=0 && tile->getY()+1<nbTiles && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0)
+            {
                 trans.rotate(-90);
                 trans.translate(-translateFactor,0);
                 pixPath=":/ressources/routeL.png";
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),7);
-            }else if(tile->getX()+1<nbTiles && tile->getY()-1>=0 && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
+            }else if(tile->getX()+1<nbTiles && tile->getY()-1>=0 && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)
+            {
                 trans.rotate(90);
                 trans.translate(0,-translateFactor);
                 pixPath=":/ressources/routeL.png";
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),8);
-            }else if(tile->getX()+1<nbTiles && tile->getY()+1<nbTiles && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0){
+            }else if(tile->getX()+1<nbTiles && tile->getY()+1<nbTiles && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0)
+            {
                 trans.rotate(180);
                 trans.translate(-translateFactor,-translateFactor);
                 pixPath=":/ressources/routeL.png";
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),9);
-            }else if(tile->getX()-1>=0 && tile->getY()-1>=0 && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
+            }else if(tile->getX()-1>=0 && tile->getY()-1>=0 && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)
+            {
                 pixPath=":/ressources/routeL.png";
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),10);
             }
             break;
 
         case 3:
-            if(tile->getX()-1 >=0 && tile->getY()-1>=0 && tile->getX()+1<nbTiles&&tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
+            if(tile->getX()-1 >=0 && tile->getY()-1>=0 && tile->getX()+1<nbTiles&&tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)
+            {
                 trans.rotate(180);
                 trans.translate(-translateFactor,-translateFactor);
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),4);
             }
-            if(tile->getX()+1 <nbTiles && tile->getY()-1>=0 && tile->getY()+1<nbTiles&&tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
+            if(tile->getX()+1 <nbTiles && tile->getY()-1>=0 && tile->getY()+1<nbTiles&&tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)
+            {
                 trans.rotate(-90);
                 trans.translate(-translateFactor,0);
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),5);
             }
-            if(tile->getX()-1>=0 && tile->getY()-1>=0 && tile->getY()+1<nbTiles&&tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0){
+            if(tile->getX()-1>=0 && tile->getY()-1>=0 && tile->getY()+1<nbTiles&&tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)
+            {
                 trans.rotate(90);
                 trans.translate(0,-translateFactor);
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),6);
@@ -1058,7 +1112,8 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
             break;
         }
 
-        if(pixPath!="NOPIX"){
+        if(pixPath!="NOPIX")
+        {
             QGraphicsPixmapItem *roadPix=new QGraphicsPixmapItem(QPixmap(pixPath));
             scene->addItem(roadPix);
             tile->removePix();
@@ -1071,18 +1126,22 @@ void  MapView::updateNeighbourRoad(MapTile* tileIn){
     }
 }
 
-void MapView::addBuildingFromSave(int id, int x, int y, int angle){
+void MapView::addBuildingFromSave(int id, int x, int y, int angle)
+{
     int buildWidthSave=ConstantBuilding::get(id).getTileWidth();
     int buildHeightSave=ConstantBuilding::get(id).getTileHeight();
 
 
-    if(id!=0){
+    if(id!=0)
+    {
         QColor color=GraphicService::getColorFromBuildingCategory(ConstantBuilding::get(id).getCategory()-1);
 
 
         buildingCount++;
-        for(int i=0;i<buildWidthSave;i++){
-            for(int j=0;j<buildHeightSave;j++){
+        for(int i=0;i<buildWidthSave;i++)
+        {
+            for(int j=0;j<buildHeightSave;j++)
+            {
                 tiles->at((x+i)+(y+j)*nbTiles)->setOccupied(true);
                 tiles->at((x+i)+(y+j)*nbTiles)->setBId(id);
                 tiles->at((x+i)+(y+j)*nbTiles)->setMainTile(x,y);
@@ -1119,7 +1178,8 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
         trans.scale(scaleFactor,scaleFactor);
         QString pixPath;
 
-        switch(angle){
+        switch(angle)
+        {
         case 1:
             trans.rotate(-90);
             trans.translate(-translateFactor,0);
@@ -1171,12 +1231,15 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
     }
 }
 
-void MapView::toggleAllBuildingRadius(){
+void MapView::toggleAllBuildingRadius()
+{
     bRadius=!bRadius;
-    if(bRadius){
+    if(bRadius)
+    {
         radiusCircle->setVisible(false);
         QVector<Building*> *vectorEffectBuildings=BuildingManagementService::getBuildingManagementService()->getEffectBuildings();
-        for(int i=0;i<vectorEffectBuildings->size();i++){
+        for(int i=0;i<vectorEffectBuildings->size();i++)
+        {
 
             QGraphicsEllipseItem *radius=new QGraphicsEllipseItem;
             setRadiusCircle(radius,vectorEffectBuildings->at(i)->getId(),vectorEffectBuildings->at(i)->getX(),vectorEffectBuildings->at(i)->getY());
@@ -1185,22 +1248,28 @@ void MapView::toggleAllBuildingRadius(){
             radiusList->append(radius);
             scene->addItem(radius);
         }
-    }else{
-        foreach(QGraphicsEllipseItem* circle,*radiusList){
+    }
+    else
+    {
+        foreach(QGraphicsEllipseItem* circle,*radiusList)
+        {
             scene->removeItem(circle);
         }
         radiusList->clear();
     }
 }
 
-void MapView::showRadius(MapTile* rect){
-    if(rect ->isOccupied() && rect->getBId()!=-10 && ConstantBuilding::get(rect->getBId()).getRadius()>1){
+void MapView::showRadius(MapTile* rect)
+{
+    if(rect ->isOccupied() && rect->getBId()!=-10 && ConstantBuilding::get(rect->getBId()).getRadius()>1)
+    {
         radiusCircle->setVisible(true);
         setRadiusCircle(radiusCircle,rect->getBId(),rect->getMainTileX(),rect->getMainTileY());
     }
 }
 
-void MapView::setRadiusCircle(QGraphicsEllipseItem* radius,int bId,int x,int y){
+void MapView::setRadiusCircle(QGraphicsEllipseItem* radius,int bId,int x,int y)
+{
     int abuildHeight=ConstantBuilding::get(bId).getTileHeight();
     int abuildWidth=ConstantBuilding::get(bId).getTileWidth();
     int buildSizeOffset=abuildHeight;

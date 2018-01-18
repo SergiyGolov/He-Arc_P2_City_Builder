@@ -47,9 +47,11 @@ GuiView::GuiView(QWidget *parent)
 
 
     cptMaxCat=0;
-    for(int i=0;i<10;i++){
+    for(int i=0;i<10;i++)
+    {
         int cpt=0;
-        for(int j=0;j<ConstantBuilding::getNbBuildings();j++){
+        for(int j=0;j<ConstantBuilding::getNbBuildings();j++)
+        {
             if(ConstantBuilding::get(j).getCategory()==i)cpt++;
         }
         if(cpt>cptMaxCat)cptMaxCat=cpt;
@@ -60,7 +62,8 @@ GuiView::GuiView(QWidget *parent)
 
     tabText=new std::vector<PickerElement*>(cptMaxCat,nullptr);
 
-    for(int i=0;i<cptMaxCat;i++){
+    for(int i=0;i<cptMaxCat;i++)
+    {
         tabText->at(i)=new PickerElement();
         this->scene->addItem(tabText->at(i));
         tabText->at(i)->setZValue(1);
@@ -68,9 +71,11 @@ GuiView::GuiView(QWidget *parent)
 
 
     tabCat=new std::vector<PickerElement*>(9,nullptr);
-    for(int i=0;i<9;i++){
+    for(int i=0;i<9;i++)
+    {
         tabCat->at(i)= new PickerElement();
-        switch(i){
+        switch(i)
+        {
         case 0:
             tabCat->at(i)->setText(QString("Houses [F%1]").arg(i+1));
             break;
@@ -154,8 +159,10 @@ GuiView::~GuiView()
 
 
 
-void GuiView::showBuildingPickerMenu(int tabId){
-    for(int i=0;i<9;i++){
+void GuiView::showBuildingPickerMenu(int tabId)
+{
+    for(int i=0;i<9;i++)
+    {
         tabCat->at(i)->setPen(QPen(Qt::transparent));
     }
 
@@ -166,14 +173,16 @@ void GuiView::showBuildingPickerMenu(int tabId){
 
 
     int nbElem=0;
-    for(int i=0;i<ConstantBuilding::getNbBuildings();i++){
+    for(int i=0;i<ConstantBuilding::getNbBuildings();i++)
+    {
         if(ConstantBuilding::get(i).getCategory()==activeTabId+1) {
             nbElem++;
         }
 
 
         int ptrElem=0;
-        for(int i=0;i<ConstantBuilding::getNbBuildings();i++){
+        for(int i=0;i<ConstantBuilding::getNbBuildings();i++)
+        {
             if(ConstantBuilding::get(i).getCategory()==activeTabId+1) {
 
                 if(ptrElem<9)tabText->at(ptrElem)->setText(ConstantBuilding::get(i).getDisplayName()+QString(" [%1]\n").arg(ptrElem+1)+QString::number(ConstantBuilding::get(i).getPrice())+" $\n"+QString::number(ConstantBuilding::get(i).getPricePerSeconds())+" $/s");
@@ -187,7 +196,8 @@ void GuiView::showBuildingPickerMenu(int tabId){
                 tabText->at(ptrElem)->setBId(i);
 
 
-                if(!BuildingManagementService::getBuildingManagementService()->isBuildingAddable(i)||GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(i).getPrice()<0 && ConstantBuilding::get(i).getCategory()>2){
+                if(!BuildingManagementService::getBuildingManagementService()->isBuildingAddable(i)||GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(i).getPrice()<0 && ConstantBuilding::get(i).getCategory()>2)
+                {
                     tabText->at(ptrElem)->changeTextColor(Qt::red);
                 }else{
                     tabText->at(ptrElem)->changeTextColor(Qt::black);
@@ -196,45 +206,56 @@ void GuiView::showBuildingPickerMenu(int tabId){
                 ptrElem++;
             }
         }
-        for(int i=ptrElem;i<cptMaxCat;i++){
+        for(int i=ptrElem;i<cptMaxCat;i++)
+        {
             tabText->at(i)->setText("");
             tabText->at(i)->setRect(0,0,0,0);
         }
     }
 }
 
-void GuiView::selectBuilding(int n){
-    if(BuildingManagementService::getBuildingManagementService()->isBuildingAddable(tabText->at(n)->getBId())&& (tabText->at(n)->getText()!="" && (GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(tabText->at(n)->getBId()).getPrice()>=0 ||ConstantBuilding::get(tabText->at(n)->getBId()).getCategory()<=2) )){
+void GuiView::selectBuilding(int n)
+{
+    if(BuildingManagementService::getBuildingManagementService()->isBuildingAddable(tabText->at(n)->getBId())&& (tabText->at(n)->getText()!="" && (GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(tabText->at(n)->getBId()).getPrice()>=0 ||ConstantBuilding::get(tabText->at(n)->getBId()).getCategory()<=2) ))
+    {
         MapView::getMapView()->callPicker(tabText->at(n)->getBId());
     }
 }
 
 
-void GuiView::mousePressEvent(QMouseEvent *event){
+void GuiView::mousePressEvent(QMouseEvent *event)
+{
 
     QList<QGraphicsItem *> itemsList=items(event->pos());
 
-    if(!itemsList.isEmpty() && itemsList.size()==3){
+    if(!itemsList.isEmpty() && itemsList.size()==3)
+    {
 
-        if(PickerElement *pick=dynamic_cast<PickerElement*>(itemsList.at(itemsList.size()-2))){
+        if(PickerElement *pick=dynamic_cast<PickerElement*>(itemsList.at(itemsList.size()-2)))
+        {
 
-            if(pick->getBId()>=-1 && (pick->getBId()==-1 || (BuildingManagementService::getBuildingManagementService()->isBuildingAddable(pick->getBId()) && GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ) || ConstantBuilding::get(pick->getBId()).getCategory()<=2) ){ //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
+            if(pick->getBId()>=-1 && (pick->getBId()==-1 || (BuildingManagementService::getBuildingManagementService()->isBuildingAddable(pick->getBId()) && GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ) || ConstantBuilding::get(pick->getBId()).getCategory()<=2) )
+            { //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
                 MapView::getMapView()->callPicker(pick->getBId());
 
-            }else if(pick->getBId()<-1){
+            }else if(pick->getBId()<-1)
+            {
                 showBuildingPickerMenu(-1*(pick->getBId()/10)-1);
             }
         }
     }
 }
-void GuiView::keyPressEvent(QKeyEvent *event){
+void GuiView::keyPressEvent(QKeyEvent *event)
+{
     GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
 
 
 }
 
-GuiView* GuiView::getGuiView(){
-    if(GuiView::guiViewInstance==nullptr){
+GuiView* GuiView::getGuiView()
+{
+    if(GuiView::guiViewInstance==nullptr)
+    {
         GuiView::guiViewInstance=new GuiView();
     }
 

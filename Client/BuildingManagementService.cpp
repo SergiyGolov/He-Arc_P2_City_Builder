@@ -229,7 +229,8 @@ int BuildingManagementService::getVectorId(int uid,QVector<Building*> *v)
     return idInVector;
 }
 
-QVector<Building*> *BuildingManagementService::getEffectBuildings(){
+QVector<Building*> *BuildingManagementService::getEffectBuildings()
+{
     vectorEffectBuildings->clear();
     for(int i = 0; i < vectorBuildings->size(); i++)
     {

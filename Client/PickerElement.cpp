@@ -1,12 +1,11 @@
 #include "PickerElement.h"
 #include <QGraphicsTextItem>
 
-PickerElement::PickerElement(int bId,QString textStr, int left, int top, int width, int height,QGraphicsItem* parent):QGraphicsRectItem(left,top,width,height,parent){
-
+PickerElement::PickerElement(int bId,QString textStr, int left, int top, int width, int height,QGraphicsItem* parent):QGraphicsRectItem(left,top,width,height,parent)
+{
     this->bId=bId;
 
     this->text=new QGraphicsTextItem(textStr);
-
 
     this->setZValue(1);
 
@@ -19,25 +18,22 @@ PickerElement::PickerElement(int bId,QString textStr, int left, int top, int wid
 
 
     if(PickerElement::scene!=nullptr)PickerElement::scene->addItem(this->text);
-
-
 }
-
-
 
 QGraphicsScene* PickerElement::scene=nullptr;
 
-
-
-void PickerElement::setScene(QGraphicsScene *scene){
+void PickerElement::setScene(QGraphicsScene *scene)
+{
     PickerElement::scene=scene;
 }
 
-PickerElement::~PickerElement(){
+PickerElement::~PickerElement()
+{
 
 }
 
-void  PickerElement::moveThis(qreal x, qreal y){
+void  PickerElement::moveThis(qreal x, qreal y)
+{
     this->setPos(x,y);
     this->text->setPos(x,y);
 }
