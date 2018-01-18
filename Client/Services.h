@@ -19,7 +19,6 @@
 #include "Client/BuildingManagementService.h"
 #include "Client/GameManagementService.h"
 #include "Client/GraphicService.h"
-#include "Client/LauncherService.h"
 #include "Client/LoadSaveService.h"
 #include "Client/TickService.h"
 

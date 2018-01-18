@@ -29,7 +29,6 @@ HEADERS += \
 	Client/GameManagementService.h \
 	Client/GraphicService.h \
 	Client/GuiView.h \
-	Client/LauncherService.h \
 	Client/LoadSaveService.h \
 	Client/MainWidget.h \
 	Client/MapTile.h \
@@ -59,7 +58,6 @@ SOURCES += \
         Client/MapView.cpp \
 	Client/PickerElement.cpp \
 	Client/TickService.cpp \
-	Client/LauncherService.cpp \
 	Client/Building.cpp \
 	Client/TopView.cpp \
         Client/BuildingManagementService.cpp \
