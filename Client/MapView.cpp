@@ -454,9 +454,6 @@ void MapView::moveAddBuilding(MapTile *rect){
         if(prevRect!=rect && !bRoad)
             prevRect=rect;
 
-
-
-
     }else if(lastTilePix!=nullptr){
 
         lastTilePix->removePixMove();
@@ -465,13 +462,11 @@ void MapView::moveAddBuilding(MapTile *rect){
         radiusCircle->setVisible(false);
     }
 
-
 }
 
 void MapView::moveAddRoad(MapTile* rect){
     if(rect->getX()==roadStartX || rect->getY()==roadStartY)
     {
-
         if(roadDir==0)
         {
             if(rect->getX()>roadStartX)
@@ -632,10 +627,7 @@ void MapView::finalAddBuilding(MapTile* rect){
             blinkTileRed(rect);
         }
         radiusCircle->setVisible(false);
-
-
     }
-
 }
 
 void MapView::finalAddRoad(MapTile* rect){
@@ -665,33 +657,24 @@ void MapView::finalAddRoad(MapTile* rect){
 
                     tile->setMainTile(roadStartX,roadStartY);
                     if(roadDir==1){
-
                         tile->setBuildingWidth(rect->getX()-roadStartX+1);
                         tile->setBuildingHeight(1);
-
                     }else if(roadDir==-1){
-
                         tile->setBuildingWidth(roadStartX-rect->getX()+1);
                         tile->setBuildingHeight(1);
                         tile->setMainTile(rect->getX(),rect->getY());
                         rect->setMainTile(rect->getX(),rect->getY());
                     }else if(roadDir==2){
-
                         tile->setBuildingWidth(1);
                         tile->setBuildingHeight(rect->getY()-roadStartY+1);
-
                     }else if(roadDir==-2){
-
                         tile->setBuildingWidth(1);
                         tile->setBuildingHeight(roadStartY-rect->getY()+1);
                         tile->setMainTile(rect->getX(),rect->getY());
                         rect->setMainTile(rect->getX(),rect->getY());
                     }
 
-
                     QString pixFilePath=":/ressources/route.png";
-
-
                     QTransform trans;
                     trans.scale(scaleFactor,scaleFactor);
 
