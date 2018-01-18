@@ -38,11 +38,13 @@ public:
     int getVectorId(int uid,QVector<Building*> *v);
     void addBuildingFromSave(int id, int x, int y, int angle);
     void setAngleFromId(int uid,int newAngle){vectorBuildings->at(getVectorId(uid,vectorBuildings))->setAngle(newAngle);}
+    QVector<Building*> *getEffectBuildings();
 	
 private:
     static BuildingManagementService* buildingManagementService;
     BuildingManagementService();
     QVector<Building*>* vectorBuildings;
+    QVector<Building*>* vectorEffectBuildings;
 
     double getHappiness(Building* b);
 

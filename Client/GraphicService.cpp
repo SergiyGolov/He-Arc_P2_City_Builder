@@ -2,7 +2,8 @@
 
 #include "Client/LoadSaveService.h"
 
-GraphicService::GraphicService(QString file){
+GraphicService::GraphicService(QString file)
+{
     loading=new QMessageBox(QString("Loading"),QString("The game is loading..."),QMessageBox::Information,QMessageBox::NoButton,QMessageBox::NoButton,QMessageBox::NoButton);
 
     loading->setWindowFlag(Qt::WindowStaysOnTopHint);
@@ -16,7 +17,8 @@ GraphicService::GraphicService(QString file){
 
 }
 
-GraphicService::~GraphicService(){
+GraphicService::~GraphicService()
+{
 
 }
 
@@ -24,8 +26,10 @@ GraphicService* GraphicService::graphicServiceInstance=nullptr;
 
 
 
-void GraphicService::setKeyboardShortcuts(int key){
-    switch(key){
+void GraphicService::setKeyboardShortcuts(int key)
+{
+    switch(key)
+    {
     case Qt::Key_Q:
         MapView::getMapView()->addRoadMode();
         break;
@@ -33,7 +37,7 @@ void GraphicService::setKeyboardShortcuts(int key){
         MapView::getMapView()->removeBuildingMode();
         break;
     case Qt::Key_F1:
-       GuiView::getGuiView()->showBuildingPickerMenu(0);
+        GuiView::getGuiView()->showBuildingPickerMenu(0);
         break;
     case Qt::Key_F2:
         GuiView::getGuiView()->showBuildingPickerMenu(1);
@@ -91,33 +95,37 @@ void GraphicService::setKeyboardShortcuts(int key){
         break;
     case Qt::Key_Down:
     case Qt::Key_S:
-         MapView::getMapView()->translateMeth(-2);
+        MapView::getMapView()->translateMeth(-2);
         break;
     case Qt::Key_Up:
     case Qt::Key_W:
-         MapView::getMapView()->translateMeth(2);
+        MapView::getMapView()->translateMeth(2);
         break;
     case Qt::Key_Right:
     case Qt::Key_D:
-         MapView::getMapView()->translateMeth(1);
+        MapView::getMapView()->translateMeth(1);
         break;
     case Qt::Key_Left:
     case Qt::Key_A:
-         MapView::getMapView()->translateMeth(-1);
+        MapView::getMapView()->translateMeth(-1);
         break;
     case Qt::Key_Plus:
-         MapView::getMapView()->zoomMeth(true);
+        MapView::getMapView()->zoomMeth(true);
         break;
     case Qt::Key_Minus:
-         MapView::getMapView()->zoomMeth(false);
+        MapView::getMapView()->zoomMeth(false);
         break;
     case Qt::Key_G:
         MapView::getMapView()->toggleGrid();
         break;
+    case Qt::Key_F:
+        MapView::getMapView()->toggleAllBuildingRadius();
+        break;
     }
 }
 
-QColor GraphicService::getColorFromBuildingCategory(int cat){
+QColor GraphicService::getColorFromBuildingCategory(int cat)
+{
     QColor color;
     switch(cat)
     {
@@ -157,8 +165,10 @@ QColor GraphicService::getColorFromBuildingCategory(int cat){
 }
 
 
-GraphicService* GraphicService::getGraphicService(QString file){
-    if(GraphicService::graphicServiceInstance==nullptr){
+GraphicService* GraphicService::getGraphicService(QString file)
+{
+    if(GraphicService::graphicServiceInstance==nullptr)
+    {
         GraphicService::graphicServiceInstance=new GraphicService(file);
     }
     return GraphicService::graphicServiceInstance;

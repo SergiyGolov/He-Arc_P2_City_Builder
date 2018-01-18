@@ -31,38 +31,24 @@ public:
     void setText(QString newText){this->text->setText(newText);}
     int getUniqueBId(){return uniqueBId;}
     void setUniqueBId(int uBiD){this->uniqueBId=uBiD;}
-
     void setMainTile(int x,int y){this->mainTileX=x;this->mainTileY=y;}
     void setBuildingWidth(int l){this->buildingWidth=l;}
     void setBuildingHeight(int h){this->buildingHeight=h;}
-
     int getBuildingWidth(){return buildingWidth;}
     int getBuildingHeight(){return buildingHeight;}
     int getMainTileX(){return mainTileX;}
     int getMainTileY(){return mainTileY;}
     int getPixelWidth(){return rect().size().width();}
-
     QGraphicsPixmapItem* getPix(){return buildImage;}
-
-
     static void setScene(QGraphicsScene *scene);
-
     void addPixMove(QGraphicsPixmapItem *pix);
-
     void removePixMove();
-
     void addPix(QGraphicsPixmapItem *pix);
-
     void addPixRoad(QGraphicsPixmapItem *pix);
-
-
     void removePix();
-
     bool isOccupied(){return bOccupied;}
     void setOccupied(bool b){bOccupied=b;}
-
     void setPixOpacity(double op){if(buildImage!=nullptr)buildImage->setOpacity(op);}
-
 
 private:
     bool bOccupied;

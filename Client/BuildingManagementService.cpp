@@ -25,6 +25,7 @@ BuildingManagementService::BuildingManagementService()
     bAverageHappiness = true;
 
     vectorBuildings = new QVector<Building*>();
+     vectorEffectBuildings = new QVector<Building*>();
 }
 
 //methods
@@ -226,4 +227,15 @@ int BuildingManagementService::getVectorId(int uid,QVector<Building*> *v)
     }
 
     return idInVector;
+}
+
+QVector<Building*> *BuildingManagementService::getEffectBuildings()
+{
+    vectorEffectBuildings->clear();
+    for(int i = 0; i < vectorBuildings->size(); i++)
+    {
+        if(ConstantBuilding::get(vectorBuildings->at(i)->getId()).getRadius()>1)vectorEffectBuildings->append(vectorBuildings->at(i));
+    }
+    return vectorEffectBuildings;
+
 }
