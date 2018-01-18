@@ -5,5 +5,6 @@
         <file>img/easy.png</file>
         <file>img/medium.png</file>
         <file>img/hard.png</file>
+        <file>img/sandbox.png</file>
     </qresource>
 </RCC>

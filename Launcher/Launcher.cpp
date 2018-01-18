@@ -19,6 +19,7 @@
 #include <QSoundEffect>
 #include <QSpinBox>
 #include <QVBoxLayout>
+#include <QTime>
 
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
@@ -50,10 +51,10 @@ Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
     });
 
 
-    sbSeed->setValue(qrand() % randomRange);
+
     connect(pRandSeed, &QPushButton::clicked, [=]()
     {
-        sbSeed->setValue(qrand() % randomRange);
+        sbSeed->setValue(QTime::currentTime().msec() * 10 + QTime::currentTime().second() % 10);
     });
 
     connect(sbMapSize, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Launcher::updatePreview);
@@ -137,11 +138,13 @@ void Launcher::displayWidgets()
     sbSeed = new QSpinBox(this);
     sbSeed->setGeometry(1150, 150, 100, 40);
     sbSeed->setMinimum(0);
+    sbSeed->setValue(QTime::currentTime().msec() * 10 + QTime::currentTime().second() % 10);
     sbSeed->setMaximum(10000);
     sbSeed->setFont(QFont(QString("Segoe UI Semilight"),18));
     sbSeed->setStyleSheet("QSpinBox { size : 14; }");
     cbDifficulty = new QComboBox(this);
     cbDifficulty->setGeometry(1100, 200, 150, 40);
+    cbDifficulty->addItem(QIcon(":img/sandbox.png"), "Sandbox");
     cbDifficulty->addItem(QIcon(":img/easy.png"), "Easy");
     cbDifficulty->addItem(QIcon(":img/medium.png"), "Medium");
     cbDifficulty->addItem(QIcon(":img/hard.png"), "Hard");
@@ -297,17 +300,15 @@ void Launcher::play()
     if(infogame.exists())
     {
         game.append(" ");
-
-
         if(!pNewGame->isEnabled())
         {
             game.append("size=");
             game.append(QString::number(sbMapSize->value()));
             game.append(" difficulty=");
-            game.append(cbDifficulty->currentText());
+            game.append(QString::number(cbDifficulty->currentIndex()));
             game.append(" seed=");
             game.append(QString::number(sbSeed->value()));
-            game.append(" name\"");
+            game.append(" name=\"");
             game.append(leGameName->text());
             game.append("\"");
         }
