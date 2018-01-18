@@ -49,7 +49,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     prevRect=nullptr;
     roadDir=0;
     lastTilePix=nullptr;
-
+    bRadius=false;
 
     //the purpose of this timer is to blink in red if the user try to add a building without an adjacent road
     timer=new QTimer(this);
@@ -80,6 +80,7 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     tempRemoveList=new QList<MapTile*>();
     buildPixList=new QList<QGraphicsPixmapItem*>();
     neighbourList=new QList<MapTile*>();
+    radiusList=new QList<QGraphicsEllipseItem*>();
 
     nbTiles=256;
     lastbId=-1;
@@ -1209,5 +1210,39 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
         scene->addItem(currentBuild);
         tiles->at(x+y*nbTiles)->addPixRoad(currentBuild);
         currentBuild=nullptr;
+    }
+}
+
+void MapView::toggleAllBuildingRadius(){
+    bRadius=!bRadius;
+    if(bRadius){
+
+        QVector<Building*> *vectorEffectBuildings=BuildingManagementService::getBuildingManagementService()->getEffectBuildings();
+        for(int i=0;i<vectorEffectBuildings->size();i++){
+
+            QGraphicsEllipseItem *radius=new QGraphicsEllipseItem;
+            int abuildHeight=ConstantBuilding::get(vectorEffectBuildings->at(i)->getId()).getTileHeight();
+            int abuildWidth=ConstantBuilding::get(vectorEffectBuildings->at(i)->getId()).getTileWidth();
+            int buildSizeOffset=abuildHeight;
+            int aBuildRadius=ConstantBuilding::get(vectorEffectBuildings->at(i)->getId()).getRadius();
+            if(abuildWidth>abuildHeight)buildSizeOffset=abuildWidth;
+            int aCircleWidth=(aBuildRadius+buildSizeOffset-3)*pixelPerTile*2;
+            int x=vectorEffectBuildings->at(i)->getX();
+            int y=vectorEffectBuildings->at(i)->getY();
+            radius->setRect(tiles->at(x+y*nbTiles)->pos().x()-aCircleWidth/2,tiles->at(x+y*nbTiles)->pos().y()-aCircleWidth/2,aCircleWidth,aCircleWidth);
+
+            QColor color=GraphicService::getColorFromBuildingCategory(ConstantBuilding::get(vectorEffectBuildings->at(i)->getId()).getCategory()-1);
+            radius->setPen(QPen(color));
+            radius->setBrush(QBrush(color));
+            radius->setZValue(5);
+            radius->setOpacity(0.35);
+            radiusList->append(radius);
+            scene->addItem(radius);
+        }
+    }else{
+        foreach(QGraphicsEllipseItem* circle,*radiusList){
+            scene->removeItem(circle);
+        }
+        radiusList->clear();
     }
 }

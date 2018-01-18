@@ -48,6 +48,7 @@ public:
     void setCameraY(int camY){this->cameraY=camY;}
     void generateMap();
     void addBuildingFromSave(int id, int x, int y, int angle);
+    void toggleAllBuildingRadius();
 
 private:
     double translateFactor;
@@ -81,30 +82,21 @@ private:
     QColor prevRemoveColor;
     MapTile* lastTilePix;
     Cell* cells;
-
     int roadStartX;
     int roadStartY;
     bool bGrid;
     int buildingCount;
     int roadDir;
     bool falseRoadAdd;
-
     bool checkIfNearRoad(MapTile* tile);
-
     void blinkTileRed(MapTile* tile);
-
     QTimer *timer;
     MapTile* blinkRedTile;
-
-
     bool timeTick;
     int nbTimeTick;
-
     QGraphicsPixmapItem *currentBuild;
-
     bool checkIfNearRoadY(MapTile* tile);
     bool checkIfNearRoadX(MapTile* tile);
-
     void moveAddBuilding(MapTile* rect);
     void moveRemoveBuilding(MapTile *rect);
     void moveAddRoad(MapTile* rect);
@@ -112,22 +104,17 @@ private:
     void finalAddBuilding(MapTile* rect);
     void finalRemove(MapTile* rect);
     void cancelAdd(MapTile* rect);
-
     int countNeighbourRoads(MapTile* tile);
-
     void updateNeighbourRoad(MapTile* tile);
-
-
     void getNeighbours(MapTile* tile);
     QList<MapTile*> *neighbourList;
-
-
     QGraphicsEllipseItem *radiusCircle;
+    bool bRadius;
+    QList<QGraphicsEllipseItem*> *radiusList;
 
 public slots:
     void blinkRedTileSlot();
 protected:
-
     void wheelEvent(QWheelEvent * event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);

@@ -114,6 +114,9 @@ void GraphicService::setKeyboardShortcuts(int key){
     case Qt::Key_G:
         MapView::getMapView()->toggleGrid();
         break;
+     case Qt::Key_F:
+            MapView::getMapView()->toggleAllBuildingRadius();
+        break;
     }
 }
 
