@@ -24,7 +24,6 @@ MainWidget::MainWidget(QWidget *parent): QWidget(parent)
     pal.setColor(QPalette::Background, Qt::black);
     this->setPalette(pal);
 
-
     QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox->addWidget(TopView::getTopView(),1);
     vbox->addWidget( MapView::getMapView(),50);

@@ -30,15 +30,13 @@ MapView* MapView::getMapView()
 
 MapView::MapView(QWidget *parent): QGraphicsView(parent)
 {
-
     currentBuild=nullptr;
     nbTimeTick=0;
-    timeTick=false;
+    bTimeTick=false;
     roadStartX=0;
     roadStartY=0;
     bRoad=false;
     bPicker=false;
-    bClick=false;
     bGrid=false;
     pickerBId=0;
     cameraX=0;
@@ -73,7 +71,6 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
 
     tempRoadList=new QList<MapTile*>();
     tempRemoveList=new QList<MapTile*>();
-    buildPixList=new QList<QGraphicsPixmapItem*>();
     neighbourList=new QList<MapTile*>();
     radiusList=new QList<QGraphicsEllipseItem*>();
 
@@ -86,15 +83,12 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     srand(time(NULL));
     int seed = rand() ;
     RandomService::setSeed(seed);
-
-
 }
 
 /**
 * generateMap
 * generates the tiles for the map from previously given parameters (from a newgame or from a save)
 */
-
 void MapView::generateMap()
 {
 
@@ -103,7 +97,6 @@ void MapView::generateMap()
     tiles->clear();
     tempRoadList->clear();
     tempRemoveList->clear();
-    buildPixList->clear();
     neighbourList->clear();
 
     radiusCircle=new QGraphicsEllipseItem(0,0,1,1);
@@ -1064,7 +1057,7 @@ void MapView::blinkRedTileSlot()
         {
             for(int j=0;j<buildHeight;j++)
             {
-                if(timeTick)
+                if(bTimeTick)
                 {
                     tiles->at((blinkRedTile->getX()+i)+(blinkRedTile->getY()+j)*nbTiles)->setPen(QPen(Qt::red));
                 }
@@ -1077,7 +1070,7 @@ void MapView::blinkRedTileSlot()
                 }
             }
         }
-        timeTick=!timeTick;
+        bTimeTick=!bTimeTick;
     }
     else
     {

@@ -15,8 +15,6 @@ PickerElement::PickerElement(int bId,QString textStr, int left, int top, int wid
     QFont font(QString("Segoe UI Semilight"),10);
     font.setWeight(40);
     this->text->setFont(font);
-
-
     if(PickerElement::scene!=nullptr)PickerElement::scene->addItem(this->text);
 }
 

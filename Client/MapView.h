@@ -64,7 +64,6 @@ private:
     int screenHeight;
     int lastbId;
     int circleWidth;
-    bool bClick;
     bool bPicker;
     int pickerBId;
     QColor prevColor;
@@ -78,7 +77,6 @@ private:
     bool bRoad;
     QList<MapTile*> *tempRoadList;
     QList<MapTile*> *tempRemoveList;
-    QList<QGraphicsPixmapItem*> *buildPixList;
     QColor prevRemoveColor;
     MapTile* lastTilePix;
     Cell* cells;
@@ -92,7 +90,7 @@ private:
     void blinkTileRed(MapTile* tile);
     QTimer *timer;
     MapTile* blinkRedTile;
-    bool timeTick;
+    bool bTimeTick;
     int nbTimeTick;
     QGraphicsPixmapItem *currentBuild;
     void moveAddBuilding(MapTile* rect);

@@ -94,7 +94,6 @@ Params* LoadSaveService::parse(int argc, char *argv[])
 void LoadSaveService::loadGame(QString filename)
 {
 
-
     if(filename.length()>0){
 
         QFile* loadfile = new QFile();
@@ -148,10 +147,9 @@ void LoadSaveService::loadGame(QString filename)
 
         }
 
-
         loadfile->close();
         delete loadfile;
-TickService::getTickService()->triggerUpdate(true);
+        TickService::getTickService()->triggerUpdate(true);
 
     }else{
         MapView::getMapView()->generateMap(); //default map generated
