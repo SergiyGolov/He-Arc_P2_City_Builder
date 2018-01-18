@@ -44,6 +44,7 @@ public:
     ~Launcher();
 
     QLabel* lTitle;                 //Title
+    QLabel* lBackgroundImage;       //Used to display the background image
 
     //Loader/Checker
     QString sPathGameFile;          //Contains the path to gameclient.exe
@@ -53,7 +54,7 @@ public:
     QPushButton* pSetGameFile;      //Opens a filedialog to select gameclient.exe
     QPushButton* pSetSaveFolder;    //Opens a folderdialog to select the saves folder
 
-    //Display
+    //Game settings
     QLabel* lMapSize;               //"New Game" menu labels
     QLabel* lSeed;
     QLabel* lDifficulty;
@@ -63,6 +64,7 @@ public:
     QSpinBox* sbSeed;               //Where a custom map seed can be chosen
     QComboBox* cbDifficulty;        //Allows to chose between 4 different game difficulties
     QLineEdit* leGameName;          //Where the game name should be entered
+    QListWidget* listSaves;         //Saves list
 
     //Map preview
     QPixmap pmPreview;              //Contains the map preview image
@@ -71,7 +73,6 @@ public:
     //Launch menu
     QPushButton* pNewGame;          //Shows the "New game" menu
     QPushButton* pLoadSave;         //Shows the saves list
-    QListWidget* listSaves;         //Saves list
     QPushButton* pPlay;             //Attempts to enter the game
     QProcess process;               //Launches the game client
 

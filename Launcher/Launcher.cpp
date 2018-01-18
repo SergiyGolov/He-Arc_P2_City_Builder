@@ -24,17 +24,8 @@
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
     this->setFixedSize(1280, 720);
-
-    QPixmap pmBackground(":/img/bg_city.jpg");
-    pmBackground = pmBackground.scaled(1280, 720);
-    QPalette palette;
-    palette.setBrush(QPalette::Background, pmBackground);
-    this->setPalette(palette);
-
     displayWidgets();
-
     connections();
-
     setViewMode(false);
     updatePreview();
 }
@@ -46,6 +37,12 @@ Launcher::~Launcher()
 
 void Launcher::displayWidgets()
 {
+    QPixmap pmBackground(":/img/bg_city.jpg");
+    pmBackground = pmBackground.scaled(1280, 720);
+    lBackgroundImage = new QLabel("", this);
+    lBackgroundImage->setGeometry(0,0,1280,720);
+    lBackgroundImage->setPixmap(pmBackground);
+
     lGameFile = new QLabel("", this);
     lGameFile->setGeometry(440,20,800,30);
     lGameFile->setFont(QFont(QString("Segoe UI Semilight"),8));
