@@ -20,11 +20,8 @@
 GuiView::GuiView(QWidget *parent)
     : QGraphicsView(parent)
 {
-
-
     this->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     this->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
-
 
     this->setBackgroundBrush(QBrush(Qt::lightGray));
     scene=new QGraphicsScene(this);
@@ -56,8 +53,6 @@ GuiView::GuiView(QWidget *parent)
         }
         if(cpt>cptMaxCat)cptMaxCat=cpt;
     }
-
-
 
 
     tabText=new std::vector<PickerElement*>(cptMaxCat,nullptr);
@@ -116,8 +111,6 @@ GuiView::GuiView(QWidget *parent)
         tabCat->at(i)->setRect(0,0, tabCat->at(i)->getText().length()*8,20);
         tabCat->at(i)->setBId(-10-i*10);
 
-
-
         this->scene->addItem(tabCat->at(i));
     }
 
@@ -139,12 +132,7 @@ GuiView::GuiView(QWidget *parent)
     remove->setBId(-1);
     this->scene->addItem(remove);
 
-
-
     showBuildingPickerMenu(0);
-
-
-
 
 }
 
@@ -158,7 +146,12 @@ GuiView::~GuiView()
 
 
 
-
+/**
+* showBuildingPickerMenu
+* Show the building picker menu for a specified category
+*
+* @param int tabId : id of the category
+*/
 void GuiView::showBuildingPickerMenu(int tabId)
 {
     for(int i=0;i<9;i++)
@@ -223,9 +216,14 @@ void GuiView::selectBuilding(int n)
 }
 
 
+
+/**
+* mousePressEvent
+* Handles the clicks on a building or a category
+*/
+
 void GuiView::mousePressEvent(QMouseEvent *event)
 {
-
     QList<QGraphicsItem *> itemsList=items(event->pos());
 
     if(!itemsList.isEmpty() && itemsList.size()==3)
@@ -233,7 +231,6 @@ void GuiView::mousePressEvent(QMouseEvent *event)
 
         if(PickerElement *pick=dynamic_cast<PickerElement*>(itemsList.at(itemsList.size()-2)))
         {
-
             if(pick->getBId()>=-1 && (pick->getBId()==-1 || (BuildingManagementService::getBuildingManagementService()->isBuildingAddable(pick->getBId()) && GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ) || ConstantBuilding::get(pick->getBId()).getCategory()<=2) )
             { //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
                 MapView::getMapView()->callPicker(pick->getBId());
@@ -245,11 +242,10 @@ void GuiView::mousePressEvent(QMouseEvent *event)
         }
     }
 }
+
 void GuiView::keyPressEvent(QKeyEvent *event)
 {
     GraphicService::getGraphicService()->setKeyboardShortcuts(event->key());
-
-
 }
 
 GuiView* GuiView::getGuiView()
@@ -262,5 +258,3 @@ GuiView* GuiView::getGuiView()
     return GuiView::guiViewInstance;
 
 }
-
-

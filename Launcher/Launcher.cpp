@@ -231,7 +231,7 @@ void Launcher::updatePreview()
 void Launcher::setGameFile()
 {
     sPathGameFile.clear();
-    sPathGameFile.append(QFileDialog::getOpenFileName(this, tr("Select the game file"), QDir::currentPath(), QString("CityBuilder.exe")));
+    sPathGameFile.append(QFileDialog::getOpenFileName(this, tr("Select the game file"), QDir::currentPath(), QString("CityBuilder.exe citybuilder")));
     updateSaves();
     updateInfos();
 }

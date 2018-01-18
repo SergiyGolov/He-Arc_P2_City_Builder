@@ -134,5 +134,6 @@ void TickService::triggerUpdate(bool everything)
 
     TopView::getTopView()->update();
 
-    GuiView::getGuiView()->showBuildingPickerMenu(GuiView::getGuiView()->getCurrentTabId()); // to update building that we can afford (if they are too expensive their names become red)
+    //Cause HUGE lags every ticks...
+    //GuiView::getGuiView()->showBuildingPickerMenu(GuiView::getGuiView()->getCurrentTabId()); // to update building that we can afford (if they are too expensive their names become red)
 }

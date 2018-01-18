@@ -209,8 +209,6 @@ void TopView::update()
     setHappinessDelta(TickService::getTickService()->getHappinessDelta());
     setMoneyDelta(TickService::getTickService()->getMoneyDelta());
     seed->setText(QString("Seed : %1").arg(RandomService::getSeed()));
-
-
 }
 
 QString TopView::deltaFormat(double delta)
