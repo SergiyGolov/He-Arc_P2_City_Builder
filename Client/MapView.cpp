@@ -287,6 +287,7 @@ void MapView::mousePressEvent(QMouseEvent *event)
             {
                 cancelAdd(rect);
             }else if(event->button()==Qt::LeftButton){
+                radiusCircle->setVisible(false);
                 if(bRoad){
                     finalAddRoad(rect);
                 }else if(bPicker){
@@ -296,6 +297,8 @@ void MapView::mousePressEvent(QMouseEvent *event)
                     }else{
                         finalRemove(rect);
                     }
+                }else{
+                    showRadius(rect);
                 }
             }
         }
@@ -435,45 +438,17 @@ void MapView::moveAddBuilding(MapTile *rect){
 
             radiusCircle->setVisible(true);
             radiusCircle->setRect(rect->pos().x()-circleWidth/2,rect->pos().y()-circleWidth/2,circleWidth,circleWidth);
-            if(lastbId!=pickerBId){
-                int buildSizeOffset=buildHeight;
-                if(buildWidth>buildHeight)buildSizeOffset=buildWidth;
-                circleWidth=(buildRadius+buildSizeOffset-3)*pixelPerTile*2;
+
+            int buildSizeOffset=buildHeight;
+            if(buildWidth>buildHeight)buildSizeOffset=buildWidth;
+            circleWidth=(buildRadius+buildSizeOffset-3)*pixelPerTile*2;
 
 
-                radiusCircle->setPen(QPen(color));
-                radiusCircle->setBrush(QBrush(color));
-                lastbId=pickerBId;
-            }
-
-            //            QRadialGradient radialGrad;
-
-            //               radialGrad.setColorAt(0, color);
-
-            //               radialGrad.setColorAt(1, Qt::white);
-
-            //               radialGrad.setCenter(mapFromScene(rect->pos().toPoint()));
-
-            //               radialGrad.setRadius(circleWidth);
+            radiusCircle->setPen(QPen(color));
+            radiusCircle->setBrush(QBrush(color));
 
 
-
-            // radiusCircle->setBrush(radialGrad);
-
-            //radiusCircle->setOpacity(0.5);
-
-            //            for(int i=-buildRadius;i<buildRadius+buildWidth;i++)
-            //            {
-            //                for(int j=-buildRadius;j<buildRadius+buildHeight;j++)
-            //                {
-            //                    if(rect->getX()+i>=0 && rect->getY()+j>=0 && rect->getX()+i<nbTiles && rect->getY()+j<nbTiles)
-            //                    {
-            //                        tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles)->setPen(color);
-            //                        radiusTilesList->append(tiles->at((rect->getX()+i)+(rect->getY()+j)*nbTiles));
-            //                    }
-            //                }
-            //            }
-
+            lastbId=pickerBId;
         }
 
         if(prevRect!=rect && !bRoad)
@@ -1216,24 +1191,12 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle){
 void MapView::toggleAllBuildingRadius(){
     bRadius=!bRadius;
     if(bRadius){
-
+        radiusCircle->setVisible(false);
         QVector<Building*> *vectorEffectBuildings=BuildingManagementService::getBuildingManagementService()->getEffectBuildings();
         for(int i=0;i<vectorEffectBuildings->size();i++){
 
             QGraphicsEllipseItem *radius=new QGraphicsEllipseItem;
-            int abuildHeight=ConstantBuilding::get(vectorEffectBuildings->at(i)->getId()).getTileHeight();
-            int abuildWidth=ConstantBuilding::get(vectorEffectBuildings->at(i)->getId()).getTileWidth();
-            int buildSizeOffset=abuildHeight;
-            int aBuildRadius=ConstantBuilding::get(vectorEffectBuildings->at(i)->getId()).getRadius();
-            if(abuildWidth>abuildHeight)buildSizeOffset=abuildWidth;
-            int aCircleWidth=(aBuildRadius+buildSizeOffset-3)*pixelPerTile*2;
-            int x=vectorEffectBuildings->at(i)->getX();
-            int y=vectorEffectBuildings->at(i)->getY();
-            radius->setRect(tiles->at(x+y*nbTiles)->pos().x()-aCircleWidth/2,tiles->at(x+y*nbTiles)->pos().y()-aCircleWidth/2,aCircleWidth,aCircleWidth);
-
-            QColor color=GraphicService::getColorFromBuildingCategory(ConstantBuilding::get(vectorEffectBuildings->at(i)->getId()).getCategory()-1);
-            radius->setPen(QPen(color));
-            radius->setBrush(QBrush(color));
+            setRadiusCircle(radius,vectorEffectBuildings->at(i)->getId(),vectorEffectBuildings->at(i)->getX(),vectorEffectBuildings->at(i)->getY());
             radius->setZValue(5);
             radius->setOpacity(0.35);
             radiusList->append(radius);
@@ -1245,4 +1208,30 @@ void MapView::toggleAllBuildingRadius(){
         }
         radiusList->clear();
     }
+}
+
+void MapView::showRadius(MapTile* rect){
+    if(rect ->isOccupied() && rect->getBId()!=-10 && ConstantBuilding::get(rect->getBId()).getRadius()>1){
+        radiusCircle->setVisible(true);
+        setRadiusCircle(radiusCircle,rect->getBId(),rect->getMainTileX(),rect->getMainTileY());
+    }
+}
+
+void MapView::setRadiusCircle(QGraphicsEllipseItem* radius,int bId,int x,int y){
+    int abuildHeight=ConstantBuilding::get(bId).getTileHeight();
+    int abuildWidth=ConstantBuilding::get(bId).getTileWidth();
+    int buildSizeOffset=abuildHeight;
+    int aBuildRadius=ConstantBuilding::get(bId).getRadius();
+    if(abuildWidth>abuildHeight)buildSizeOffset=abuildWidth;
+    int aCircleWidth=(aBuildRadius+buildSizeOffset-3)*pixelPerTile*2;
+
+    radius->setRect(tiles->at(x+y*nbTiles)->pos().x()-aCircleWidth/2,tiles->at(x+y*nbTiles)->pos().y()-aCircleWidth/2,aCircleWidth,aCircleWidth);
+
+    if(abuildWidth>abuildHeight)buildSizeOffset=abuildWidth;
+    circleWidth=(aBuildRadius+buildSizeOffset-3)*pixelPerTile*2;
+
+    QColor color=GraphicService::getColorFromBuildingCategory(ConstantBuilding::get(bId).getCategory()-1);
+
+    radius->setPen(QPen(color));
+    radius->setBrush(QBrush(color));
 }

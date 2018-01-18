@@ -111,6 +111,8 @@ private:
     QGraphicsEllipseItem *radiusCircle;
     bool bRadius;
     QList<QGraphicsEllipseItem*> *radiusList;
+    void showRadius(MapTile* rect);
+    void setRadiusCircle(QGraphicsEllipseItem* radius,int bId,int x,int y);
 
 public slots:
     void blinkRedTileSlot();
