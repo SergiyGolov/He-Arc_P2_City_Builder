@@ -95,8 +95,6 @@ private:
     bool timeTick;
     int nbTimeTick;
     QGraphicsPixmapItem *currentBuild;
-    bool checkIfNearRoadY(MapTile* tile);
-    bool checkIfNearRoadX(MapTile* tile);
     void moveAddBuilding(MapTile* rect);
     void moveRemoveBuilding(MapTile *rect);
     void moveAddRoad(MapTile* rect);
