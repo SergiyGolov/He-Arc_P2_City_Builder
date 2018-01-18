@@ -14,7 +14,7 @@
 void LoadSaveService::loadGameUI()
 {
 
-    QString filename = QFileDialog::getOpenFileName(nullptr, tr("Load file"), QString("."), tr("City Builder Saves (*.cbsave *.save *.cb *.json)"));
+    QString filename = QFileDialog::getOpenFileName(nullptr, tr("Load file"), QString("."), tr("City Builder Saves (*.cbsave)"));
     if(filename.count()>0){
 
         GraphicService::getGraphicService()->enableLoadingMessage();
@@ -27,8 +27,8 @@ void LoadSaveService::loadGameUI()
 void LoadSaveService::saveGameUI()
 {
     QFile* savefile = new QFile();
-    QString filter = tr("City Builder Saves (*.cbsave)");
-    QString filename = QFileDialog::getSaveFileName(nullptr, tr("Save file"), QString("."),tr("City Builder Saves (*.cbsave *.save *.cb *.json)"),&filter );
+
+    QString filename = QFileDialog::getSaveFileName(nullptr, tr("Save file"), QString("."),tr("City Builder Saves (*.cbsave)"));
     if(filename.count()>0){
         savefile->setFileName(filename);
         savefile->open(QIODevice::WriteOnly);
