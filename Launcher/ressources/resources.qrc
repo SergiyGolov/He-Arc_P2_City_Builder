@@ -6,5 +6,6 @@
         <file>img/medium.png</file>
         <file>img/hard.png</file>
         <file>img/sandbox.png</file>
+        <file>img/iconCB.png</file>
     </qresource>
 </RCC>

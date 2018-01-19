@@ -51,6 +51,7 @@ public:
     void setPixOpacity(double op){if(buildImage!=nullptr)buildImage->setOpacity(op);}
     void setDelimiterRect(int x,int y,int w,int h);
     void unsetDelimiterRect();
+    void setPixZValue(double z){if(buildImage!=nullptr)buildImage->setZValue(z);}
 
 private:
     bool bOccupied;

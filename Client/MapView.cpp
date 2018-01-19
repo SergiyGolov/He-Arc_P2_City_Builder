@@ -101,7 +101,7 @@ void MapView::generateMap()
 
     radiusCircle=new QGraphicsEllipseItem(0,0,1,1);
     radiusCircle->setVisible(false);
-    radiusCircle->setZValue(5);
+    radiusCircle->setZValue(257);
     radiusCircle->setOpacity(0.5);
 
     scene->addItem(radiusCircle);
@@ -402,9 +402,10 @@ void MapView::moveAddBuilding(MapTile *rect)
         if(currentBuild==nullptr && pixExists)
         {
             QTransform trans;
+             trans.translate(256/nbTiles*pixelPerTile*0.0025,-256/nbTiles*pixelPerTile*0.005);
             trans.rotate(-45);
-            trans.scale(1.2*0.05*256/nbTiles,1.6*0.05*256/nbTiles);
-            trans.translate(0,-256/nbTiles*pixelPerTile*0.02);
+            trans.scale(1.2*0.04*256/nbTiles,1.6*0.04*256/nbTiles);
+
             currentBuild=new QGraphicsPixmapItem( QPixmap(pixFilePath));
 
             currentBuild->setOpacity(0.65);
@@ -644,18 +645,7 @@ void MapView::finalAddBuilding(MapTile* rect)
             if(currentBuild!=nullptr)
             {
                 rect->addPix(currentBuild);
-                //test z order
-                int i=1;
 
-                while(tiles->at(rect->getX()+i+rect->getY()*nbTiles)->getBId()==1 ){
-                    tiles->at(rect->getX()+i+rect->getY()*nbTiles)->setZValue(++i);
-                    qDebug()<<i;
-                }
-
-                i=1;
-                while(tiles->at(rect->getX()+(rect->getY()+i)*nbTiles)->getBId()==1){
-                    tiles->at(rect->getX()+(rect->getY()+i)*nbTiles)->setZValue(++i);
-                }
                 currentBuild=nullptr;
             }
 
@@ -1373,7 +1363,7 @@ void MapView::toggleAllBuildingRadius()
 
             QGraphicsEllipseItem *radius=new QGraphicsEllipseItem;
             setRadiusCircle(radius,vectorEffectBuildings->at(i)->getId(),vectorEffectBuildings->at(i)->getX(),vectorEffectBuildings->at(i)->getY());
-            radius->setZValue(5);
+            radius->setZValue(257);
             radius->setOpacity(0.35);
             radiusList->append(radius);
             scene->addItem(radius);
