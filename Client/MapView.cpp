@@ -411,7 +411,7 @@ void MapView::moveAddBuilding(MapTile *rect)
         if(currentBuild==nullptr && pixExists)
         {
             QTransform trans;
-             trans.translate(256/nbTiles*pixelPerTile*0.0025,-256/nbTiles*pixelPerTile*0.005);
+            trans.translate(256/nbTiles*pixelPerTile*0.0025,-256/nbTiles*pixelPerTile*0.005);
             trans.rotate(-45);
             trans.scale(1.2*0.04*256/nbTiles,1.6*0.04*256/nbTiles);
 

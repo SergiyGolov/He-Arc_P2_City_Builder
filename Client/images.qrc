@@ -7,5 +7,7 @@
         <file>ressources/routeX.png</file>
         <file>ressources/iconCB.png</file>
         <file>ressources/clouds.jpg</file>
+        <file>ressources/remove.png</file>
+        <file>ressources/roadIcon.png</file>
     </qresource>
 </RCC>
