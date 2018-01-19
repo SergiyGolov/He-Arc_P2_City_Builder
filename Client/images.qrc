@@ -6,5 +6,6 @@
         <file>ressources/routeT.png</file>
         <file>ressources/routeX.png</file>
         <file>ressources/iconCB.png</file>
+        <file>ressources/clouds.jpg</file>
     </qresource>
 </RCC>
