@@ -117,9 +117,8 @@ GuiView::GuiView(QWidget *parent)
     road=new PickerElement();
     road->setText("Road [Q]");
     road->setBId(0);
-
-    road->moveThis(3,150);
-    road->setRect(0,0,55,20);
+    road->moveThis(3,tab->boundingRect().height()-70);
+    road->setRect(0,0,80,75);
 
     this->scene->addItem(road);
 
@@ -127,10 +126,22 @@ GuiView::GuiView(QWidget *parent)
     remove=new PickerElement();
 
     remove->setText("Remove [R]");
-    remove->moveThis(screenWidth-110,150);
-    remove->setRect(0,0,70,20);
+    remove->moveThis(screenWidth-110,tab->boundingRect().height()-70);
+    remove->setRect(0,0,80,75);
     remove->setBId(-1);
     this->scene->addItem(remove);
+
+
+    QGraphicsPixmapItem *removePix=new QGraphicsPixmapItem(QPixmap(":ressources/remove.png")); //https://www.freepik.com
+    scene->addItem(removePix);
+    removePix->setZValue(5);
+    removePix->moveBy(screenWidth-105,tab->boundingRect().height()-55);
+
+    QGraphicsPixmapItem *roadPix=new QGraphicsPixmapItem(QPixmap(":ressources/roadIcon.png")); //https://www.freepik.com
+    scene->addItem(roadPix);
+    roadPix->setZValue(5);
+    roadPix->moveBy(0,tab->boundingRect().height()-55);
+
 
     showBuildingPickerMenu(0);
 
@@ -226,10 +237,10 @@ void GuiView::mousePressEvent(QMouseEvent *event)
 {
     QList<QGraphicsItem *> itemsList=items(event->pos());
 
-    if(!itemsList.isEmpty() && itemsList.size()==3)
+    if(!itemsList.isEmpty() && itemsList.size()>1)
     {
 
-        if(PickerElement *pick=dynamic_cast<PickerElement*>(itemsList.at(itemsList.size()-2)))
+        if(PickerElement *pick=dynamic_cast<PickerElement*>(itemsList.at(1)))
         {
             if(pick->getBId()>=-1 && (pick->getBId()==-1 || (BuildingManagementService::getBuildingManagementService()->isBuildingAddable(pick->getBId()) && GameManagementService::getGameManagementService()->getMoney()-ConstantBuilding::get(pick->getBId()).getPrice()>=0 ) || ConstantBuilding::get(pick->getBId()).getCategory()<=2) )
             { //test if we have enough money to add the building or if we want to add a house/townhall (they are free)
