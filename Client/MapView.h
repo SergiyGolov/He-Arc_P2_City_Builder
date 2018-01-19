@@ -18,6 +18,7 @@
 #include <QGraphicsView>
 #include <Client/MapTile.h>
 #include <QList>
+#include <QIcon>
 
 class QTimer;
 class GuiView;

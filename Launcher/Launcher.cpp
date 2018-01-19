@@ -24,6 +24,8 @@
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
     this->setFixedSize(1280, 720);
+    this->setWindowIcon(QIcon(":/img/iconCB.png"));
+    this->setWindowTitle("City Builder Launcher");
     displayWidgets();
     connections();
     setViewMode(false);
@@ -37,7 +39,7 @@ Launcher::~Launcher()
 
 void Launcher::displayWidgets()
 {
-    QPixmap pmBackground(":/img/bg_city.jpg");
+    QPixmap pmBackground(":/img/bg_city.jpg"); //source : https://pixabay.com/fr/hong-kong-chine-port-ville-2940250/
     pmBackground = pmBackground.scaled(1280, 720);
     lBackgroundImage = new QLabel("", this);
     lBackgroundImage->setGeometry(0,0,1280,720);
@@ -315,7 +317,12 @@ void Launcher::play()
         else
         {
             if(listSaves->currentItem() != nullptr)
+            {
+                game.append('"');
                 game.append(listSaves->currentItem()->text());
+                game.append('"');
+            }
+
         }
         process.close();
         qDebug() << "starting :" << game;

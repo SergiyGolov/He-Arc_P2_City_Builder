@@ -5,8 +5,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Launcher w;
-
-    w.show();
+    Launcher l;
+    l.show();
     return a.exec();
 }
