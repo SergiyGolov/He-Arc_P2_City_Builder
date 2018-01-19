@@ -19,6 +19,7 @@ MapTile::MapTile(int x, int y, int left, int top, int width, int height,QGraphic
     bPix=false;
     bOccupied=false;
     buildImage=nullptr;
+    delimiterRect=nullptr;
 }
 
 MapTile::~MapTile()
@@ -103,11 +104,27 @@ void MapTile::removePix()
 {
     if(buildImage!=nullptr && bPix)
     {
-
         bPix=false;
         MapTile::scene->removeItem(buildImage);
 
         delete buildImage;
         buildImage=nullptr;
+    }
+}
+
+void MapTile::setDelimiterRect(int x,int y,int w,int h)
+{
+    delimiterRect=new QGraphicsRectItem(x,y,w,h);
+    delimiterRect->setPen(QPen(Qt::black));
+    delimiterRect->setVisible(true);
+    delimiterRect->setZValue(4);
+    scene->addItem(delimiterRect);
+}
+void MapTile::unsetDelimiterRect()
+{
+    if(delimiterRect!=nullptr)
+    {
+        scene->removeItem(delimiterRect);
+        delete delimiterRect;
     }
 }

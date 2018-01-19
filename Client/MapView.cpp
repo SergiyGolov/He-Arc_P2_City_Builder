@@ -577,7 +577,7 @@ void MapView::finalRemove(MapTile* rect)
     if(initialBid!=-10)
     {
         if(rect->getUniqueBId()!=-10)BuildingManagementService::getBuildingManagementService()->removeBuilding(rect->getUniqueBId());
-
+        tiles->at((rect->getMainTileX())+(rect->getMainTileY())*nbTiles)->unsetDelimiterRect();
         for(int i=0;i<rect->getBuildingWidth();i++)
         {
             for(int j=0;j<rect->getBuildingHeight();j++)
@@ -654,6 +654,7 @@ void MapView::finalAddBuilding(MapTile* rect)
             if(pickerBId!=0)
             {
                 buildingCount++;
+                rect->setDelimiterRect(rect->pos().x(),rect->pos().y(),buildWidth*pixelPerTile,buildHeight*pixelPerTile);
                 for(int i=0;i<buildWidth;i++)
                 {
                     for(int j=0;j<buildHeight;j++)
@@ -902,11 +903,11 @@ void MapView::toggleGrid()
         {
             if(bGrid)
             {
-                tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::transparent));
+                if(!tiles->at((i)+(j)*nbTiles)->isOccupied())tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::transparent));
             }
             else if(!bGrid)
             {
-                tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::black));
+                 if(!tiles->at((i)+(j)*nbTiles)->isOccupied())tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::black));
             }
         }
     }
@@ -1388,7 +1389,7 @@ void MapView::toggleAllBuildingRadius()
 */
 void MapView::showRadius(MapTile* rect)
 {
-    if(rect ->isOccupied() && rect->getBId()!=-10 && ConstantBuilding::get(rect->getBId()).getRadius()>1)
+    if(!bRadius&&rect ->isOccupied() && rect->getBId()!=-10 && ConstantBuilding::get(rect->getBId()).getRadius()>1)
     {
         radiusCircle->setVisible(true);
         setRadiusCircle(radiusCircle,rect->getBId(),rect->getMainTileX(),rect->getMainTileY());

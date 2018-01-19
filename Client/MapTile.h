@@ -49,6 +49,8 @@ public:
     bool isOccupied(){return bOccupied;}
     void setOccupied(bool b){bOccupied=b;}
     void setPixOpacity(double op){if(buildImage!=nullptr)buildImage->setOpacity(op);}
+    void setDelimiterRect(int x,int y,int w,int h);
+    void unsetDelimiterRect();
 
 private:
     bool bOccupied;
@@ -56,7 +58,7 @@ private:
     int y;
     int bId;
     int uniqueBId;
-
+    QGraphicsRectItem *delimiterRect;
     static QGraphicsScene *scene;
     QGraphicsSimpleTextItem* text;
 
