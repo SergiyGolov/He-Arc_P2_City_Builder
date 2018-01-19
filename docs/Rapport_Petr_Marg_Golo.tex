@@ -1,28 +1,28 @@
 \documentclass[a4paper,10pt,openany,oneside]{book}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[francais]{babel}
-\usepackage[hidelinks]{hyperref}
-\usepackage{wrapfig}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{listings} %Pour le code
+
+\usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[francais]{babel}
 \usepackage{changepage}
 \usepackage{color}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm,headsep=1cm]{geometry}
 \usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm,headsep=1cm]{geometry}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{listings} %Pour le code
+\usepackage{wrapfig}
+
 \setitemize{topsep=5pt}
+\setlength{\parindent}{1em}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \definecolor{myblue}{rgb}{0,0,1}
-
-
 
 \lstset{frame=tb,
   language=C++,
@@ -44,7 +44,7 @@
 }
 
 \begin{document}
-\title{Rapport P2 Qt}
+\title{City Builder}
 \author{Damian Petroff, Sergiy Goloviatinski, Raphaël Margueron}
 \maketitle
 
@@ -52,9 +52,25 @@
 \thispagestyle{empty}
 
 
-\chapter{Introduction}
+\chapter*{Introduction}
 \setcounter{page}{1}
 \thispagestyle{headings}
+\paragraph{}
+L'industrie vidéo-ludique est aujourd'hui un marché grandissant de manière notoire et notre intérêt pour les diverses facettes que ce domaine propose a inévitablement influencé notre choix.
+En effet, la conception d'un jeu-vidéo n'est de loin pas une mince affaire. Dans ce rapport nous allons présenter comment nous avons relevé le défi et notre approche sur sa conception et sa réalisation.
+
+Il est nécessaire de prendre note qu'aucun de nous trois n'avait réalisé ni même conceptualisé de jeu-vidéo auparavant, malgré cela, c'est un domaine très intéressant et très complet qui laisse part à la créativité autant sur le plan artistique que scientifique du fait de la diversité des corps de métier nécessaires à l'élaboration d'un tel produit. Le dessin, la sculpture, l'architecture, la musique, la littérature et le cinéma sont quelques uns des arts présents dans la conception d'un jeu-vidéo et nous sommes trois développeurs possédant peu de connaissances en création de contenu audiovisuel, il est donc évident que nous nous sommes orienté vers un jeu de type gestion, qui contient relativement beaucoup d'algorithmie.
+
+\paragraph{Vers un city builder :}
+L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru appropriée, chacun de nous connait un tant soit peu le sujet, ayant joué à des grosses licences comme "\textit{Cities: Skylines}" de Colossal Order\footnote{Colossal Order : \url{http://www.colossalorder.com/}} ou encore "\textit{SimCity}" de Electronics Arts\footnote{Electronics Arts : \url{https://www.ea.com/fr-fr}} pour ne citer qu'elles, et ce type de jeu de gestion laisse place à une certaine liberté de contenu (comme les bâtiments disponibles, les ressources nécessaires, etc.). Nous avons donc pris la décision de créer un produit de la même nature, en version extrêmement plus modeste évidement.
+
+\begin{center}
+	\includegraphics[scale=0.2]{img_intro_cscity.jpg}
+\end{center}
+Le but principal du projet est de produire une 
+
+
+
 
 \chapter{Analyse}
 \thispagestyle{headings}
