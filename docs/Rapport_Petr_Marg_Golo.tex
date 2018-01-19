@@ -53,12 +53,15 @@
 \maketitle
 \end{titlepage}
 
-\tableofcontents
+
 \thispagestyle{empty}
+\pagebreak
 
 \chapter*{Abstract}
 \thispagestyle{empty}
 Abstract content
+
+\tableofcontents
 
 \chapter*{Introduction}
 \setcounter{page}{1}
@@ -80,32 +83,44 @@ L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru
 \pagebreak
 \thispagestyle{empty}
 \paragraph{}
-Le but principal du projet est de produire un city builder avec des interactions basiques, un certain panel d'actions possibles rendant le jeu "jouable" et significativement unique. L'application doit être stable et répondre aux spécifications (cf. section 1.1 Spécifications). Le joueur a la possibilités de commencer une nouvelle partie avec des paramètres personnalisés et de reprendre un partie déjà commencée (principe de sauvegarde).
+Le but principal du projet est de produire un city builder avec des interactions basiques, un certain panel d'actions possibles rendant le jeu "jouable" et significativement unique. L'application doit être stable et répondre aux spécifications (cf. section 1.1 Spécifications). Le joueur a la possibilités de commencer une nouvelle partie avec des paramètres personnalisés et de reprendre un partie déjà commencée (principe de sauvegarde). L'application doit être codée en C++ via le framework Qt qui permet de faciliter l'affichage et la gestion des éléments graphiques et des conteneurs. Les éléments du framework Qt appris au cours aident à concevoir les éléments graphiques principaux nécessaires.
+\paragraph{}
+Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation des différentes facette du projet. En premier lieu nous analyserons les besoins du projet,  
 
-\chapter{Analyse}
+\chapter{Analyse des besoins}
 \thispagestyle{headings}
+\section{Exigences fonctionnelles}
+\subsection{Spécifications}
+\section{Exigences non-fonctionnelles}
+\subsection{Portabilité}
+\subsection{Ergonomie}
+\subsection{Efficience}
+\subsubsection{Temps de réponse}
+\subsubsection{Utilité des ressources}
+\subsection{Maintenabilité}
+\section{Cas d'utilisation}
 
-\section{Spécifications}
 
 \chapter{Conception}
 \thispagestyle{headings}
+\section{Stratégie de conception}
+\subsection{Planification initiale}
 
-\section{Cas d'utilisation}
+\section{Architecture logicielle}
+\subsection{Schéma procédural}
+\subsection{Diagramme de classe}
+\subsection{Convention de codage}
 
-\section{Planification initiale}
-
-\section{Planification finale}
-
-\section{Diagramme de classe}
-
-\section{Schéma procédural d'utilisation}
-
-\chapter{Développement}
-\thispagestyle{headings}
-\section{Interface graphique}
-L'interface graphique se divise en 3 parties:
-\begin{itemize}
-\item $TopView$ : Vue fixe se trouvant toujours en haut de l'interface et qui contient:
+\section{Interface utilisateur}
+\subsection{Launcher}
+$Insérer une image$
+\subsubsection{Interactions et raccourcis}
+\subsubsection{Esthétique}
+\subsection{Client}
+$Insérer une image$
+\paragraph{}
+L'interface graphique se divise en 3 parties:\\\\
+$TopView$ : Vue fixe se trouvant toujours en haut de l'interface et qui contient:
 \begin{itemize}
 \item L'heure et la date dans le jeu
 \item Des indicateurs d'argent, de bonheur et de population disponible pour le joueur avec le delta entre chaque seconde
@@ -115,7 +130,7 @@ L'interface graphique se divise en 3 parties:
 \item Des boutons pour charger,sauvegarder et quitter la partie
 \item La valeur de la seed utilisée pour générer la carte
 \end{itemize}
-\item $MapView$ : Contient le terrain de jeu, les différents raccourcis claviers (même quand cette vue n'a pas le focus) et actions de souris qui sont dans son focus influencent sur cette vue:
+$MapView$ : Contient le terrain de jeu, les différents raccourcis claviers (même quand cette vue n'a pas le focus) et actions de souris qui sont dans son focus influencent sur cette vue:
 \begin{itemize}
 \item Translation dans la vue (Raccourcis: A S D W ou flèches directionnelles)
 \item Zoom dans la vue (Raccourcis : + - ou molette de la souris)
@@ -123,16 +138,25 @@ L'interface graphique se divise en 3 parties:
 \item Afficher/masquer les rayons d'effets de tous les bâtiments qui en ont un (Raccourci: F)
 \item Afficher le rayon d'effet d'un bâtiment s'il en a un quand un clique dessus
 \end{itemize}
-\item $GuiView$ : Vue contenant les boutons permettant de:
+$GuiView$ : Vue contenant les boutons permettant de:
 \begin{itemize}
 \item Choisir la catégorie de bâtiment à poser (Raccourcis clavier disponible depuis n'importe quelle vue: F1 à F9)
 \item Les différents bâtiments à poser selon la catégorie choisie (Raccourcis claviers de 1 à 0)
 \item Un bouton pour poser des routes disponibles dans toutes les catégories (Raccourci: Q)
 \item Un bouton pour supprimer un bâtiment/route disponible dans toutes les catégories (Raccourci: R)
 \end{itemize}
-\end{itemize}
+\subsubsection{Interactions et raccourcis}
 
-\section{Génération des sols}
+\subsubsection{Esthétique}
+
+
+\chapter{Développement et réalisation}
+\thispagestyle{headings}
+\section{Fonctionnalités du launcher}
+\subsection{Création d'une partie}
+\subsection{Chargement d'une partie}
+\section{Fonctionnalités du client}
+\subsection{Génération des sols}
 Pour la gestion du terrain, nous avons décidé d'avoir deux types de sol : l'eau et l'herbe. Sur l'herbe, il est possible d'ajouter des bâtiments et sur l'eau non.
 
 Pour pouvoir avoir des cartes auto-générée, nous avons décide d'utiliser un algorithme de bruit de Perlin. Nous n'allons pas aller dans les détails du fonctionnement du bruit de Perlin, dans ce rapport. Mais son principe est le suivant: il permet d'avoir des nombres aléatoires qui sont proche les uns de autres en function d'une seed(pour l'aléatoire, initialisé au début) et de 1, 2 ou X dimensions (trois dans celui que nous avons utilisés, mais que 2 utilisés). Vu que les outputs de la function de bruit de Perlin sont les mêmes quand nous utilisons les mêmes inputs. Nous pouvons la considérer comme une fonction à plusieurs variables (qui sont les dimensions et la seed). Changer la seed donne des résultats complètement différent mais changer les autres variables change peu entre chaque valeur.
@@ -144,7 +168,7 @@ Leurs distribution sont sous la forme d'une distribution normal.
 \[y=e^{-x^{2}}\]
 
 Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le fonction de Perlin" d'un certain offset (qui est un multiple des index des cases).
-\section{Gestion des cases de la carte}
+\subsection{Gestion des cases de la carte}
 Nous stockons les cases de la carte dans un $QArray$ d'une longueur $nbCases^{2}$
 
 Une case à la coordonnée $X;Y$ dans la grille de cases représentant la carte correspond à l'élément se trouvant à l'indice $X+Y nbCases$ dans le $QArray$
@@ -163,10 +187,10 @@ Une case de la carte est représenté par la classe $MapTile$ dérivé de la cla
 \item bPix (boolean): indique si la case a une texture ou pas
 \item buildImage ($QGraphicsPixmapItem*$): Pointeur vers la texture du bâtiment/route qui se trouve sur la case
 \end{itemize}
-\section{Routes et bâtiments}
+\subsection{Routes et bâtiments}
 Pour la gestion des routes et des bâtiments nous sommes parti sur une approche plutôt simple qui est d'avoir divisé en trois classe qui chacune des rôles spécifique. Une qui décrit les caractéristiques propre à chaque bâtiments : les constantes -> ConstantBuilding. Une seconde classe qui décrit une bâtiment spécifique à la partie -> Building. Et une troisième qui sert de gestionnaires de building, 'classe tableau' -> BuildingManager. 
 
-\subsection{Constant Building}
+\subsubsection{Constant Building}
 Constant Building contient une function de construction d'un tableau d'objet de 'soit même'. Chacun de ces objet représente un bâtiment avec toutes ces caractéristiques internes, par exemple : le prix de construction, la liste des bâtiments nécessaires pour sa construction ou encore sa catégorie dans l'affichage de l'HUD.
 
 Liste de caractéristique de base de chaque bâtiment :
@@ -225,7 +249,7 @@ La liste des bâtiments pré-requis et des poids pour le laboratoire est la suiv
 \end{itemize}
 Il y a donc au moins une possibilité pour arrivé à remplir cette demande, qui est d'avoir une bâtiment de chaque. A noter que dans ce cas, la somme de pré-requis n'influence pas pour ce bâtiment, mais on pourrai imaginer qu'un bâtiment aille une somme plus grande que la somme de chaque bâtiment pré-requis et la la somme aurai une influence.
 
-\subsection{Building}
+\subsubsection{Building}
 La classe building décrit un bâtiment posé dans une partie. Il est décris les caractéristiques suivantes :
 \begin{itemize}
 	\item Un identifiant unique
@@ -236,7 +260,7 @@ La classe building décrit un bâtiment posé dans une partie. Il est décris le
 \end{itemize}
 On peut donc noter que cet objet est rendu assez 'léger' car la plus part de ce qui le décrit est géré par l'identifiant constant building. Nous pouvons donc avoir beaucoup de bâtiment et avoir une emprunte mémoire peu conséquente.
 
-\subsection{Building Manager}
+\subsubsection{Building Manager}
 Cette classe permet de gérer une liste de bâtiment de la classe Building. On peut exécuté les actions suivante :
 \begin{itemize}
 	\item Ajouter un bâtiments (qui est ajoutable selon les pré-requis)
@@ -248,7 +272,7 @@ Cette classe permet de gérer une liste de bâtiment de la classe Building. On p
 
 Les fonctions de récupération retournent un valeur stocké mais la valeur stock est recalculé si le besoin l'est, par exemple le bonheur moyen ne varie pas selon le temps mais si un nouveau bâtiment est placé on doit donc recalculer le bonheur moyen.
 
-\section{Déroulement en fonction du temps de la partie}
+\subsection{Déroulement en fonction du temps de la partie}
 Le jeu se déroule en fonction du temps sur divers aspects, cela permet d'avoir une progression. Toute les secondes certain calcules sont effectuer pour donner l'impression au joueur que le temps défile. Voici les trois indicateurs que nous avons choisis de représenté :
 \begin{itemize}
 	\item Bonheur : Représente une satisfaction de la population sur la ville construite.
@@ -256,10 +280,10 @@ Le jeu se déroule en fonction du temps sur divers aspects, cela permet d'avoir 
 	\item Population : Le nombre d'habitant qui réside actuellement dans la ville.
 \end{itemize}
 Malgré nos efforts à rendre le jeu jouable. Nous avons parfaitement conscience que le jeu n'est pas très bien équilibré à ce niveau.
-\subsection{Temps : Heure et Date}
+\subsubsection{Temps : Heure et Date}
 Pour pouvoir donner un aspect réaliste au jeu, nous avons choisi de prendre la date du jour comme date du début de jeu. Puis toute les secondes, le temps virtuel augmente de une heure. Nous avons donc pour 60 minutes de jeu effectives correspondent à 150 jours virtuel.
 
-\subsection{Bonheur}
+\subsubsection{Bonheur}
 La jauge de bonheur global est un nombre qui varie entre 0 et 250. Il est basé sur la moyenne du bonheur de toutes la résidence de la ville. 
 \newline
 Pour chaque résidence, un bonheur résidentiel est calculé.
@@ -280,10 +304,10 @@ Pour ajouter un effet de lissage sur le temps du bonheur, nous avons implément�
 \[bohneur = 20\% ancienBohneur + 80\% bohneurResidentielMoyen\]
 L'ancien bonheur correspond au bonheur qui était en vigueur la seconde précédente.
 
-\subsection{Population}
+\subsubsection{Population}
 Nous avons actuellement une population fixe mais il avait été prévu d'avoir un accroissement de la population en fonction du bonheur. Ainsi que des logements qui se construisent automatique au bords des routes en conséquence.
 
-\subsection{Argent}
+\subsubsection{Argent}
 Pour l'argent il y a principalement deux facteurs qui influence les revenus ou non de la ville.
 \begin{itemize}
 	\item En négatif : Le prix par seconde des bâtiments public installés
@@ -292,10 +316,10 @@ Pour l'argent il y a principalement deux facteurs qui influence les revenus ou n
 Pour les revenus des impôts, nous avons fais une règle un peu fantaisiste qui est que les habitants payent des impôts relatif à leur satisfaction à la ville. Ce qui impose au joueur d'avoir une ville heureuse pour pouvoir avoir de l'argent. Ce qui nous évite permis de contourné le faites que les flux de population ne sont pas géré. Car initialement les revenus n'était pas censé être influencé par le bonheur mais seulement par la population. Ce qui nous apportai une liaison en triangle entre les trois indicateurs.
 Selon ce schéma Bonheur -> Population -> Argent -> Bonheur(Indirectement) et la boucle est fermé.
 
-\subsection{Dérivé des indicateurs}
+\subsubsection{Dérivé des indicateurs}
 Lors du déroulement en fonction du temps nous avons trouvé intéressant d'avoir d'affiche la variation de chaque indicateurs entre les deux derniers calculs (la dérivée en fonction du temps). Calculé de cette façon. \[deltaValeur = nouvelleValeur - ancienneValeur\]
 
-\section{Gestion du son}
+\subsection{Gestion du son}
 Pour la gestion du son nous avons décider de pouvoir traiter facilement les musiques et les bruitages du jeu avec un mixeur. Nous avons donc crée une classe. L'HUD supérieur permet de la piloté à l'aide de trois sliders : Un pour le contrôle du volume de la musique, un pour celui des bruitages et un troisième englobant les deux, appelé master.
 
 \subsection{Gestion des sauvegardes}
@@ -307,16 +331,18 @@ Quand aux données à sauvegarder, nous avons essayer de stocker un minimum d'in
 \newline
 Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 
-\section{Launcher}
 
-\chapter{Tests}
+\section{Tests}
 \thispagestyle{headings}
-\section{Protocoles de tests}
-\section{Bugs encore présents}
+\subsection{Protocoles de tests}
+\subsection{Bugs persistants}
 Le premier bâtiment sélectionné de la partie disposant d'un rayon d'effet a l'affichage du rayon d'effet qui est faux si on le sélectionne avec un raccourci clavier et qu'on ne change pas de case, l'affichage du rayon d'effet devient juste dés qu'on change de case.
+
+\section{Déploiement}
 
 \chapter{Bilan}
 \thispagestyle{headings}
+\section{Planification finale}
 
 
 \chapter{Conclusion}
