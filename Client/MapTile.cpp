@@ -117,7 +117,7 @@ void MapTile::setDelimiterRect(int x,int y,int w,int h)
     delimiterRect=new QGraphicsRectItem(x,y,w,h);
     delimiterRect->setPen(QPen(Qt::black));
     delimiterRect->setVisible(true);
-    delimiterRect->setZValue(4);
+    delimiterRect->setZValue(3);
     scene->addItem(delimiterRect);
 }
 void MapTile::unsetDelimiterRect()

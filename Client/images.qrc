@@ -5,6 +5,5 @@
         <file>ressources/routeL.png</file>
         <file>ressources/routeT.png</file>
         <file>ressources/routeX.png</file>
-        <file>../docs/iconCB.png</file>
     </qresource>
 </RCC>

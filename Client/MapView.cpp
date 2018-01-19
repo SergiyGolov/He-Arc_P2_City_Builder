@@ -402,13 +402,13 @@ void MapView::moveAddBuilding(MapTile *rect)
         if(currentBuild==nullptr && pixExists)
         {
             QTransform trans;
-
-            trans.scale(1.1*0.04*256/nbTiles,1.2*0.04*256/nbTiles);
             trans.rotate(-45);
+            trans.scale(1.2*0.05*256/nbTiles,1.6*0.05*256/nbTiles);
+            trans.translate(0,-256/nbTiles*pixelPerTile*0.02);
             currentBuild=new QGraphicsPixmapItem( QPixmap(pixFilePath));
 
             currentBuild->setOpacity(0.65);
-            currentBuild->setZValue(2);
+            currentBuild->setZValue(3);
 
             currentBuild->setTransform(trans);
 
@@ -422,13 +422,11 @@ void MapView::moveAddBuilding(MapTile *rect)
             lastTilePix=rect;
         }
 
-        if(currentBuild==nullptr)
+        if(currentBuild!=nullptr)
         {
-
-        }
-        else{
             color=baseColors->at((rect->getX())+(rect->getY())*nbTiles);
         }
+
 
 
         for(int i=0;i<buildWidth;i++)
@@ -632,14 +630,12 @@ void MapView::finalAddBuilding(MapTile* rect)
             QColor color=GraphicService::getColorFromBuildingCategory(ConstantBuilding::get(pickerBId).getCategory()-1);
 
             //TODO: set the real image of the building instead of colorizing the tiles => switch on the buildingId instead of the category
-            if(currentBuild==nullptr)
+            if(currentBuild!=nullptr)
             {
 
-
-            }
-            else{
                 color=baseColors->at((rect->getX())+(rect->getY())*nbTiles);
             }
+
             lastTilePix=nullptr;
             rect->setBrush(color);
             int mainTileX=rect->getX();
@@ -648,13 +644,25 @@ void MapView::finalAddBuilding(MapTile* rect)
             if(currentBuild!=nullptr)
             {
                 rect->addPix(currentBuild);
+                //test z order
+                int i=1;
+
+                while(tiles->at(rect->getX()+i+rect->getY()*nbTiles)->getBId()==1 ){
+                    tiles->at(rect->getX()+i+rect->getY()*nbTiles)->setZValue(++i);
+                    qDebug()<<i;
+                }
+
+                i=1;
+                while(tiles->at(rect->getX()+(rect->getY()+i)*nbTiles)->getBId()==1){
+                    tiles->at(rect->getX()+(rect->getY()+i)*nbTiles)->setZValue(++i);
+                }
                 currentBuild=nullptr;
             }
 
             if(pickerBId!=0)
             {
                 buildingCount++;
-                rect->setDelimiterRect(rect->pos().x(),rect->pos().y(),buildWidth*pixelPerTile,buildHeight*pixelPerTile);
+                if(pickerBId!=1)rect->setDelimiterRect(rect->pos().x(),rect->pos().y(),buildWidth*pixelPerTile,buildHeight*pixelPerTile);
                 for(int i=0;i<buildWidth;i++)
                 {
                     for(int j=0;j<buildHeight;j++)
@@ -773,7 +781,7 @@ void MapView::finalAddRoad(MapTile* rect)
                     BuildingManagementService::getBuildingManagementService()->addBuilding(0,tile->getX(),tile->getY(), angle);
                     currentBuild=new QGraphicsPixmapItem(QPixmap(pixFilePath));
 
-                    currentBuild->setZValue(2);
+                    currentBuild->setZValue(1);
                     currentBuild->setTransform(trans);
                     scene->addItem(currentBuild);
                     tile->addPixRoad(currentBuild);
@@ -907,7 +915,7 @@ void MapView::toggleGrid()
             }
             else if(!bGrid)
             {
-                 if(!tiles->at((i)+(j)*nbTiles)->isOccupied())tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::black));
+                if(!tiles->at((i)+(j)*nbTiles)->isOccupied())tiles->at((i)+(j)*nbTiles)->setPen(QPen(Qt::black));
             }
         }
     }
