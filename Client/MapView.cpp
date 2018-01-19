@@ -212,6 +212,7 @@ void MapView::callPicker(int bId)
 
 void MapView::wheelEvent(QWheelEvent *event)
 {
+
     if(event->angleDelta().y()>0)
     {
         //zoom
@@ -224,7 +225,7 @@ void MapView::wheelEvent(QWheelEvent *event)
     else
     {
         //dezoom
-        if(zoomFactor>1)
+        if(zoomFactor>0.95)
         {
             zoomFactor-=0.05;
             this->scale(0.5,0.5);
