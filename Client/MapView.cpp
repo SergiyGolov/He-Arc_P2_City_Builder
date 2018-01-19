@@ -45,13 +45,13 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     roadDir=0;
     lastTilePix=nullptr;
     bRadius=false;
-
+    this->setStyleSheet("background-image: url(:/ressources/clouds.jpg)");
     //the purpose of this timer is to blink in red if the user try to add a building without an adjacent road
     timer=new QTimer(this);
     timer->setInterval(100);
     connect(timer,SIGNAL(timeout()),this,SLOT(blinkRedTileSlot()));
 
-    this->setBackgroundBrush(QBrush(Qt::black));
+    this->setBackgroundBrush(QBrush(Qt::transparent));
     scene=new QGraphicsScene(this);
     MapTile::setScene(scene);
 
@@ -83,6 +83,10 @@ MapView::MapView(QWidget *parent): QGraphicsView(parent)
     srand(time(NULL));
     int seed = rand() ;
     RandomService::setSeed(seed);
+
+
+
+
 }
 
 /**
@@ -98,6 +102,8 @@ void MapView::generateMap()
     tempRoadList->clear();
     tempRemoveList->clear();
     neighbourList->clear();
+
+
 
     radiusCircle=new QGraphicsEllipseItem(0,0,1,1);
     radiusCircle->setVisible(false);
@@ -163,6 +169,9 @@ void MapView::generateMap()
 
     if(nbTiles>243)scaleFactor=0.19*256.0/(double)nbTiles;
     else scaleFactor=0.235*256.0/(double)nbTiles;
+
+
+
 
 }
 
