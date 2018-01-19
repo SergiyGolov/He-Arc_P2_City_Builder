@@ -3,7 +3,7 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[francais]{babel}
+\usepackage[french]{babel}
 \usepackage{changepage}
 \usepackage{color}
 \usepackage{enumitem}
@@ -14,6 +14,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[utf8]{inputenc}
 \usepackage{listings} %Pour le code
+\usepackage{titlepic}
 \usepackage{wrapfig}
 
 \setitemize{topsep=5pt}
@@ -44,17 +45,23 @@
 }
 
 \begin{document}
+\begin{titlepage}
+\titlepic{\includegraphics[scale=0.2]{img/iconCB.png}}
 \title{City Builder}
 \author{Damian Petroff, Sergiy Goloviatinski, Raphaël Margueron}
+\date{\today}
 \maketitle
+\end{titlepage}
 
 \tableofcontents
 \thispagestyle{empty}
 
+\chapter*{Abstract}
+\thispagestyle{empty}
+Abstract content
 
 \chapter*{Introduction}
 \setcounter{page}{1}
-\thispagestyle{headings}
 \paragraph{}
 L'industrie vidéo-ludique est aujourd'hui un marché grandissant de manière notoire et notre intérêt pour les diverses facettes que ce domaine propose a inévitablement influencé notre choix.
 En effet, la conception d'un jeu-vidéo n'est de loin pas une mince affaire. Dans ce rapport nous allons présenter comment nous avons relevé le défi et notre approche sur sa conception et sa réalisation.
@@ -63,14 +70,17 @@ Il est nécessaire de prendre note qu'aucun de nous trois n'avait réalisé ni m
 
 \paragraph{Vers un city builder :}
 L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru appropriée, chacun de nous connait un tant soit peu le sujet, ayant joué à des grosses licences comme "\textit{Cities: Skylines}" de Colossal Order\footnote{Colossal Order : \url{http://www.colossalorder.com/}} ou encore "\textit{SimCity}" de Electronics Arts\footnote{Electronics Arts : \url{https://www.ea.com/fr-fr}} pour ne citer qu'elles, et ce type de jeu de gestion laisse place à une certaine liberté de contenu (comme les bâtiments disponibles, les ressources nécessaires, etc.). Nous avons donc pris la décision de créer un produit de la même nature, en version extrêmement plus modeste évidement.
-
 \begin{center}
-	\includegraphics[scale=0.2]{img_intro_cscity.jpg}
+	\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.2]{img/img_intro_cscity.jpg}
+	\caption{\label{fig:Cities: Skylines city}Une ville basique sur \textit{Cities : Skylines}}
+	\end{figure}
 \end{center}
-Le but principal du projet est de produire une 
-
-
-
+\pagebreak
+\thispagestyle{empty}
+\paragraph{}
+Le but principal du projet est de produire un city builder avec des interactions basiques, un certain panel d'actions possibles rendant le jeu "jouable" et significativement unique. L'application doit être stable et répondre aux spécifications (cf. section 1.1 Spécifications). Le joueur a la possibilités de commencer une nouvelle partie avec des paramètres personnalisés et de reprendre un partie déjà commencée (principe de sauvegarde).
 
 \chapter{Analyse}
 \thispagestyle{headings}
