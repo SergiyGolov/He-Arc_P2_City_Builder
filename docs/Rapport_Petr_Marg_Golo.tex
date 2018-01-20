@@ -24,6 +24,7 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \definecolor{myblue}{rgb}{0,0,1}
+\definecolor{bonus}{rgb}{1,0.7,0}
 
 \newcommand\blfootnote[1]{%
   \begingroup
@@ -60,16 +61,20 @@
 \maketitle
 \end{titlepage}
 
-
+%------
 \thispagestyle{empty}
 \pagebreak
-
+\thispagestyle{empty}
+%------
 \chapter*{Abstract}
 \thispagestyle{empty}
 Abstract content
-
+\pagebreak
+%------
+\thispagestyle{empty}
 \tableofcontents
-
+\thispagestyle{empty}
+%------
 \chapter*{Introduction}
 \setcounter{page}{1}
 \paragraph{}
@@ -79,7 +84,9 @@ En effet, la conception d'un jeu-vidéo n'est de loin pas une mince affaire. Dan
 Il est nécessaire de prendre note qu'aucun de nous trois n'avait réalisé ni même conceptualisé de jeu-vidéo auparavant, malgré cela, c'est un domaine très intéressant et très complet qui laisse part à la créativité autant sur le plan artistique que scientifique du fait de la diversité des corps de métier nécessaires à l'élaboration d'un tel produit. Le dessin, la sculpture, l'architecture, la musique, la littérature et le cinéma sont quelques uns des arts présents dans la conception d'un jeu-vidéo et nous sommes trois développeurs possédant peu de connaissances en création de contenu audiovisuel, il est donc évident que nous nous sommes orienté vers un jeu de type réflexion ou gestion, qui contient relativement beaucoup d'algorithmie. Le but n'étant pas non plus de créer un sudoku.
 
 \paragraph{Vers un city builder :}
-L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru appropriée, chacun de nous connait un tant soit peu le sujet, ayant joué à des grosses licences comme "\textit{Cities: Skylines}" de Colossal Order\footnote{Colossal Order : \textcolor{blue}{\url{http://www.colossalorder.com/}}} ou encore "\textit{SimCity}" de Electronics Arts\footnote{Electronics Arts : \textcolor{blue}{\url{https://www.ea.com/fr-fr}}} pour ne citer qu'elles. Ce type de jeu de gestion laisse place à une certaine liberté de contenu (comme les bâtiments disponibles, les ressources nécessaires, etc.). Nous avons donc pris la décision de créer un produit de la même nature, en version extrêmement plus modeste évidement.
+L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru appropriée, chacun de nous connait un tant soit peu le sujet, ayant joué à des grosses licences comme "\textit{Cities: Skylines}" de Colossal Order\footnote{Colossal Order : \textcolor{blue}{\url{www.colossalorder.com}}}
+\blfootnote{\hspace{7pt}Figure 1. Source de l'image : \href{https://www.reddit.com/r/CitiesSkylines/comments/3mubt5/finally_my_first_city_in_more_then_80_hours_i/}{\texttt{\textcolor{blue}{www.reddit.com/r/CitiesSkylines}}}}
+ ou encore "\textit{SimCity}" de Electronics Arts\footnote{Electronics Arts : \textcolor{blue}{\url{www.ea.com}}} pour ne citer qu'elles. Ce type de jeu de gestion laisse place à une certaine liberté de contenu (comme les bâtiments disponibles, les ressources nécessaires, etc.). Nous avons donc pris la décision de créer un produit de la même nature, en version extrêmement plus modeste évidement.
 \begin{center}
 	\begin{figure}[h]
 	\centering
@@ -87,7 +94,7 @@ L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru
 	\caption{\label{fig:Cities: Skylines city}Un village sur Cities : Skylines}
 	\end{figure}
 \end{center}
-\blfootnote{\hspace{7pt}Source de l'image : \href{https://www.reddit.com/r/CitiesSkylines/comments/3mubt5/finally_my_first_city_in_more_then_80_hours_i/}{\textbf{\textcolor{blue}{reddit}}}}
+
 \thispagestyle{empty}
 \paragraph{}
 Le but principal du projet est de produire un city builder avec des interactions basiques, un certain panel d'actions possibles rendant le jeu "jouable" et significativement unique. L'application doit être stable et répondre aux spécifications (cf. section 1.1 Spécifications). Le joueur a la possibilités de commencer une nouvelle partie avec des paramètres personnalisés et de reprendre une partie déjà commencée (principe de sauvegarde). L'application doit être codée en C++ via le framework Qt qui permet de faciliter l'affichage et la gestion des éléments graphiques et des conteneurs. Les éléments du framework Qt appris au cours aident à concevoir les composants graphiques principaux nécessaires.
@@ -98,8 +105,44 @@ Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation 
 \thispagestyle{headings}
 \section{Exigences fonctionnelles}
 \subsection{Spécifications}
-Voici les spécifications du projet sous forme non 
+Voici les spécifications principales\footnote{Par spécifications principales, on entend les fonctionnalités nécessaires, sans citer celles bonus, qui viendront à la section suivante} du projet :
+\subsubsection{Général}
+\begin{itemize}
+\item Le jeu est en plein écran
+\item Utilisation de contenu audio (musique d'ambiance, événements)
+\item Possibilité de voir toute la carte à la fois ou alors de zoomer puis de se déplacer en haut, en bas, à gauche et à droite
+\item La carte est divisée en cases carrées, certains bâtiments peuvent utiliser plusieurs cases
+\end{itemize}
+\subsubsection{Mécaniques de gameplay}
+L'application doit permettre de :
+\begin{itemize}
+\item construire des routes;
+\item construire des habitations;
+\item construire des bâtiments publiques qui ont un effet sur la population;
+\item voir le rayon d'effet d'un tel bâtiment lors de sa construction;
+\item détruire des éléments déjà construits
+\item construire un élément qu'à condition d'en avoir les moyens financiers;
+\item construire un élément qu'à condition d'avoir déjà construits le ou les éléments requis à sa construction (exemple : Construire une tour Eiffel ne peut se faire que dans un ville relativement grande.)
+
+\end{itemize}
+
+
+\subsection{Spécifications \textcolor{bonus}{bonus}}
+Cette section tient d'indication sur quelques idées que nous avions au cas où le temps nous le permettrait.
+
+\subsubsection{Général}
+\begin{itemize}
+\item
+
+\end{itemize}
+\subsubsection{Mécaniques de gameplay}
+\begin{itemize}
+\item Filtres pour afficher la quantité de bonheur apportée par case (somme des effets de tous les bâtiments). Permet de savoir quelles sont la zone la plus ou moins heureuse de la ville.
+\item Système de quêtes (surtout pour servir comme tutoriel, par exemple: construire 4 maisons, les connecter avec une route : récompense en argent)
+\end{itemize}
+
 \section{Exigences non-fonctionnelles}
+\subsection{Codage}
 \subsection{Portabilité}
 \subsection{Ergonomie}
 \subsection{Efficience}
@@ -325,11 +368,20 @@ Pour l'argent il y a principalement deux facteurs qui influence les revenus ou n
 Pour les revenus des impôts, nous avons fais une règle un peu fantaisiste qui est que les habitants payent des impôts relatif à leur satisfaction à la ville. Ce qui impose au joueur d'avoir une ville heureuse pour pouvoir avoir de l'argent. Ce qui nous évite permis de contourné le faites que les flux de population ne sont pas géré. Car initialement les revenus n'était pas censé être influencé par le bonheur mais seulement par la population. Ce qui nous apportai une liaison en triangle entre les trois indicateurs.
 Selon ce schéma Bonheur -> Population -> Argent -> Bonheur(Indirectement) et la boucle est fermé.
 
-\subsubsection{Dérivé des indicateurs}
+\subsubsection{Dérivée des indicateurs}
 Lors du déroulement en fonction du temps nous avons trouvé intéressant d'avoir d'affiche la variation de chaque indicateurs entre les deux derniers calculs (la dérivée en fonction du temps). Calculé de cette façon. \[deltaValeur = nouvelleValeur - ancienneValeur\]
 
 \subsection{Gestion du son}
-Pour la gestion du son nous avons décider de pouvoir traiter facilement les musiques et les bruitages du jeu avec un mixeur. Nous avons donc crée une classe. L'HUD supérieur permet de la piloté à l'aide de trois sliders : Un pour le contrôle du volume de la musique, un pour celui des bruitages et un troisième englobant les deux, appelé master.
+Afin de faciliter la gestion du son, nous avons pris l'initiative de créer un classe dédiée à cette tâche, nous l'avons appelée \texttt{AudioService}.
+\paragraph{}
+\textbf{\textcolor{red}{Parler un peu de la classe, qu'est-ce qu'elle fait, les principales fonctions}}
+\paragraph{}
+En ce qui concerne le contrôle par l'utilisateur, il est possible de gérer le volume via les trois sliders dans le panel supérieur du jeu, gérant respectivement :
+\begin{itemize}
+\item Le volume de la musique
+\item Le volume des effets sonores
+\item Le volume global du jeu, le "master"
+\end{itemize}
 
 \subsection{Gestion des sauvegardes}
 Pour la sauvegarde des parties, nous avons opté pour un système de enregistrement par fichier JSON. Ce qui nous permet d'avoir les données répartis sous forme hiérarchique et Qt possède toute une palette de fonction pour gérer des fichier JSON. Nous n'avions aucune connaissance de ce format.
@@ -380,6 +432,8 @@ Nous somme heureux de nos progrès dans tous les domaines qui ont composé ce pr
 \item LaTeX : Pour la rédaction du présent rapport;
 \item Et quelques autres encore.
 \end{itemize}
+\paragraph{}
+Nous avons fait notre possible pour être "originaux" et sortir de l'ordinaire des projets scolaires en intégrant des fonctionnalités auxquelles nous n'avions jamais touchées, par exemple la 2.5D, l'intégration d'effets sonores, ou encore le principe de Launcher permettant de lancer une application avec une autre en ajoutant des paramètres d'entrée par exemple.
 
 \chapter{Source}
 \begin{itemize}
