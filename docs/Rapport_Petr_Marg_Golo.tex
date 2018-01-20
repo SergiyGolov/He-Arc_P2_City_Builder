@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt,openany,oneside]{book}
+\documentclass[a4paper,10pt,openany,oneside]{report}
 
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -24,6 +24,13 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \definecolor{myblue}{rgb}{0,0,1}
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
 
 \lstset{frame=tb,
   language=C++,
@@ -69,28 +76,29 @@ Abstract content
 L'industrie vidéo-ludique est aujourd'hui un marché grandissant de manière notoire et notre intérêt pour les diverses facettes que ce domaine propose a inévitablement influencé notre choix.
 En effet, la conception d'un jeu-vidéo n'est de loin pas une mince affaire. Dans ce rapport nous allons présenter comment nous avons relevé le défi et notre approche sur sa conception et sa réalisation.
 
-Il est nécessaire de prendre note qu'aucun de nous trois n'avait réalisé ni même conceptualisé de jeu-vidéo auparavant, malgré cela, c'est un domaine très intéressant et très complet qui laisse part à la créativité autant sur le plan artistique que scientifique du fait de la diversité des corps de métier nécessaires à l'élaboration d'un tel produit. Le dessin, la sculpture, l'architecture, la musique, la littérature et le cinéma sont quelques uns des arts présents dans la conception d'un jeu-vidéo et nous sommes trois développeurs possédant peu de connaissances en création de contenu audiovisuel, il est donc évident que nous nous sommes orienté vers un jeu de type gestion, qui contient relativement beaucoup d'algorithmie.
+Il est nécessaire de prendre note qu'aucun de nous trois n'avait réalisé ni même conceptualisé de jeu-vidéo auparavant, malgré cela, c'est un domaine très intéressant et très complet qui laisse part à la créativité autant sur le plan artistique que scientifique du fait de la diversité des corps de métier nécessaires à l'élaboration d'un tel produit. Le dessin, la sculpture, l'architecture, la musique, la littérature et le cinéma sont quelques uns des arts présents dans la conception d'un jeu-vidéo et nous sommes trois développeurs possédant peu de connaissances en création de contenu audiovisuel, il est donc évident que nous nous sommes orienté vers un jeu de type réflexion ou gestion, qui contient relativement beaucoup d'algorithmie. Le but n'étant pas non plus de créer un sudoku.
 
 \paragraph{Vers un city builder :}
-L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru appropriée, chacun de nous connait un tant soit peu le sujet, ayant joué à des grosses licences comme "\textit{Cities: Skylines}" de Colossal Order\footnote{Colossal Order : \url{http://www.colossalorder.com/}} ou encore "\textit{SimCity}" de Electronics Arts\footnote{Electronics Arts : \url{https://www.ea.com/fr-fr}} pour ne citer qu'elles, et ce type de jeu de gestion laisse place à une certaine liberté de contenu (comme les bâtiments disponibles, les ressources nécessaires, etc.). Nous avons donc pris la décision de créer un produit de la même nature, en version extrêmement plus modeste évidement.
+L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru appropriée, chacun de nous connait un tant soit peu le sujet, ayant joué à des grosses licences comme "\textit{Cities: Skylines}" de Colossal Order\footnote{Colossal Order : \textcolor{blue}{\url{http://www.colossalorder.com/}}} ou encore "\textit{SimCity}" de Electronics Arts\footnote{Electronics Arts : \textcolor{blue}{\url{https://www.ea.com/fr-fr}}} pour ne citer qu'elles. Ce type de jeu de gestion laisse place à une certaine liberté de contenu (comme les bâtiments disponibles, les ressources nécessaires, etc.). Nous avons donc pris la décision de créer un produit de la même nature, en version extrêmement plus modeste évidement.
 \begin{center}
 	\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.2]{img/img_intro_cscity.jpg}
-	\caption{\label{fig:Cities: Skylines city}Une ville basique sur \textit{Cities : Skylines}}
+	\includegraphics[width=0.9\textwidth]{img/img_intro_cscity.jpg}
+	\caption{\label{fig:Cities: Skylines city}Un village sur Cities : Skylines}
 	\end{figure}
 \end{center}
-\pagebreak
+\blfootnote{\hspace{7pt}Source de l'image : \href{https://www.reddit.com/r/CitiesSkylines/comments/3mubt5/finally_my_first_city_in_more_then_80_hours_i/}{\textbf{\textcolor{blue}{reddit}}}}
 \thispagestyle{empty}
 \paragraph{}
-Le but principal du projet est de produire un city builder avec des interactions basiques, un certain panel d'actions possibles rendant le jeu "jouable" et significativement unique. L'application doit être stable et répondre aux spécifications (cf. section 1.1 Spécifications). Le joueur a la possibilités de commencer une nouvelle partie avec des paramètres personnalisés et de reprendre un partie déjà commencée (principe de sauvegarde). L'application doit être codée en C++ via le framework Qt qui permet de faciliter l'affichage et la gestion des éléments graphiques et des conteneurs. Les éléments du framework Qt appris au cours aident à concevoir les éléments graphiques principaux nécessaires.
+Le but principal du projet est de produire un city builder avec des interactions basiques, un certain panel d'actions possibles rendant le jeu "jouable" et significativement unique. L'application doit être stable et répondre aux spécifications (cf. section 1.1 Spécifications). Le joueur a la possibilités de commencer une nouvelle partie avec des paramètres personnalisés et de reprendre une partie déjà commencée (principe de sauvegarde). L'application doit être codée en C++ via le framework Qt qui permet de faciliter l'affichage et la gestion des éléments graphiques et des conteneurs. Les éléments du framework Qt appris au cours aident à concevoir les composants graphiques principaux nécessaires.
 \paragraph{}
-Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation des différentes facette du projet. En premier lieu nous analyserons les besoins du projet,  
+Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation des différentes facettes du projet. En premier lieu, nous analyserons les besoins du projet et ses spécifications. Ensuite nous détaillerons sa conception, notre planification et notre stratégie de développement. À la suite de quoi nous expliquerons la phase de développement en détail. Enfin, nous proposerons un bilan du projet suivi d'une conclusion traitant de notre ressenti par rapport à cette expérience.
 
 \chapter{Analyse des besoins}
 \thispagestyle{headings}
 \section{Exigences fonctionnelles}
 \subsection{Spécifications}
+Voici les spécifications du projet sous forme non 
 \section{Exigences non-fonctionnelles}
 \subsection{Portabilité}
 \subsection{Ergonomie}
@@ -112,8 +120,9 @@ Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation 
 \subsection{Convention de codage}
 
 \section{Interface utilisateur}
+Cette section traite des choix faits sur les possibilités d'interactions de l'utilisateur avec l'application. En premier lieu sera présenté le launcher, puis le client. 
 \subsection{Launcher}
-$Insérer une image$
+\includegraphics[width=\textwidth]{img/ui_launcher.png}
 \subsubsection{Interactions et raccourcis}
 \subsubsection{Esthétique}
 \subsection{Client}
@@ -346,19 +355,29 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 
 \chapter{Bilan}
 \thispagestyle{headings}
-\section{Planification finale}
+\section{État final du projet}
+\section{Changement de planification}
+\section{Spécifications non-implémentées}
+Voici une listes des spécifications non-implémentée pour cause technique, par manque de temps ou simplement car elle n'était pas adaptée.
+\begin{itemize}
+\item a
+\item b
+\end{itemize}
 
 
 \chapter{Conclusion}
 \thispagestyle{headings}
+Il est important de mentionner que notre but avant tout était de nous faire plaisir, ce pourquoi nous avons profité de la liberté de choisir notre projet en réalisant un jeu vidéo. Bien sûr, aucun de nous n'y jouera dans l'état dans lequel il est actuellement (il faut être honnête), mais nous sommes fiers de tout ce que nous avons appris sur le tas, et de la maturité que ce projet nous a apporté. En effet, nous avons désormais une bien meilleure idée de l'importance qu'a une bonne planification et une répartition des tâches intelligente.
+\paragraph{}
+L'organisation au seins d'un projet de groupe comme le P2 n'est pas une tâche facile car nous avons d'autres cours en parallèle dans des domaines totalement différents et sur lesquels nous avons l'obligation de travailler. Cela accentué par le fait que les personnes au seins d'un même groupe n'ont souvent pas la même façon de s'organiser face au reste des tâches scolaires et c'est précisément pour cela que la rigueur et la discipline que demande le travail en équipe nous a appris l'importance d'une bonne communication. 
 
 \chapter{Source}
-Pour le projet en général, nous avons principalement utilisé la documentation en ligne du framework Qt pour le développement.
-\newline
-Pour le utilisation du bruit de Perlin, nous avons consulté une série de vidéo tutoriel en javascript (avec le framework p5) de la chaîne Youtube "the CodingTrain" par Daniel Shiffman qui a couvert le sujet.
-\newline
+\begin{itemize}
+\item Pour le développement du projet en général, nous avons principalement utilisé la documentation en ligne du framework Qt.
+\item En ce qui concerne l'utilisation du bruit de Perlin, nous avons consulté une série de vidéo tutoriel en javascript (avec le framework p5) de la chaîne Youtube "the CodingTrain" par Daniel Shiffman qui a couvert le sujet. \\
 Pour ce qui est de l'algorithme de Perlin (en lui même) utilisé, il a été trouvé sur le compte Github de Sol-program :
 \url{https://github.com/sol-prog/Perlin_Noise}
+\end{itemize}
 
 \chapter{Annexes}
 \thispagestyle{headings}
