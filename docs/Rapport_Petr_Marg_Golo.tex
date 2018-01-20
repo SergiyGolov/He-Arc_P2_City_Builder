@@ -108,6 +108,15 @@ Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation 
 Voici les spécifications principales\footnote{Par spécifications principales, on entend les fonctionnalités nécessaires, sans citer celles bonus, qui viendront à la section suivante} du projet :
 \subsubsection{Général}
 \begin{itemize}
+\item Possibilité de créer une nouvelle partie avec des paramètres personnalisés comme :
+\begin{itemize}
+\item La taille de la carte;
+\item La graine de génération aléatoire;
+\item La difficulté;
+\item Le nom de la partie.
+\end{itemize}
+\item Possibilité de charger une sauvegarde d'une partie
+\item Possibilité de générer une carte aléatoire
 \item Le jeu est en plein écran
 \item Utilisation de contenu audio (musique d'ambiance, événements)
 \item Possibilité de voir toute la carte à la fois ou alors de zoomer puis de se déplacer en haut, en bas, à gauche et à droite
@@ -120,10 +129,27 @@ L'application doit permettre de :
 \item construire des habitations;
 \item construire des bâtiments publiques qui ont un effet sur la population;
 \item voir le rayon d'effet d'un tel bâtiment lors de sa construction;
-\item détruire des éléments déjà construits
+\item détruire des éléments déjà construits;
 \item construire un élément qu'à condition d'en avoir les moyens financiers;
 \item construire un élément qu'à condition d'avoir déjà construits le ou les éléments requis à sa construction (exemple : Construire une tour Eiffel ne peut se faire que dans un ville relativement grande.)
+\item créer une économie via des coûts de certaines infrastructures;
+\item gérer les frais imposés aux habitants ;
+\item 
+\end{itemize}
 
+\subsubsection{Interface utilisateur}
+Le HUD\footnote{\textit{Head Up Display} : Communication graphique des informations avec le joueur} du jeu comporte :
+\begin{itemize}
+\item Un espace d'affichage des données de jeu comme la fortune, la population, le bonheur, le nom de la partie, etc.;
+\item Un menu d'options, sauvegarde, quitter la partie, etc.;
+\item Le carte en elle-même;
+\item Un onglet de construction de bâtiments;
+\end{itemize}
+
+\subsubsection{Rendu graphique}
+\begin{itemize}
+\item Le jeu est en 2.5D (2D isométrique)
+\item Une différence visuel entre terrain constructible et non-constructible
 \end{itemize}
 
 
@@ -137,9 +163,26 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 \end{itemize}
 \subsubsection{Mécaniques de gameplay}
 \begin{itemize}
-\item Filtres pour afficher la quantité de bonheur apportée par case (somme des effets de tous les bâtiments). Permet de savoir quelles sont la zone la plus ou moins heureuse de la ville.
-\item Système de quêtes (surtout pour servir comme tutoriel, par exemple: construire 4 maisons, les connecter avec une route : récompense en argent)
+\item Impossible de construire un bâtiment sans route qui le borde
+\item Filtre pour afficher la quantité de bonheur apportée par case (somme des effets de tous les bâtiments). Permet de savoir quelles sont la zone la plus ou moins heureuse de la ville.
+\item Système de quêtes pouvant servir de tutoriel, par exemple:
+\begin{itemize}
+\item Construire une route
+\item Construire quatre maisons
+\item Récompense : 200 \$ et déblocage d'un bâtiment
 \end{itemize}
+\item Gérer plusieurs difficultés
+\end{itemize}
+
+\subsubsection{Interface graphique}
+\begin{itemize}
+\item Nos propres textures de bâtiments et de routes
+\item Textures adaptatives des routes, gestion des virages et des croisées
+\item Temps de construction d'un bâtiment, sous forme d'un chantier animé
+\item Une minimap affichable ou non sur laquelle il serait possible de cliquer pour se rendre au bon endroit directement
+\end{itemize}
+
+
 
 \section{Exigences non-fonctionnelles}
 \subsection{Codage}
