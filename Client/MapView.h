@@ -111,6 +111,12 @@ private:
     void showRadius(MapTile* rect);
     void setRadiusCircle(QGraphicsEllipseItem* radius,int bId,int x,int y);
 
+    const char* texRoad = ":/ressources/route.png";
+    const char* texRoadL = ":/ressources/routeL.png";
+    const char* texRoadT = ":/ressources/routeT.png";
+    const char* texRoadX = ":/ressources/routeX.png";
+
+    const char* texHouse = ":/ressources/house.png";
 public slots:
     void blinkRedTileSlot();
 protected:

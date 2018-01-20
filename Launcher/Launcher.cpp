@@ -21,6 +21,9 @@
 #include <QVBoxLayout>
 #include <QTime>
 
+#include <stdlib.h>
+#include <time.h>
+
 Launcher::Launcher(QMainWindow *parent) : QMainWindow(parent)
 {
     this->setFixedSize(1280, 720);
@@ -93,9 +96,8 @@ void Launcher::displayWidgets()
     pRandSeed->setIcon(QIcon(":/img/rand.png")); //source : https://d30y9cdsu7xlg0.cloudfront.net/png/45441-200.png via Google Images
     sbSeed = new QSpinBox(this);
     sbSeed->setGeometry(1150, 150, 100, 40);
-    sbSeed->setMinimum(0);
-    sbSeed->setValue(QTime::currentTime().msec() * 10 + QTime::currentTime().second() % 10);
-    sbSeed->setMaximum(10000);
+    sbSeed->setMinimum(1);
+    sbSeed->setMaximum(randomRange-1);
     sbSeed->setFont(QFont(QString("Segoe UI Semilight"),18));
     sbSeed->setStyleSheet("QSpinBox { size : 14; }");
     cbDifficulty = new QComboBox(this);
@@ -108,9 +110,6 @@ void Launcher::displayWidgets()
     leGameName = new QLineEdit(this);
     leGameName->setGeometry(1100, 250, 150, 40);
     leGameName->setFont(QFont(QString("Segoe UI Semilight"),18));
-
-
-
 
     //Liste des sauvegardes
     listSaves = new QListWidget(this);
@@ -161,9 +160,11 @@ void Launcher::connections()
         updateInfos();
     });
 
+    srand(time(NULL));
+    randomizeSeed();
     connect(pRandSeed, &QPushButton::clicked, [=]()
     {
-        sbSeed->setValue(QTime::currentTime().msec() * 10 + QTime::currentTime().second() % 10);
+        randomizeSeed();
     });
 
     connect(leGameName, &QLineEdit::textChanged, [=]()
@@ -185,6 +186,11 @@ void Launcher::connections()
     connect(pPlay, &QPushButton::clicked, this, &Launcher::play);
     connect(pSetGameFile, &QPushButton::clicked, this, &Launcher::setGameFile);
     connect(pSetSaveFolder, &QPushButton::clicked, this, &Launcher::setSaveFolder);
+}
+
+void Launcher::randomizeSeed()
+{
+    sbSeed->setValue(rand() % randomRange);
 }
 
 void Launcher::updateInfos()
@@ -241,7 +247,7 @@ void Launcher::setGameFile()
 void Launcher::setSaveFolder()
 {
     sPathSaveFolder.clear();
-    sPathSaveFolder.append(QFileDialog::getExistingDirectory(this, tr("Select the save folder"), QDir::currentPath() ,QFileDialog::ShowDirsOnly));
+    sPathSaveFolder.append(QFileDialog::getExistingDirectory(this, tr("Select the save folder"), QDir::currentPath(), QFileDialog::ShowDirsOnly));
     updateSaves();
     updateInfos();
 }
@@ -296,11 +302,12 @@ void Launcher::setViewMode(bool b)
 
 void Launcher::play()
 {
-    QString game = sPathGameFile;
+    QString game = QString(sPathGameFile);
     QFileInfo infogame(game);
 
     if(infogame.exists())
     {
+        game = QString("\"" + game + "\"");
         game.append(" ");
         if(!pNewGame->isEnabled())
         {
@@ -311,18 +318,19 @@ void Launcher::play()
             game.append(" seed=");
             game.append(QString::number(sbSeed->value()));
             game.append(" name=\"");
-            game.append(leGameName->text());
+            game.append(leGameName->text().replace('=', '-'));
             game.append("\"");
         }
         else
         {
             if(listSaves->currentItem() != nullptr)
             {
-                game.append('"');
+                game.append("\"");
+                game.append(sPathSaveFolder);
+                game.append("/");
                 game.append(listSaves->currentItem()->text());
-                game.append('"');
+                game.append("\"");
             }
-
         }
         process.close();
         qDebug() << "starting :" << game;
