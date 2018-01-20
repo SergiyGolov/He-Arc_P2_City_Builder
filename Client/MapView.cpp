@@ -403,7 +403,7 @@ void MapView::moveAddBuilding(MapTile *rect)
         switch(pickerBId)//would be nice to test if the pixPath exists in constantBuilding instead...
         {
         case 1:
-            pixFilePath=":/ressources/house.png";
+            pixFilePath=texHouse;
             break;
         }
 
@@ -762,7 +762,7 @@ void MapView::finalAddRoad(MapTile* rect)
                         rect->setMainTile(rect->getX(),rect->getY());
                     }
 
-                    QString pixFilePath=":/ressources/route.png";
+                    QString pixFilePath=texRoad;
                     QTransform trans;
                     trans.scale(scaleFactor,scaleFactor);
 
@@ -1159,14 +1159,14 @@ void MapView::updateNeighbourRoad(MapTile* tileIn)
         {
         //"T"
         case 3:
-            pixPath=":/ressources/routeT.png";
+            pixPath=texRoadT;
             BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),3);
 
             break;
             //crossroad
         case 4:
 
-            pixPath=":/ressources/routeX.png";
+            pixPath=texRoadX;
             BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),2);
 
             break;
@@ -1181,26 +1181,26 @@ void MapView::updateNeighbourRoad(MapTile* tileIn)
             {
                 trans.rotate(-90);
                 trans.translate(-translateFactor,0);
-                pixPath=":/ressources/routeL.png";
+                pixPath=texRoadL;
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),7);
             }
             else if(tile->getX()+1<nbTiles && tile->getY()-1>=0 && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)
             {
                 trans.rotate(90);
                 trans.translate(0,-translateFactor);
-                pixPath=":/ressources/routeL.png";
+                pixPath=texRoadL;
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),8);
             }
             else if(tile->getX()+1<nbTiles && tile->getY()+1<nbTiles && tiles->at((tile->getX()+1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()+1)*nbTiles)->getBId()==0)
             {
                 trans.rotate(180);
                 trans.translate(-translateFactor,-translateFactor);
-                pixPath=":/ressources/routeL.png";
+                pixPath=texRoadL;
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),9);
             }
             else if(tile->getX()-1>=0 && tile->getY()-1>=0 && tiles->at((tile->getX()-1)+(tile->getY())*nbTiles)->getBId()==0 && tiles->at((tile->getX())+(tile->getY()-1)*nbTiles)->getBId()==0)
             {
-                pixPath=":/ressources/routeL.png";
+                pixPath=texRoadL;
                 BuildingManagementService::getBuildingManagementService()->setAngleFromId(tile->getUniqueBId(),10);
             }
             break;
@@ -1278,7 +1278,7 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle)
 
                     trans.scale(1.1*0.04*256/nbTiles,1.2*0.04*256/nbTiles);
                     trans.rotate(-45);
-                    currentBuild=new QGraphicsPixmapItem( QPixmap(":/ressources/house.png"));
+                    currentBuild=new QGraphicsPixmapItem( QPixmap(texHouse));
                     currentBuild->setZValue(2);
                     currentBuild->setTransform(trans);
 
@@ -1308,42 +1308,42 @@ void MapView::addBuildingFromSave(int id, int x, int y, int angle)
             trans.rotate(-90);
             trans.translate(-translateFactor,0);
         case 0:
-            pixPath=":/ressources/route.png";
+            pixPath=texRoad;
             break;
         case 2:
-            pixPath=":/ressources/routeX.png";
+            pixPath=texRoadX;
             break;
         case 4:
             trans.rotate(180);
             trans.translate(-translateFactor,-translateFactor);
         case 3:
-            pixPath=":/ressources/routeT.png";
+            pixPath=texRoadT;
             break;
         case 5:
             trans.rotate(-90);
             trans.translate(-translateFactor,0);
-            pixPath=":/ressources/routeT.png";
+            pixPath=texRoadT;
             break;
         case 6:
             trans.rotate(90);
             trans.translate(0,-translateFactor);
-            pixPath=":/ressources/routeT.png";
+            pixPath=texRoadT;
             break;
         case 7:
             trans.rotate(-90);
             trans.translate(-translateFactor,0);
-            pixPath=":/ressources/routeL.png";
+            pixPath=texRoadL;
             break;
         case 8:
             trans.rotate(90);
             trans.translate(0,-translateFactor);
-            pixPath=":/ressources/routeL.png";
+            pixPath=texRoadL;
             break;
         case 9:
             trans.rotate(180);
             trans.translate(-translateFactor,-translateFactor);
         case 10:
-            pixPath=":/ressources/routeL.png";
+            pixPath=texRoadL;
             break;
         }
         currentBuild=new QGraphicsPixmapItem(QPixmap(pixPath));

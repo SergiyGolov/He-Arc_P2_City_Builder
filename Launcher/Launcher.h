@@ -77,7 +77,7 @@ public:
     QProcess process;               //Launches the game client
 
 private:
-    const int randomRange = 10001;  //Used to limit the random generations
+    const int randomRange = 10000;  //Used to limit the random generations
     //Functions
     void displayWidgets();          //Regroups all the widgets properties to set at launch
     void connections();             //Regroups signals to slots connections
@@ -86,6 +86,8 @@ private:
     void updateSaves();             //Loads .cbsave files from the file system to the saves list to be able to select them
     void updateListWidget(QStringList sl);
     QStringList getSavesList();
+
+    void randomizeSeed();
 
 private slots:
     void setGameFile();             //Opens a filedialog to select gameclient.exe
