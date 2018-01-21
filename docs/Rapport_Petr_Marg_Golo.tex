@@ -272,7 +272,7 @@ $MapView$ : Contient le terrain de jeu, les différents raccourcis claviers (mê
 \item Zoom dans la vue (Raccourcis : + - ou molette de la souris)
 \item Afficher/masquer la grille (Raccourci: G)
 \item Afficher/masquer les rayons d'effets de tous les bâtiments qui en ont un (Raccourci: F)
-\item Afficher le rayon d'effet d'un bâtiment s'il en a un quand un clique dessus
+\item Afficher le rayon d'effet d'un bâtiment s'il en a un quand on clique dessus
 \end{itemize}
 $GuiView$ : Vue contenant les boutons permettant de:
 \begin{itemize}
@@ -430,6 +430,10 @@ Quand on choisi d'ajouter/détruire une route/bâtiment, la $MapView$ se mets en
 \end{itemize}
 \subsection{Adaptation des textures de routes dynamique}
 Quand on pose une route et que celle-ci a des cases adjacentes avec une route existante, les textures des cases se mettent à jour afin de prendre en compte des éventuelles intersections entre l'ancienne et la nouvelle route (Une case peut devenir un virage, un croisement "en X" ou une intersection "en T")
+\subsection{Représentation des bâtiments}
+L'idée initiale était d'avoir une texture différente pour chaque bâtiment, mais n'ayant pas trouvé de textures satisfaisantes nous avons juste un bâtiment et les routes qui sont dotés de textures.
+\newline
+Les autres bâtiments sont des carrés de couleur, avec une couleur unique par catégorie de bâtiment (de toutes façons pour le calcul de bonheur l'important c'est d'avoir un bâtiment de chaque type et la distance séparant une maison d'un bâtiment à effet)
 \subsection{Déroulement en fonction du temps de la partie}
 Le jeu se déroule en fonction du temps sur divers aspects, cela permet d'avoir une progression. Toute les secondes certain calcules sont effectuer pour donner l'impression au joueur que le temps défile. Voici les trois indicateurs que nous avons choisis de représenté :
 \begin{itemize}
@@ -586,7 +590,8 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 \item Il n'y a pas de limitation pour la taille de la carte en création de partie par ligne de commande. Peut causer des crashes si les tailles sont disproportionnées.
 \item Des fois quand une route est ajouté au jeu ou qu'on la charge depuis une sauvegarde, un bug fait en sorte qu'une case de route supplémentaire soit affiché dans le coin supérieur de la carte alors que dans la logique de jeu cette route n'existe pas
 \item Après avoir chargé une partie, les routes "perdent" leurs hauteur et largeur ce qui fait que quand on veut l'effacer après il faut le faire case par case
-\item La portée d'effet affiché est centrée sur la case du coin supérieur du bâtiment s'il se compose de plusieurs cases
+\item Après avoir chargé une partie, on a oublié d'afficher le cadre noir entourant chaque bâtiment
+\item La portée d'effet affichée est centrée sur la case du coin supérieur du bâtiment s'il se compose de plusieurs cases
 \item L'affichage dans la $GuiView$ ne passe pas toujours du rouge au noir dés qu'on a rempli une condition pour pouvoir poser un bâtiment (Quand on pose un cimetière, le texte du crématoire dans le menu du bas ne devient pas toujours noir mais le bouton devient actif, c'est un bug d'affichage et pas de logique)
 \item Dans l'installateur windows il manque une DLL qui nous est pas connu. Elle sert à gérer les arrière-plan et le chargement dynamique des QSoundEffect.
 \end{itemize}
@@ -641,7 +646,7 @@ Nous somme heureux de nos progrès dans tous les domaines qui ont composé ce pr
 \paragraph{}
 Nous avons fait notre possible pour être "originaux" et sortir de l'ordinaire des projets scolaires en intégrant des fonctionnalités auxquelles nous n'avions jamais touchées, par exemple la 2.5D, la génération aléatoire d'environnements, l'intégration d'effets sonores, ou encore le principe de Launcher permettant de lancer une application avec une autre en ajoutant des paramètres d'entrée par exemple.
 
-\chapter{Source}
+\chapter{Sources}
 \begin{itemize}
 \item Notre manuel de référence sur la programmation Qt a été basé sur le cours de 2017, intitulé "Programmation événementielle avec Qt 5" de notre école écrit par Messieurs Stéphane Beurret et David Grunenwald.
 \item Pour le développement du projet en général, nous avons utilisé la documentation officiel en ligne du framework Qt : \url{http://doc.qt.io/}.
