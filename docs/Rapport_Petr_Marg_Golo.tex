@@ -225,8 +225,21 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 \section{Architecture logicielle}
 \subsection{Schéma procédural}
 \subsection{Diagramme de classe}
+\includegraphics[width=\textwidth]{img/hierarchieClasses.png}
+\begin{itemize}
+\item Le point d'entrée est $LoadSaveService$, qui soit charge une sauvegarde ou soit crée une nouvelle partie à partir des arguments passés au $main$
+\item $GraphicService$ comporte des méthodes généralistes utilisés par toutes les vue comme par exemple la gestion des raccourcis claviers ou la coloration des bâtiments selon leurs catégorie
+\item $GuiView$ contient l'interface utilisateur qui permet de poser des routes/bâtiments ou les détruire (se trouve en bas de l'écran), les boutons de ce menu sont représentés avec la classe $PickerElement$
+\item $TopView$ contient l'interface utilisateur qui nous montre les informations sur la partie et permet de faire divers configurations (volume musique, niveau des taxes p. ex) et actions  (charger/sauvegarder partie p. ex)
+\item $MapView$ contient l'affichage du terrain de jeu, et est composé de $MapTile$ qui représentent les cases du jeu
+\item $ConstantBuilding$ stocke les informations sur les bâtiments (nom, catégorie, prix, portée d'effet, etc.)
+\item $BuildingManagementService$ gère la logique des bâtiments, c'est à dire le calcul du prix, du bonheur, la gestion des portées d'effets etc. , de plus contient les structures de données contenant les $Building$ qui sont des bâtiments qui ont été instanciés au cours de la partie
+\item $GameManagementService$ gère la logique "haut niveau" du jeu, donc contient les valeurs sur l'argent, le bonheur et la population, et s'occupe d'instancier le $TickService$ et $AudioService$
+\item $TickService$ recalcule les données du jeu s'il y a eu un bâtiment ajouté/retiré depuis le dernier tick, un tick s’exécutant chaque seconde
+\item $AudioService$ est appelé pour jouer la musique du jeu, et pioche parmi plusieurs sons possibles à chaque fois qu'on construit un bâtiment
+\end{itemize}
 \subsection{Convention de codage}
-
+La convention de codage utilisée était celle spécifié sur la forge.
 \section{Interface utilisateur}
 Cette section traite des choix faits sur les possibilités d'interactions de l'utilisateur avec l'application. En premier lieu sera présenté le launcher, puis le client. 
 \subsection{Launcher}
