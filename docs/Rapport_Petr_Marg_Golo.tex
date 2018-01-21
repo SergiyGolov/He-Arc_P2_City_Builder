@@ -235,7 +235,7 @@ Le code devait rester maintenable malgré l'ajout de nouvelles fonctionnalités,
 \begin{itemize}
 \item Le point d'entrée est $LoadSaveService$, qui soit charge une sauvegarde ou soit crée une nouvelle partie à partir des arguments passés au $main$
 \item $GraphicService$ comporte des méthodes généralistes utilisés par toutes les vue comme par exemple la gestion des raccourcis claviers ou la coloration des bâtiments selon leurs catégorie
-\item $GuiView$ contient l'interface utilisateur qui permet de poser des routes/bâtiments ou les détruire (se trouve en bas de l'écran), les boutons de ce menu sont représentés avec la classe $PickerElement$
+\item $GuiView$ contient l'interface utilisateur qui permet de poser des routes/bâtiments ou les détruire (se trouve en bas de l'écran), les boutons de ce menu sont représentés avec la classe $PickerElement$, quand on clique sur un $PickerElement$ (autre que ceux représentant les catégories) la $MapView$ se mets dans le mode correspondant
 \item $TopView$ contient l'interface utilisateur qui nous montre les informations sur la partie et permet de faire divers configurations (volume musique, niveau des taxes p. ex) et actions  (charger/sauvegarder partie p. ex)
 \item $MapView$ contient l'affichage du terrain de jeu, et est composé de $MapTile$ qui représentent les cases du jeu
 \item $ConstantBuilding$ stocke les informations sur les bâtiments (nom, catégorie, prix, portée d'effet, etc.)
@@ -412,7 +412,7 @@ On peut donc noter que cet objet est rendu assez 'léger' car la plus part de ce
 \subsubsection{Building Manager}
 Cette classe permet de gérer une liste de bâtiment de la classe Building. On peut exécuté les actions suivante :
 \begin{itemize}
-	\item Ajouter un bâtiments (qui est ajoutable selon les pré-requis)
+	\item Ajouter un bâtiment (qui est ajoutable selon les pré-requis)
 	\item Supprimer des bâtiments 
 	\item Récupérer la population total de la ville.
 	\item Récupérer le bonheur moyen de la ville.
@@ -420,7 +420,16 @@ Cette classe permet de gérer une liste de bâtiment de la classe Building. On p
 \end{itemize}
 
 Les fonctions de récupération retournent un valeur stocké mais la valeur stock est recalculé si le besoin l'est, par exemple le bonheur moyen ne varie pas selon le temps mais si un nouveau bâtiment est placé on doit donc recalculer le bonheur moyen.
-
+\subsection{Sélecteur pour poser/détruire route/bâtiment}
+Quand on choisi d'ajouter/détruire une route/bâtiment, la $MapView$ se mets en mode "picker" (sélecteur) pendant lequel les cases de la carte se trouvant sous la souris montre un aperçu de l'action choisie:
+\begin{itemize}
+\item Quand on a choisi l'ajout d'un bâtiment, les cases sous la souris se colorient de la couleur du futur bâtiment quand le posage sous ces cases est possibles, disparaît si ce n'est pas possible (quand on mets la souris par dessus un bâtiment déjà existant par exemple), et quand on fait un clique gauche quand les cases sous la souris sont coloriés (donc quand le posage est possible), le bâtiment est effectivement ajouté et devient persistant sur la carte
+\item Quand on choisi l'ajout d'une route, la case sous la souris devient grise quand le posage est possible, un premier clic commence à "tirer" la route dans n'importe quelle des 4 directions par rapport à la première case, dés qu'on a choisi une 2ème case, cette direction est "bloquée" et on ne peut que continuer de "tirer" la route dans cette direction, après avoir fini de "tirer" la route un clique gauche de la souris ajoute la route de façon définitive
+\item Quand la destruction d'un bâtiment/route est sélectionné, les bâtiments/routes qui se trouvent sous la souris se colorient en noir quand on passe dessus, et un clique gauche dessus supprime le bâtiment/route de la partie
+\item Un clique droite pendant ces 3 actions ci-dessus annule l'action en question
+\end{itemize}
+\subsection{Adaptation des textures de routes dynamique}
+Quand on pose une route et que celle-ci a des cases adjacentes avec une route existante, les textures des cases se mettent à jour afin de prendre en compte des éventuelles intersections entre l'ancienne et la nouvelle route (Une case peut devenir un virage, un croisement "en X" ou une intersection "en T")
 \subsection{Déroulement en fonction du temps de la partie}
 Le jeu se déroule en fonction du temps sur divers aspects, cela permet d'avoir une progression. Toute les secondes certain calcules sont effectuer pour donner l'impression au joueur que le temps défile. Voici les trois indicateurs que nous avons choisis de représenté :
 \begin{itemize}
@@ -556,6 +565,7 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
 		 \\ \hline Un bâtiment ne peut pas être construit sans route adjacente & Essayer de poser un bâtiment non-adjacent à une route & Le posage est annulé et la case sur laquelle on a essayé de poser clignote en rouge
 		\\ \hline Un bâtiment ne peut être posé sur une case déjà occupé (eau/autre bâtiment) & En mode posage de bâtiment, essayer d'aller avec la souris sur un autre bâtiment/sur de l'eau & La prévisualisation du bâtiment sur la case sous la souris disparaît, on ne peut pas cliquer donc on ne peut pas poser de bâtiment
+		\\ \hline Quand on pose/détruit une maison habitée, l'indicateur de population se mets à jour comme prévu & Poser un bâtiment, regarder l'indicateur de population au prochain tick, détruite ce bâtiment et regarder l'indicateur de population au prochain tick & L'indicateur de population se mets bien à jour comme prévu, poser une maison l'augmente et la détruire le diminue
 		\\ \hline Les routes peuvent que être posés en ligne droite et selon la direction de la 2ème case sélectionnée & Essayer de cliquer avec la souris ailleurs que la direction de la 2ème case sélectionnée en mode posage de route & Le posage de route est annulé et la case sur laquelle on voulait poser clignote en rouge
 		\\ \hline La portée d'effet d'un bâtiment affiché doit pas être plus grand que la portée calculée & Poser un bâtiment à effet (clinique p. ex) et poser une maison sur la dernière case de portée affichée et poser une maison sur la case d'après & Le bonheur additionnel est toujours pris en compte avec la plus petite valeur possible pour la maison la plus proche, pas toujours pour la maison qui se trouve une case plus loin
 		\\ \hline Quand on pose un bâtiment, son prix est déduit de l'argent & Poser un bâtiment a un coût et vérifier le delta d'argent au prochain tick & Le delta d'argent correspond bien au prix soustrait au delta d'avant
@@ -563,6 +573,7 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 		\\ \hline Dés qu'on a remplis un prérequis pour un bâtiment, celui-ci devient posable & On construit d'abord un cimetière et on essaye de construire un crématoire après & La couleur du texte ne se mets pas toujours à jour par contre le bâtiment devient posable
 		\\ \hline Les routes adaptent une forme cohérente quand on pose une route voisine à une route déjà existante & "Dessinner" un croisement "en X", un virage et une intersection "en T" & Les textures des routes se mettent bien à jour de façon cohérente
 		\\ \hline Le positionnement et taille des textures sont cohérentes pour toutes les tailles de cartes & On commence des parties avec des tailles de cartes différentes et on essaye de poser des routes de différentes intersections possibles & Cohérent pour des cartes 256x256, 16x16 mais pour certaines tailles intermédiaires les textures sont décalés ou ont une mauvaise taille
+	
 	\end{tabular}
 \end{center}
 
