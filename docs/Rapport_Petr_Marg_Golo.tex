@@ -221,7 +221,7 @@ Le jeu ne devait pas être trop "lourd", et devait rester simple
 \subsection{Maintenabilité}
 Le code devait rester maintenable malgré l'ajout de nouvelles fonctionnalités, et ceci grâce à une modularisation des classes
 \section{Cas d'utilisation}
-
+\includegraphics[width=\textwidth]{img/usecase.png}
 
 \chapter{Conception}
 \thispagestyle{headings}
@@ -492,7 +492,7 @@ En ce qui concerne le contrôle par l'utilisateur, il est possible de gérer le 
 \item Le volume des effets sonores
 \item Le volume global du jeu, le "master"
 \end{itemize}
-La classe est un singleton. Au lancement du client, elle s'occupe de charger les différents bruitages, et créer un objet \texttt{QSoundEffect} pour chacun d'eux. Pour chaque type de bruitage correspond un nom dans un enum (\texttt{sfxID}) et à ces types de bruitages sont affecté des \texttt{QSoundEffect}.Lors qu'un bruitage est demandé à être joué un \texttt{QSoundEffect} est choisi aléatoirement parmi le type de bruitage demandé. Ce fonctionnement nous a permis pour un action d'avoir facilement plusieurs bruitage aléatoire.
+La classe est un singleton. Au lancement du client, elle s'occupe de charger les différents bruitages, et créer un objet \texttt{QSoundEffect} pour chacun d'eux. Pour chaque type de bruitage correspond un nom dans un enum (\texttt{sfxID}) et à ces types de bruitages sont affecté des \texttt{QSoundEffect}.Lorsqu'un bruitage est demandé à être joué un \texttt{QSoundEffect} est choisi aléatoirement parmi le type de bruitage demandé. Ce fonctionnement nous a permis pour un action d'avoir facilement plusieurs bruitage aléatoire.
 \newline
 Pour la gestion du mixeur, comme cité ci-dessus nous l'avons séparé en trois. Les trois volume représente une valeur entre 0 et 1 puis pour chaque \texttt{QSoundEffect} le volume est changé pour le produit du master et du volume de la musique ou des bruitages dans la cas échéant.
 \subsection{Gestion des sauvegardes}
