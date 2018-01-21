@@ -68,7 +68,8 @@
 %------
 \chapter*{Abstract}
 \thispagestyle{empty}
-Abstract content
+Dans le cadre du "Projet P2", nous, Raphaël Margueron, Sergiy Goloviatinsky et Damian Petroff, avons la tâche de réaliser une application graphique en C++ grâce au framework Qt. 
+Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation des différentes facettes du projet. En premier lieu, nous analyserons les besoins du projet et ses spécifications. Ensuite nous détaillerons sa conception, notre planification et notre stratégie de développement. À la suite de quoi nous expliquerons la phase de développement en détail. Enfin, nous proposerons un bilan du projet suivi d'une conclusion traitant de notre ressenti par rapport à cette expérience.
 \pagebreak
 %------
 \thispagestyle{empty}
@@ -98,8 +99,6 @@ L'idée d'un jeu portant sur la conception et la gestion d'une ville nous a paru
 \thispagestyle{empty}
 \paragraph{}
 Le but principal du projet est de produire un city builder avec des interactions basiques, un certain panel d'actions possibles rendant le jeu "jouable" et significativement unique. L'application doit être stable et répondre aux spécifications (cf. section 1.1 Spécifications). Le joueur a la possibilités de commencer une nouvelle partie avec des paramètres personnalisés et de reprendre une partie déjà commencée (principe de sauvegarde). L'application doit être codée en C++ via le framework Qt qui permet de faciliter l'affichage et la gestion des éléments graphiques et des conteneurs. Les éléments du framework Qt appris au cours aident à concevoir les composants graphiques principaux nécessaires.
-\paragraph{}
-Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation des différentes facettes du projet. En premier lieu, nous analyserons les besoins du projet et ses spécifications. Ensuite nous détaillerons sa conception, notre planification et notre stratégie de développement. À la suite de quoi nous expliquerons la phase de développement en détail. Enfin, nous proposerons un bilan du projet suivi d'une conclusion traitant de notre ressenti par rapport à cette expérience.
 
 \chapter{Analyse des besoins}
 \thispagestyle{headings}
@@ -208,18 +207,18 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 
 \section{Exigences non-fonctionnelles}
 \subsection{Codage}
-Nous avons choisi d'utiliser le design pattern $singleton$ pour toutes nos classes gestionnaires qui devaient être appelés depuis plusieurs endroits, ceci pour éviter de devoir les mettre comme attributs dans toutes les autres classes.
+Nous avons choisi d'utiliser le design pattern $singleton$ pour toutes nos classes gestionnaires qui devaient être appelées depuis plusieurs endroits, ceci pour éviter de devoir les mettre comme attributs dans toutes les autres classes.
 \subsection{Portabilité}
 Nous avons décidé de porter le jeu sur les plateformes utilisés par les membres du groupe, à savoir Windows et Linux
 \subsection{Ergonomie}
-L'interface du jeu devait être claire et sobre
+Les interactions sont simples et malgré les quelques bugs possibles, la gestion de la ville est relativement facile à prendre en main lorsque le joueur a quelques minutes de jeu à son actif.
 \subsection{Efficience}
 \subsubsection{Temps de réponse}
-Le temps de réponse n'était pas une contrainte essentielle, vu que le jeu ne se repose pas sur la réactivité mais sur la réflexion, par contre pendant les chargement/générations de parties nous avons décidé de notifier le joueur qu'un chargement a eu lieu afin qu'il soit rassuré si ça prends du temps
+Dans notre cas, le temps de réponse n'est pas une contrainte essentielle car nous n'utilisons pas de communication réseau et le jeu ne se repose pas sur la réactivité mais plutôt sur la réflexion. En revanche, pendant les chargement et générations de parties, nous notifions le joueur qu'un chargement a lieu afin de le rassurer.
 \subsubsection{Utilisation des ressources}
-Le jeu ne devait pas être trop "lourd", et devait rester simple
+Le jeu ne se veut pas trop "lourd" et tourne aisément sur une machine standard actuelle.
 \subsection{Maintenabilité}
-Le code devait rester maintenable malgré l'ajout de nouvelles fonctionnalités, et ceci grâce à une modularisation des classes
+Grâce à une bonne modularisation des classes, la compréhension, la maintenance et l'amélioration du code de l'application est relativement simple.
 \section{Cas d'utilisation}
 \includegraphics[width=\textwidth]{img/usecase.png}
 
@@ -227,9 +226,16 @@ Le code devait rester maintenable malgré l'ajout de nouvelles fonctionnalités,
 \thispagestyle{headings}
 \section{Stratégie de conception}
 \subsection{Planification initiale}
-
+\paragraph{}
+Voici note planning initial :
+\begin{center}
+\includegraphics[width=1.1\textwidth]{img/planning_initial.png}
+\end{center}
 \section{Architecture logicielle}
 \subsection{Schéma procédural}
+\begin{center}
+\includegraphics[width=\textwidth]{img/schema_proc.png}
+\end{center}
 \subsection{Diagramme de classe}
 \includegraphics[width=\textwidth]{img/hierarchieClasses.png}
 \begin{itemize}
@@ -653,7 +659,7 @@ Nous avons fait notre possible pour être "originaux" et sortir de l'ordinaire d
 \item En ce qui concerne l'utilisation du bruit de Perlin, nous avons consulté une série de vidéo tutoriel en javascript (avec le framework p5) de la chaîne Youtube "the CodingTrain" par Daniel Shiffman qui a couvert le sujet : \url{https://www.youtube.com/user/shiffman}\\
 Pour ce qui est de l'algorithme de Perlin (en lui même) utilisé, il a été trouvé sur le compte Github de Sol-program :
 \url{https://github.com/sol-prog/Perlin_Noise}
-\item Pour divers spécificité lié à Qt qui n'était pas forcement évidente de prime abords dans le cours de notre école ou dans la documentation officiel, nous avons profité à plusieurs reprise de l'expérience de la communauté du forum de Stack Overflow : \url{https://stackoverflow.com/}
+\item Pour diverses spécificités liées à Qt qui n'étaient pas forcément évidentes de prime abord dans le cours de notre école ou dans la documentation officiel, nous avons profité à plusieurs reprise de l'expérience de la communauté du forum de Stack Overflow : \url{https://stackoverflow.com/}
 \end{itemize}
 
 \chapter{Annexes}
