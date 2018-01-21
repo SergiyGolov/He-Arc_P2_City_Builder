@@ -542,8 +542,6 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 	\end{tabular}
 \end{center}
 
-
-
 \subsubsection{Client}
 Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet on avait 2 approches:
 \begin{itemize}
@@ -561,6 +559,10 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 		\\ \hline Les routes peuvent que être posés en ligne droite et selon la direction de la 2ème case sélectionnée & Essayer de cliquer avec la souris ailleurs que la direction de la 2ème case sélectionnée en mode posage de route & Le posage de route est annulé et la case sur laquelle on voulait poser clignote en rouge
 		\\ \hline La portée d'effet d'un bâtiment affiché doit pas être plus grand que la portée calculée & Poser un bâtiment à effet (clinique p. ex) et poser une maison sur la dernière case de portée affichée et poser une maison sur la case d'après & Le bonheur additionnel est toujours pris en compte avec la plus petite valeur possible pour la maison la plus proche, pas toujours pour la maison qui se trouve une case plus loin
 		\\ \hline Quand on pose un bâtiment, son prix est déduit de l'argent & Poser un bâtiment a un coût et vérifier le delta d'argent au prochain tick & Le delta d'argent correspond bien au prix soustrait au delta d'avant
+		\\ \hline On ne peut pas poser de bâtiment si ses prérequis n'ont pas été atteints & Essayer de poser un crématoire avant un cimetière & Pas possible, le bouton du crématoire est inactif et son texte rouge
+		\\ \hline Dés qu'on a remplis un prérequis pour un bâtiment, celui-ci devient posable & On construit d'abord un cimetière et on essaye de construire un crématoire après & La couleur du texte ne se mets pas toujours à jour par contre le bâtiment devient posable
+		\\ \hline Les routes adaptent une forme cohérente quand on pose une route voisine à une route déjà existante & "Dessinner" un croisement "en X", un virage et une intersection "en T" & Les textures des routes se mettent bien à jour de façon cohérente
+		\\ \hline Le positionnement et taille des textures sont cohérentes pour toutes les tailles de cartes & On commence des parties avec des tailles de cartes différentes et on essaye de poser des routes de différentes intersections possibles & Cohérent pour des cartes 256x256, 16x16 mais pour certaines tailles intermédiaires les textures sont décalés ou ont une mauvaise taille
 	\end{tabular}
 \end{center}
 
@@ -574,7 +576,8 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 \item Des fois quand une route est ajouté au jeu ou qu'on la charge depuis une sauvegarde, un bug fait en sorte qu'une case de route supplémentaire soit affiché dans le coin supérieur de la carte alors que dans la logique de jeu cette route n'existe pas
 \item Après avoir chargé une partie, les routes "perdent" leurs hauteur et largeur ce qui fait que quand on veut l'effacer après il faut le faire case par case
 \item La portée d'effet affiché est centrée sur la case du coin supérieur du bâtiment s'il se compose de plusieurs cases
-\item Dans l'installateur il manque un DLLs qui nous est pas connu. Elle sert à gérer les arrière-plan et le chargement dynamique des QSoundEffect.
+\item L'affichage dans la $GuiView$ ne passe pas toujours du rouge au noir dés qu'on a rempli une condition pour pouvoir poser un bâtiment (Quand on pose un cimetière, le texte du crématoire dans le menu du bas ne devient pas toujours noir mais le bouton devient actif, c'est un bug d'affichage et pas de logique)
+\item Dans l'installateur windows il manque une DLL qui nous est pas connu. Elle sert à gérer les arrière-plan et le chargement dynamique des QSoundEffect.
 \end{itemize}
 
 
