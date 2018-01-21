@@ -493,7 +493,65 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 
 \section{Tests}
 \thispagestyle{headings}
-\subsection{Protocoles de tests}
+\subsection{Protocoles de tests}Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag gitlab).
+\subsubsection{Launcher}
+
+\paragraph{Général}
+\begin{center}
+	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\hline
+		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+		 \\ \hline
+		Choix de l'exécutable du jeu (Set game file)&
+		L'exécutable peut être choisi à l'aide d'une boîte modal qui a pour contrainte le nom suivante CityBuilder.exe, la casse n'est pas à être respecté. &
+		Choix pris en compte dans l'interface
+		\\ \hline
+		Choix du dossier de sauvegarde (Set save folder) &
+		Le dossier de sauvegarde peut-être choisi sans contraintes particulières &
+		Choix pris en compte dans l'interface
+		\\ \hline
+		Bouton jouer (Play) &
+		Le bouton play doit s'activer et se désactiver correctement. &
+		Il ne se désactive pas si du text à été saisie pour le nom de la partie puis supprimé ou qu'une partie à été sauvegarde sélectionné puis changement d'onglet.
+		\\ \hline
+	\hline
+	\end{tabular}
+\end{center}
+
+\paragraph{Création de partie (onglet New)}
+\begin{center}
+	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\hline
+		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+		 \\ \hline
+		Choix des paramètres & Est-ce que les paramètres peuvent être changés & Les quartes paramètres peuvent être changé indépendamment les un des autres, en respectent les contraintes.
+		\\ \hline
+		Pré-visualisation & Lors de la variation des paramètres de taille et de seed. Mise à jour? & La pré-visualisation de la carte se met à jour correctement lors du changement de seed et de taille de carte.
+		\\ \hline
+	\hline
+	\end{tabular}
+\end{center}
+
+\paragraph{Chargement de partie (onglet Load)}
+\begin{center}
+	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\hline
+		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+		 \\ \hline
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection{Client}
+\begin{center}
+	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\hline
+		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+		 \\ \hline
+		\hline
+	\end{tabular}
+\end{center}
+
 Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet on avait 2 approches:
 \begin{itemize}
 \item Les test "à l'oeil" pour tout ce qui touchait la partie graphique, qui consistait à jouer et créer divers conditions et voir le résultat, parmi ces test il y avait notamment:
@@ -517,6 +575,7 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 \item Des fois quand une route est ajouté au jeu ou qu'on la charge depuis une sauvegarde, un bug fait en sorte qu'une case de route supplémentaire soit affiché dans le coin supérieur de la carte alors que dans la logique de jeu cette route n'existe pas
 \item Après avoir chargé une partie, les routes "perdent" leurs hauteur et largeur ce qui fait que quand on veut l'effacer après il faut le faire case par case
 \item La portée d'effet affiché est centrée sur la case du coin supérieur du bâtiment s'il se compose de plusieurs cases
+\item Dans l'installateur il manque un DLLs qui nous est pas connu. Elle sert à gérer les arrière-plan et le chargement dynamique des QSoundEffect.
 \end{itemize}
 
 
