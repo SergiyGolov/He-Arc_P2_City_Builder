@@ -475,12 +475,71 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 \section{Tests}
 \thispagestyle{headings}
 \subsection{Protocoles de tests}
+Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag gitlab).
+\subsubsection{Launcher}
+
+\paragraph{Général}
+\begin{center}
+	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\hline
+		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+		 \\ \hline
+		Choix de l'exécutable du jeu (Set game file)&
+		L'exécutable peut être choisi à l'aide d'une boîte modal qui a pour contrainte le nom suivante CityBuilder.exe, la casse n'est pas à être respecté. &
+		Choix pris en compte dans l'interface
+		\\ \hline
+		Choix du dossier de sauvegarde (Set save folder) &
+		Le dossier de sauvegarde peut-être choisi sans contraintes particulières &
+		Choix pris en compte dans l'interface
+		\\ \hline
+		Bouton jouer (Play) &
+		Le bouton play doit s'activer et se désactiver correctement. &
+		Il ne se désactive pas si du text à été saisie pour le nom de la partie puis supprimé ou qu'une partie à été sauvegarde sélectionné puis changement d'onglet.
+		\\ \hline
+	\hline
+	\end{tabular}
+\end{center}
+
+\paragraph{Création de partie (onglet New)}
+\begin{center}
+	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\hline
+		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+		 \\ \hline
+		Choix des paramètres & Est-ce que les paramètres peuvent être changés & Les quartes paramètres peuvent être changé indépendamment les un des autres, en respectent les contraintes.
+		\\ \hline
+		Pré-visualisation & Lors de la variation des paramètres de taille et de seed. Mise à jour? & La pré-visualisation de la carte se met à jour correctement lors du changement de seed et de taille de carte.
+		\\ \hline
+	\hline
+	\end{tabular}
+\end{center}
+
+\paragraph{Chargement de partie (onglet Load)}
+\begin{center}
+	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\hline
+		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+		 \\ \hline
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection{Client}
+\begin{center}
+	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\hline
+		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+		 \\ \hline
+		\hline
+	\end{tabular}
+\end{center}
 \subsection{Bugs persistants}
 \begin{itemize}
 \item Le premier bâtiment sélectionné de la partie disposant d'un rayon d'effet a l'affichage du rayon d'effet qui est faux si on le sélectionne avec un raccourci clavier et qu'on ne change pas de case, l'affichage du rayon d'effet devient juste dés qu'on change de case.
 \item Quand on attend pas la fin du clignotement rouge quand on fait une fausse action (essayer de poser un bâtiment sans route p. ex) et qu'on en refait une, les cadres rouges restent
 \item Le manque d'équilibrage du jeu peut entrainer le joueur se trouver en dette et à ne plus pouvoir placer de bâtiment qui augmente le bonheur et qui donc permet au joueur d'amasser de l'argent. La partie est donc plus jouable.
 \item Il n'y a pas de limitation pour la taille de la carte en création de partie par ligne de commande. Peut causer des crashes si la taille sont disproportionnées.
+\item Dans l'installateur il manque un DLLs qui nous est pas connu. Elle sert à gérer les arrière-plan et le chargement dynamique des QSoundEffect.
 \end{itemize}
 
 
