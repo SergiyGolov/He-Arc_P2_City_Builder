@@ -175,15 +175,21 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 
 \subsubsection{Mécaniques de gameplay}
 \begin{itemize}
-\item Impossible de construire un bâtiment sans route qui le borde
-\item Filtre pour afficher la quantité de bonheur apportée par case (somme des effets de tous les bâtiments). Permet de savoir quelles sont la zone la plus ou moins heureuse de la ville.
-\item Système de quêtes pouvant servir de tutoriel, par exemple:
-\begin{itemize}
-\item Construire une route
-\item Construire quatre maisons
-\item Récompense : 200 \$ et déblocage d'un bâtiment
-\end{itemize}
-\item Gérer plusieurs difficultés
+	\item Impossible de construire un bâtiment sans route qui le borde
+	\item Filtre pour afficher la quantité de bonheur apportée par case (somme des effets de tous les bâtiments). Permet de savoir quelles sont la zone la plus ou moins heureuse de la ville.
+	\item Système de quêtes pouvant servir de tutoriel, par exemple:
+	\begin{itemize}
+		\item Construire une route
+		\item Construire quatre maisons
+		\item Récompense : 200 \$ et déblocage d'un bâtiment
+	\end{itemize}
+	\item Gérer plusieurs difficultés
+	\item La gestion de plusieurs indicateur étroitement liés représentant la ville
+	\begin{itemize}
+		\item L'argent (représente les caisses de la ville)
+		\item Le bonheur (représente la satisfaction des habitants par rapport à la ville)
+		\item La population (représente la quantité d'habitant dans la ville)
+	\end{itemize}
 \end{itemize}
 
 \subsubsection{Interface graphique}
@@ -265,8 +271,21 @@ $GuiView$ : Vue contenant les boutons permettant de:
 \chapter{Développement et réalisation}
 \thispagestyle{headings}
 \section{Fonctionnalités du launcher}
+Le launcher permet de créer une interface entre les paramètres de création de partie ou le chargement de sauvegarde et les argument en ligne de commande du client.
 \subsection{Création d'une partie}
+Pour la création d'un partie nous avons réfléchi sur quel paramètre nous laissions libre à l'utilisateur et nous avons développé une interface autour de ceux-ci.
+\newline
+Les paramètres que nous avons retenu sont les suivants :
+\begin{itemize}
+	\item La taille de la carte (en case)
+	\item La graine de la carte (seed)
+	\item La difficulté de la partie (Argent de départ)
+	\item Le nom de la ville
+\end{itemize}
+Étant donné que la taille de la carte et la seed pouvait être précisé lors de la création d'une partie, nous avions tous les paramètres pour offrir à l'utilisateur la pré-visualisation de la carte.
 \subsection{Chargement d'une partie}
+Pour charger les parties dans l'onglet Load, tous les fichiers .cbsave du dossier de sauvegarde spécifié sont présenté à l'utilisateur. Le dossier peut être changé en cliquant sur le bouton "Save save folder".
+Si une sauvegarde est sélectionné et que l'utilisateur appuie sur "Play" le launcher va ouvrir le jeu avec comme seul argument le chemin absolu du fichier de sauvegarde sélectionné. Aucune pré-visualisation n'est actuellement effectué avec les sauvegardes.
 \section{Fonctionnalités du client}
 \subsection{Génération des sols}
 Pour la gestion du terrain, nous avons décidé d'avoir deux types de sol : l'eau et l'herbe. Sur l'herbe, il est possible d'ajouter des bâtiments et sur l'eau non.
@@ -442,7 +461,9 @@ En ce qui concerne le contrôle par l'utilisateur, il est possible de gérer le 
 \item Le volume des effets sonores
 \item Le volume global du jeu, le "master"
 \end{itemize}
-
+La classe est un singleton. Au lancement du client, elle s'occupe de charger les différents bruitages, et créer un objet \texttt{QSoundEffect} pour chacun d'eux. Pour chaque type de bruitage correspond un nom dans un enum (\texttt{sfxID}) et à ces types de bruitages sont affecté des \texttt{QSoundEffect}.Lors qu'un bruitage est demandé à être joué un \texttt{QSoundEffect} est choisi aléatoirement parmi le type de bruitage demandé. Ce fonctionnement nous a permis pour un action d'avoir facilement plusieurs bruitage aléatoire.
+\newline
+Pour la gestion du mixeur, comme cité ci-dessus nous l'avons séparé en trois. Les trois volume représente une valeur entre 0 et 1 puis pour chaque \texttt{QSoundEffect} le volume est changé pour le produit du master et du volume de la musique ou des bruitages dans la cas échéant.
 \subsection{Gestion des sauvegardes}
 Pour la sauvegarde des parties, nous avons opté pour un système de enregistrement par fichier JSON. Ce qui nous permet d'avoir les données répartis sous forme hiérarchique et Qt possède toute une palette de fonction pour gérer des fichier JSON. Nous n'avions aucune connaissance de ce format.
 \newline
@@ -452,7 +473,6 @@ Quand aux données à sauvegarder, nous avons essayer de stocker un minimum d'in
 \newline
 Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 
-
 \section{Tests}
 \thispagestyle{headings}
 \subsection{Protocoles de tests}
@@ -460,20 +480,32 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 \begin{itemize}
 \item Le premier bâtiment sélectionné de la partie disposant d'un rayon d'effet a l'affichage du rayon d'effet qui est faux si on le sélectionne avec un raccourci clavier et qu'on ne change pas de case, l'affichage du rayon d'effet devient juste dés qu'on change de case.
 \item Quand on attend pas la fin du clignotement rouge quand on fait une fausse action (essayer de poser un bâtiment sans route p. ex) et qu'on en refait une, les cadres rouges restent
+\item Le manque d'équilibrage du jeu peut entrainer le joueur se trouver en dette et à ne plus pouvoir placer de bâtiment qui augmente le bonheur et qui donc permet au joueur d'amasser de l'argent. La partie est donc plus jouable.
+\item Il n'y a pas de limitation pour la taille de la carte en création de partie par ligne de commande. Peut causer des crashes si la taille sont disproportionnées.
 \end{itemize}
 
 
 \section{Déploiement}
+Pour le déploiement, nous avons choisi de créer un installer pour permet aux utilisateurs de pouvoir installateur facilement facilement et rapidement notre jeu. Durant l'année scolaire lors du cours C++ avec Qt (2241 - Langages et Frameworks) nous avons découvert Qt Installer Framework qui permet de générer des installateur. Nous avons donc intuitivement utilisé cet outil.
+\newline
+Étant donnée la portabilité Qt, nous avions la possibilité de compiler notre jeu pour Microsoft Windows et pour les OS à noyau Linux. Nous avons donc compiler notre jeu avec les paramètres de release des compilateur et avons créer deux installer que vous pouvez trouver dans les annexes du rapport.
+Les installateurs sont séparé en deux packages l'un installe le client (obligatoire) avec toute les bibliothèques dynamiques (DLLs) nécessaire et l'autre installe uniquement le Launcher et créer un raccourcis sur le bureau pour celui-ci.
+Cela permet aux utilisateurs qui n'auraient pas la nécessité d'utiliser l'interface graphique du Launcher de s'en passer dès l'installation du logiciel.
+\newline
+La recherche des bibliothèques dynamiques utiles au projet n'a pas été évidente. Malgré l'utilisation de logiciel prévu à cet effet, comme par exemple pour Windows : Dependency Walker. Nous n'avons pas trouvé un moyen exact pour trouver quelle DLLs était nécessaire à notre projet. Nous avons donc plutôt fonctionner de manière empirique pour cette recherche.
 
 \chapter{Bilan}
 \thispagestyle{headings}
 \section{État final du projet}
 \subsection{Spécifications implémentées}
 \subsection{Spécifications non-implémentées}
-Voici une listes des spécifications non-implémentée pour cause technique, par manque de temps ou simplement car elle n'était pas adaptée.
+Voici une listes des spécifications non-implémentée pour cause technique, par manque de temps ou simplement car elle n'était pas adaptée. \\
+Liste des fonctionnalité non-implémentées qui aurait pu être intéressante :
 \begin{itemize}
-\item a
-\item b
+	\item L'évolution de la population en fonction du bonheur et du temps (flux migratoires)
+	\item Cycles jour nuit affichage visuel.
+	\item Pré-visualisation du ficher de sauvegarde dans le launcher.
+	\item Les événements aléatoires.
 \end{itemize}
 
 \section{Changement de planification}
@@ -493,14 +525,16 @@ Nous somme heureux de nos progrès dans tous les domaines qui ont composé ce pr
 \item Et quelques autres encore.
 \end{itemize}
 \paragraph{}
-Nous avons fait notre possible pour être "originaux" et sortir de l'ordinaire des projets scolaires en intégrant des fonctionnalités auxquelles nous n'avions jamais touchées, par exemple la 2.5D, l'intégration d'effets sonores, ou encore le principe de Launcher permettant de lancer une application avec une autre en ajoutant des paramètres d'entrée par exemple.
+Nous avons fait notre possible pour être "originaux" et sortir de l'ordinaire des projets scolaires en intégrant des fonctionnalités auxquelles nous n'avions jamais touchées, par exemple la 2.5D, la génération aléatoire d'environnements, l'intégration d'effets sonores, ou encore le principe de Launcher permettant de lancer une application avec une autre en ajoutant des paramètres d'entrée par exemple.
 
 \chapter{Source}
 \begin{itemize}
-\item Pour le développement du projet en général, nous avons principalement utilisé la documentation en ligne du framework Qt.
-\item En ce qui concerne l'utilisation du bruit de Perlin, nous avons consulté une série de vidéo tutoriel en javascript (avec le framework p5) de la chaîne Youtube "the CodingTrain" par Daniel Shiffman qui a couvert le sujet. \\
+\item Notre manuel de référence sur la programmation Qt a été basé sur le cours de 2017, intitulé "Programmation événementielle avec Qt 5" de notre école écrit par Messieurs Stéphane Beurret et David Grunenwald.
+\item Pour le développement du projet en général, nous avons utilisé la documentation officiel en ligne du framework Qt : \url{http://doc.qt.io/}.
+\item En ce qui concerne l'utilisation du bruit de Perlin, nous avons consulté une série de vidéo tutoriel en javascript (avec le framework p5) de la chaîne Youtube "the CodingTrain" par Daniel Shiffman qui a couvert le sujet : \url{https://www.youtube.com/user/shiffman}\\
 Pour ce qui est de l'algorithme de Perlin (en lui même) utilisé, il a été trouvé sur le compte Github de Sol-program :
 \url{https://github.com/sol-prog/Perlin_Noise}
+\item Pour divers spécificité lié à Qt qui n'était pas forcement évidente de prime abords dans le cours de notre école ou dans la documentation officiel, nous avons profité à plusieurs reprise de l'expérience de la communauté du forum de Stack Overflow : \url{https://stackoverflow.com/}
 \end{itemize}
 
 \chapter{Annexes}
