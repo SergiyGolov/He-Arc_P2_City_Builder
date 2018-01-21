@@ -209,10 +209,14 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 \section{Exigences non-fonctionnelles}
 \subsection{Codage}
 \subsection{Portabilité}
+Nous avons décidé de porter le jeu sur les plateformes utilisés par les membres du groupe, à savoir Windows et Linux
 \subsection{Ergonomie}
+L'interface du jeu devait être claire et sobre
 \subsection{Efficience}
 \subsubsection{Temps de réponse}
+Le temps de réponse n'était pas une contrainte essentielle, vu que le jeu ne se repose pas sur la réactivité mais sur la réflexion, par contre pendant les chargement/générations de parties nous avons décidé de notifier le joueur qu'un chargement a eu lieu afin qu'il soit rassuré si ça prends du temps
 \subsubsection{Utilisation des ressources}
+
 \subsection{Maintenabilité}
 \section{Cas d'utilisation}
 
@@ -225,8 +229,21 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 \section{Architecture logicielle}
 \subsection{Schéma procédural}
 \subsection{Diagramme de classe}
+\includegraphics[width=\textwidth]{img/hierarchieClasses.png}
+\begin{itemize}
+\item Le point d'entrée est $LoadSaveService$, qui soit charge une sauvegarde ou soit crée une nouvelle partie à partir des arguments passés au $main$
+\item $GraphicService$ comporte des méthodes généralistes utilisés par toutes les vue comme par exemple la gestion des raccourcis claviers ou la coloration des bâtiments selon leurs catégorie
+\item $GuiView$ contient l'interface utilisateur qui permet de poser des routes/bâtiments ou les détruire (se trouve en bas de l'écran), les boutons de ce menu sont représentés avec la classe $PickerElement$
+\item $TopView$ contient l'interface utilisateur qui nous montre les informations sur la partie et permet de faire divers configurations (volume musique, niveau des taxes p. ex) et actions  (charger/sauvegarder partie p. ex)
+\item $MapView$ contient l'affichage du terrain de jeu, et est composé de $MapTile$ qui représentent les cases du jeu
+\item $ConstantBuilding$ stocke les informations sur les bâtiments (nom, catégorie, prix, portée d'effet, etc.)
+\item $BuildingManagementService$ gère la logique des bâtiments, c'est à dire le calcul du prix, du bonheur, la gestion des portées d'effets etc. , de plus contient les structures de données contenant les $Building$ qui sont des bâtiments qui ont été instanciés au cours de la partie
+\item $GameManagementService$ gère la logique "haut niveau" du jeu, donc contient les valeurs sur l'argent, le bonheur et la population, et s'occupe d'instancier le $TickService$ et $AudioService$
+\item $TickService$ recalcule les données du jeu s'il y a eu un bâtiment ajouté/retiré depuis le dernier tick, un tick s’exécutant chaque seconde
+\item $AudioService$ est appelé pour jouer la musique du jeu, et pioche parmi plusieurs sons possibles à chaque fois qu'on construit un bâtiment
+\end{itemize}
 \subsection{Convention de codage}
-
+La convention de codage utilisée était celle spécifié sur la forge.
 \section{Interface utilisateur}
 Cette section traite des choix faits sur les possibilités d'interactions de l'utilisateur avec l'application. En premier lieu sera présenté le launcher, puis le client. 
 \subsection{Launcher}
@@ -538,8 +555,10 @@ Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag git
 \item Le premier bâtiment sélectionné de la partie disposant d'un rayon d'effet a l'affichage du rayon d'effet qui est faux si on le sélectionne avec un raccourci clavier et qu'on ne change pas de case, l'affichage du rayon d'effet devient juste dés qu'on change de case.
 \item Quand on attend pas la fin du clignotement rouge quand on fait une fausse action (essayer de poser un bâtiment sans route p. ex) et qu'on en refait une, les cadres rouges restent
 \item Le manque d'équilibrage du jeu peut entrainer le joueur se trouver en dette et à ne plus pouvoir placer de bâtiment qui augmente le bonheur et qui donc permet au joueur d'amasser de l'argent. La partie est donc plus jouable.
-\item Il n'y a pas de limitation pour la taille de la carte en création de partie par ligne de commande. Peut causer des crashes si la taille sont disproportionnées.
 \item Dans l'installateur il manque un DLLs qui nous est pas connu. Elle sert à gérer les arrière-plan et le chargement dynamique des QSoundEffect.
+\item Il n'y a pas de limitation pour la taille de la carte en création de partie par ligne de commande. Peut causer des crashes si les tailles sont disproportionnées.
+\item Des fois quand une route est ajouté au jeu ou qu'on la charge depuis une sauvegarde, un bug fait en sorte qu'une case de route supplémentaire soit affiché dans le coin supérieur de la carte alors que dans la logique de jeu cette route n'existe pas
+\item Après avoir chargé une partie, les routes "perdent" leurs hauteur et largeur ce qui fait que quand on veut l'effacer après il faut le faire case par case
 \end{itemize}
 
 
