@@ -208,6 +208,7 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 
 \section{Exigences non-fonctionnelles}
 \subsection{Codage}
+Nous avons choisi d'utiliser le design pattern $singleton$ pour toutes nos classes gestionnaires qui devaient être appelés depuis plusieurs endroits, ceci pour éviter de devoir les mettre comme attributs dans toutes les autres classes.
 \subsection{Portabilité}
 Nous avons décidé de porter le jeu sur les plateformes utilisés par les membres du groupe, à savoir Windows et Linux
 \subsection{Ergonomie}
@@ -216,8 +217,9 @@ L'interface du jeu devait être claire et sobre
 \subsubsection{Temps de réponse}
 Le temps de réponse n'était pas une contrainte essentielle, vu que le jeu ne se repose pas sur la réactivité mais sur la réflexion, par contre pendant les chargement/générations de parties nous avons décidé de notifier le joueur qu'un chargement a eu lieu afin qu'il soit rassuré si ça prends du temps
 \subsubsection{Utilisation des ressources}
-
+Le jeu ne devait pas être trop "lourd", et devait rester simple
 \subsection{Maintenabilité}
+Le code devait rester maintenable malgré l'ajout de nouvelles fonctionnalités, et ceci grâce à une modularisation des classes
 \section{Cas d'utilisation}
 
 
@@ -492,25 +494,47 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 \section{Tests}
 \thispagestyle{headings}
 \subsection{Protocoles de tests}
+Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet on avait 2 approches:
+\begin{itemize}
+\item Les test "à l'oeil" pour tout ce qui touchait la partie graphique, qui consistait à jouer et créer divers conditions et voir le résultat, parmi ces test il y avait notamment:
+\begin{itemize}
+\item Essayer de poser un bâtiment non-adjacent à une route et constater que ce n'est pas possible
+\item Essayer de poser un bâtiment sur une case déjà occupée (eau ou un autre bâtiment) et constater que ce n'est pas possible
+\item Essayer de construire une route pas droite et constater que ce n'est pas possible
+\item Poser une maison à la limite de la portée d'effet d'une clinique par exemple et constater que le rayon affiché soit pas plus grand que le rayon d'effet calculé
+\end{itemize}
+\item Les test en observant la  valeur d'un indicateur avant et après un test ou alors en affichant la valeur d'une variable dans $qDebug()$ à un moment donné, exemples de test:
+\begin{itemize}
+\item Quand on pose un bâtiment, le prix déduit de notre argent correspond bien au prix du bâtiment spécifie dans $ConstantBuilding$
+\end{itemize}
+\end{itemize}
 \subsection{Bugs persistants}
 \begin{itemize}
 \item Le premier bâtiment sélectionné de la partie disposant d'un rayon d'effet a l'affichage du rayon d'effet qui est faux si on le sélectionne avec un raccourci clavier et qu'on ne change pas de case, l'affichage du rayon d'effet devient juste dés qu'on change de case.
 \item Quand on attend pas la fin du clignotement rouge quand on fait une fausse action (essayer de poser un bâtiment sans route p. ex) et qu'on en refait une, les cadres rouges restent
-\item Le manque d'équilibrage du jeu peut entrainer le joueur se trouver en dette et à ne plus pouvoir placer de bâtiment qui augmente le bonheur et qui donc permet au joueur d'amasser de l'argent. La partie est donc plus jouable.
+\item Le manque d'équilibrage du jeu peut entraîner le joueur se trouver en dette et à ne plus pouvoir placer de bâtiment qui augmente le bonheur et qui donc permet au joueur d'amasser de l'argent. La partie est donc plus jouable.
 \item Il n'y a pas de limitation pour la taille de la carte en création de partie par ligne de commande. Peut causer des crashes si les tailles sont disproportionnées.
 \item Des fois quand une route est ajouté au jeu ou qu'on la charge depuis une sauvegarde, un bug fait en sorte qu'une case de route supplémentaire soit affiché dans le coin supérieur de la carte alors que dans la logique de jeu cette route n'existe pas
 \item Après avoir chargé une partie, les routes "perdent" leurs hauteur et largeur ce qui fait que quand on veut l'effacer après il faut le faire case par case
+\item La portée d'effet affiché est centrée sur la case du coin supérieur du bâtiment s'il se compose de plusieurs cases
 \end{itemize}
 
 
 \section{Déploiement}
-Pour le déploiement, nous avons choisi de créer un installer pour permet aux utilisateurs de pouvoir installateur facilement facilement et rapidement notre jeu. Durant l'année scolaire lors du cours C++ avec Qt (2241 - Langages et Frameworks) nous avons découvert Qt Installer Framework qui permet de générer des installateur. Nous avons donc intuitivement utilisé cet outil.
+Pour le déploiement, nous avons choisi de créer un installeur pour permettre aux utilisateurs de pouvoir installer  facilement et rapidement notre jeu. Durant l'année scolaire lors du cours C++ avec Qt (2241 - Langages et Frameworks) nous avons découvert Qt Installer Framework qui permet de générer des installateur. Nous avons donc intuitivement utilisé cet outil.
 \newline
-Étant donnée la portabilité Qt, nous avions la possibilité de compiler notre jeu pour Microsoft Windows et pour les OS à noyau Linux. Nous avons donc compiler notre jeu avec les paramètres de release des compilateur et avons créer deux installer que vous pouvez trouver dans les annexes du rapport.
-Les installateurs sont séparé en deux packages l'un installe le client (obligatoire) avec toute les bibliothèques dynamiques (DLLs) nécessaire et l'autre installe uniquement le Launcher et créer un raccourcis sur le bureau pour celui-ci.
+
+Étant donnée la portabilité Qt, nous avions la possibilité de compiler notre jeu pour Microsoft Windows et pour les OS à noyau Linux. Nous avons donc compilés notre jeu avec les paramètres de release des compilateur et avons crée deux installer que vous pouvez trouver dans les annexes du rapport.
+Les installateurs sont séparé en deux packages l'un installe le client (obligatoire) avec toute les bibliothèques dynamiques (DLLs) nécessaire et l'autre installe uniquement le Launcher et crée un raccourci sur le bureau pour celui-ci.
 Cela permet aux utilisateurs qui n'auraient pas la nécessité d'utiliser l'interface graphique du Launcher de s'en passer dès l'installation du logiciel.
 \newline
+
 La recherche des bibliothèques dynamiques utiles au projet n'a pas été évidente. Malgré l'utilisation de logiciel prévu à cet effet, comme par exemple pour Windows : Dependency Walker. Nous n'avons pas trouvé un moyen exact pour trouver quelle DLLs était nécessaire à notre projet. Nous avons donc plutôt fonctionner de manière empirique pour cette recherche.
+\newline
+
+Par contre sur Linux, cela était facile grâce à $linuxdeployqt$ qui nous générait un dossier dans lesquels ont été copiés tous les fichiers $.so$ nécessaires et un fichier $qt.conf$ renvoyant vers ces dossiers, il suffisait de le mettre dans le dossier $data$ avant d'appeler $binarycreator$
+
+
 
 \chapter{Bilan}
 \thispagestyle{headings}
