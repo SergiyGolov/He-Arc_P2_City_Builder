@@ -542,30 +542,29 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 	\end{tabular}
 \end{center}
 
+
+
 \subsubsection{Client}
+Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet on avait 2 approches:
+\begin{itemize}
+\item Les test "à l'oeil" pour tout ce qui touchait la partie graphique, qui consistait à jouer et créer divers conditions et voir le résultat
+\
+\item Les test en observant la  valeur d'un indicateur avant et après un test ou alors en affichant la valeur d'une variable dans $qDebug()$ à un moment donné
+
+\end{itemize}
 \begin{center}
 	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
 	\hline
 		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
-		 \\ \hline
-		\hline
+		 \\ \hline Un bâtiment ne peut pas être construit sans route adjacente & Essayer de poser un bâtiment non-adjacent à une route & Le posage est annulé et la case sur laquelle on a essayé de poser clignote en rouge
+		\\ \hline Un bâtiment ne peut être posé sur une case déjà occupé (eau/autre bâtiment) & En mode posage de bâtiment, essayer d'aller avec la souris sur un autre bâtiment/sur de l'eau & La prévisualisation du bâtiment sur la case sous la souris disparaît, on ne peut pas cliquer donc on ne peut pas poser de bâtiment
+		\\ \hline Les routes peuvent que être posés en ligne droite et selon la direction de la 2ème case sélectionnée & Essayer de cliquer avec la souris ailleurs que la direction de la 2ème case sélectionnée en mode posage de route & Le posage de route est annulé et la case sur laquelle on voulait poser clignote en rouge
+		\\ \hline La portée d'effet d'un bâtiment affiché doit pas être plus grand que la portée calculée & Poser un bâtiment à effet (clinique p. ex) et poser une maison sur la dernière case de portée affichée et poser une maison sur la case d'après & Le bonheur additionnel est toujours pris en compte avec la plus petite valeur possible pour la maison la plus proche, pas toujours pour la maison qui se trouve une case plus loin
+		\\ \hline Quand on pose un bâtiment, son prix est déduit de l'argent & Poser un bâtiment a un coût et vérifier le delta d'argent au prochain tick & Le delta d'argent correspond bien au prix soustrait au delta d'avant
 	\end{tabular}
 \end{center}
 
-Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet on avait 2 approches:
-\begin{itemize}
-\item Les test "à l'oeil" pour tout ce qui touchait la partie graphique, qui consistait à jouer et créer divers conditions et voir le résultat, parmi ces test il y avait notamment:
-\begin{itemize}
-\item Essayer de poser un bâtiment non-adjacent à une route et constater que ce n'est pas possible
-\item Essayer de poser un bâtiment sur une case déjà occupée (eau ou un autre bâtiment) et constater que ce n'est pas possible
-\item Essayer de construire une route pas droite et constater que ce n'est pas possible
-\item Poser une maison à la limite de la portée d'effet d'une clinique par exemple et constater que le rayon affiché soit pas plus grand que le rayon d'effet calculé
-\end{itemize}
-\item Les test en observant la  valeur d'un indicateur avant et après un test ou alors en affichant la valeur d'une variable dans $qDebug()$ à un moment donné, exemples de test:
-\begin{itemize}
-\item Quand on pose un bâtiment, le prix déduit de notre argent correspond bien au prix du bâtiment spécifie dans $ConstantBuilding$
-\end{itemize}
-\end{itemize}
+
 \subsection{Bugs persistants}
 \begin{itemize}
 \item Le premier bâtiment sélectionné de la partie disposant d'un rayon d'effet a l'affichage du rayon d'effet qui est faux si on le sélectionne avec un raccourci clavier et qu'on ne change pas de case, l'affichage du rayon d'effet devient juste dés qu'on change de case.
