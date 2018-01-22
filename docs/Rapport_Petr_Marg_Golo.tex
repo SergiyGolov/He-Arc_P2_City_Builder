@@ -485,8 +485,8 @@ Les fonctions de récupération retournent un valeur stocké mais la valeur stoc
 \subsection{Sélecteur pour poser/détruire route/bâtiment}
 Quand on choisi d'ajouter/détruire une route/bâtiment, la $MapView$ se mets en mode "picker" (sélecteur) pendant lequel les cases de la carte se trouvant sous la souris montre un aperçu de l'action choisie:
 \begin{itemize}
-\item Quand on a choisi l'ajout d'un bâtiment, les cases sous la souris se colorient de la couleur du futur bâtiment quand le posage sous ces cases est possibles, disparaît si ce n'est pas possible (quand on mets la souris par dessus un bâtiment déjà existant par exemple), et quand on fait un clique gauche quand les cases sous la souris sont coloriés (donc quand le posage est possible), le bâtiment est effectivement ajouté et devient persistant sur la carte
-\item Quand on choisi l'ajout d'une route, la case sous la souris devient grise quand le posage est possible, un premier clic commence à "tirer" la route dans n'importe quelle des 4 directions par rapport à la première case, dés qu'on a choisi une 2ème case, cette direction est "bloquée" et on ne peut que continuer de "tirer" la route dans cette direction, après avoir fini de "tirer" la route un clique gauche de la souris ajoute la route de façon définitive
+\item Quand on a choisi l'ajout d'un bâtiment, les cases sous la souris se colorient de la couleur du futur bâtiment quand le placement sous ces cases est possible, disparaît si ce n'est pas possible (quand on mets la souris par dessus un bâtiment déjà existant par exemple), et quand on fait un clique gauche quand les cases sous la souris sont coloriés (donc quand le placement est possible), le bâtiment est effectivement ajouté et devient persistant sur la carte
+\item Quand on choisi l'ajout d'une route, la case sous la souris devient grise quand le placement est possible, un premier clic commence à "tirer" la route dans n'importe quelle des 4 directions par rapport à la première case, dés qu'on a choisi une 2ème case, cette direction est "bloquée" et on ne peut que continuer de "tirer" la route dans cette direction, après avoir fini de "tirer" la route un clique gauche de la souris ajoute la route de façon définitive
 \item Quand la destruction d'un bâtiment/route est sélectionné, les bâtiments/routes qui se trouvent sous la souris se colorient en noir quand on passe dessus, et un clique gauche dessus supprime le bâtiment/route de la partie
 \item Un clique droite pendant ces 3 actions ci-dessus annule l'action en question
 \end{itemize}
@@ -584,7 +584,7 @@ Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag git
 		 Graine aléatoire & La graîne aléatoire est suffisamment aléatoire. & OK.
 		 \\ \hline
 		Choix de l'exécutable du jeu (Set game file)&
-		L'exécutable peut être choisi à l'aide d'une boîte modale qui a pour contrainte le nom "citybuilder.exe", la casse n'est pas à être respectée. &
+		L'exécutable peut être choisi à l'aide d'une boîte modale qui a pour contrainte le nom "citybuilder.exe" (pour WIndows) ou "citybuilder" (pour Linux), la casse n'a pas à être respectée sur Windows. &
 		Choix pris en compte dans l'interface
 		\\ \hline
 		Choix du dossier de sauvegarde (Set save folder) &
@@ -593,7 +593,7 @@ Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag git
 		\\ \hline
 		Bouton jouer (Play) &
 		Le bouton play doit s'activer et se désactiver correctement. &
-		Il ne se désactive pas si du text à été saisie pour le nom de la partie puis supprimé ou qu'une partie à été sauvegarde sélectionné puis changement d'onglet.
+		Il ne se désactive pas si du texte à été saisi pour le nom de la partie puis supprimé ou qu'une partie à charger à été sélectionné puis l'onglet changé.
 		\\ \hline
 	\end{tabular}
 \end{center}
@@ -643,10 +643,10 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 \\ \hline Lancement & Le client se lance correctement à la création d'une nouvelle partie. & OK.
 \\ \hline Lancement & Le client se lance correctement au chargement d'une sauvegarde. & OK.
 \\ \hline Lancement & Le client se lance correctement lorsqu'on le lance via une ligne de commande pour dans les deux cas ci-dessus. & OK.
-		 \\ \hline Un bâtiment ne peut pas être construit sans route adjacente & Essayer de poser un bâtiment non-adjacent à une route & Le posage est annulé et la case sur laquelle on a essayé de poser clignote en rouge
-		\\ \hline Un bâtiment ne peut être posé sur une case déjà occupé (eau/autre bâtiment) & En mode posage de bâtiment, essayer d'aller avec la souris sur un autre bâtiment/sur de l'eau & La prévisualisation du bâtiment sur la case sous la souris disparaît, on ne peut pas cliquer donc on ne peut pas poser de bâtiment
+		 \\ \hline Un bâtiment ne peut pas être construit sans route adjacente & Essayer de poser un bâtiment non-adjacent à une route & Le placement est annulé et la case sur laquelle on a essayé de poser clignote en rouge
+		\\ \hline Un bâtiment ne peut être posé sur une case déjà occupé (eau/autre bâtiment) & En mode placement de bâtiment, essayer d'aller avec la souris sur un autre bâtiment/sur de l'eau & La prévisualisation du bâtiment sur la case sous la souris disparaît, on ne peut pas cliquer donc on ne peut pas poser de bâtiment
 		\\ \hline Quand on pose/détruit une maison habitée, l'indicateur de population se mets à jour comme prévu & Poser un bâtiment, regarder l'indicateur de population au prochain tick, détruite ce bâtiment et regarder l'indicateur de population au prochain tick & L'indicateur de population se mets bien à jour comme prévu, poser une maison l'augmente et la détruire le diminue
-		\\ \hline Les routes peuvent que être posés en ligne droite et selon la direction de la 2ème case sélectionnée & Essayer de cliquer avec la souris ailleurs que la direction de la 2ème case sélectionnée en mode posage de route & Le posage de route est annulé et la case sur laquelle on voulait poser clignote en rouge
+		\\ \hline Les routes peuvent que être posés en ligne droite et selon la direction de la 2ème case sélectionnée & Essayer de cliquer avec la souris ailleurs que la direction de la 2ème case sélectionnée en mode placement de route & Le placement de route est annulé et la case sur laquelle on voulait poser clignote en rouge
 		\\ \hline La portée d'effet d'un bâtiment affiché doit pas être plus grand que la portée calculée & Poser un bâtiment à effet (clinique p. ex) et poser une maison sur la dernière case de portée affichée et poser une maison sur la case d'après & Le bonheur additionnel est toujours pris en compte avec la plus petite valeur possible pour la maison la plus proche, pas toujours pour la maison qui se trouve une case plus loin
 		\\ \hline Quand on pose un bâtiment, son prix est déduit de l'argent & Poser un bâtiment a un coût et vérifier le delta d'argent au prochain tick & Le delta d'argent correspond bien au prix soustrait au delta d'avant
 		\\ \hline On ne peut pas poser de bâtiment si ses prérequis n'ont pas été atteints & Essayer de poser un crématoire avant un cimetière & Pas possible, le bouton du crématoire est inactif et son texte rouge
