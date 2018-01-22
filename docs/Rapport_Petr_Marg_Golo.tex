@@ -1,6 +1,7 @@
 \documentclass[a4paper,10pt,openany,oneside]{report}
 
 \usepackage{amsfonts}
+\usepackage{pstricks}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[french]{babel}
@@ -54,13 +55,20 @@
 }
 
 \begin{document}
-\begin{titlepage}
-\titlepic{\includegraphics[scale=0.2]{img/iconCB.png}}
-\title{City Builder}
-\author{Damian Petroff, Sergiy Goloviatinski, Raphaël Margueron}
-\date{\today}
-\maketitle
-\end{titlepage}
+\pagenumbering{gobble}
+\vspace*{1cm}
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{img/iconCB.png}
+\end{figure}
+\vspace*{6cm}
+\begin{center}
+\textbf{\Huge City Builder} \\[1cm]
+{\Large Damian Petroff, Sergiy Goloviatinski, Raphaël Margueron}
+\\[4cm]
+22 janvier 2018
+\end{center}
+
 
 %------
 \thispagestyle{empty}
@@ -72,13 +80,14 @@
 Dans le cadre du "Projet P2", nous, Raphaël Margueron, Sergiy Goloviatinsky et Damian Petroff, avons la tâche de réaliser une application graphique en C++ grâce au framework Qt. 
 Ce rapport décrit les étapes de réflexion, conceptualisation et réalisation des différentes facettes du projet. En premier lieu, nous analyserons les besoins du projet et ses spécifications. Ensuite nous détaillerons sa conception, notre planification et notre stratégie de développement. À la suite de quoi nous expliquerons la phase de développement en détail. Enfin, nous proposerons un bilan du projet suivi d'une conclusion traitant de notre ressenti par rapport à cette expérience.
 \pagebreak
-%------
-\thispagestyle{empty}
+
 \tableofcontents
-\thispagestyle{empty}
-%------
+
+
+\setcounter{page}{0}
 \chapter*{Introduction}
-\setcounter{page}{1}
+\pagenumbering{arabic}
+\thispagestyle{headings}
 \paragraph{}
 L'industrie vidéo-ludique est aujourd'hui un marché grandissant de manière notoire et notre intérêt pour les diverses facettes que ce domaine propose a inévitablement influencé notre choix.
 En effet, la conception d'un jeu-vidéo n'est de loin pas une mince affaire. Dans ce rapport nous allons présenter comment nous avons relevé le défi et notre approche sur sa conception et sa réalisation.
@@ -228,6 +237,7 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 
 \subsubsection{Bâtiments}
 \begin{itemize}
+\item Les bâtiments peuvent être tournés par quart de tour;
 \item Les bâtiments peuvent occuper des cases de manière non-rectangulaire (en L par exemple)
 \end{itemize}
 
@@ -272,16 +282,16 @@ Le bloc en rouge n'a pas été implémenté
 \subsubsection{Diagramme de classe}
 \includegraphics[width=0.9\textwidth]{img/hierarchieClasses.png}
 \begin{itemize}
-\item Le point d'entrée est $LoadSaveService$, qui soit charge une sauvegarde ou soit crée une nouvelle partie à partir des arguments passés au $main$
-\item $GraphicService$ comporte des méthodes généralistes utilisés par toutes les vue comme par exemple la gestion des raccourcis claviers ou la coloration des bâtiments selon leurs catégorie
+\item Le point d'entrée est $LoadSaveService$, qui soit charge une sauvegarde, soit crée une nouvelle partie à partir des arguments passés au $main$
+\item $GraphicService$ comporte des méthodes généralistes utilisés par toutes les vues comme par exemple la gestion des raccourcis claviers ou la coloration des bâtiments selon leur catégorie
 \item $GuiView$ contient l'interface utilisateur qui permet de poser des routes/bâtiments ou les détruire (se trouve en bas de l'écran), les boutons de ce menu sont représentés avec la classe $PickerElement$, quand on clique sur un $PickerElement$ (autre que ceux représentant les catégories) la $MapView$ se mets dans le mode correspondant
 \item $TopView$ contient l'interface utilisateur qui nous montre les informations sur la partie et permet de faire divers configurations (volume musique, niveau des taxes p. ex) et actions  (charger/sauvegarder partie p. ex)
-\item $MapView$ contient l'affichage du terrain de jeu, et est composé de $MapTile$ qui représentent les cases du jeu
+\item $MapView$ contient l'affichage du terrain de jeu, et est composée de $MapTile$ qui représente les cases du jeu
 \item $ConstantBuilding$ stocke les informations sur les bâtiments (nom, catégorie, prix, portée d'effet, etc.)
-\item $BuildingManagementService$ gère la logique des bâtiments, c'est à dire le calcul du prix, du bonheur, la gestion des portées d'effets etc. , de plus contient les structures de données contenant les $Building$ qui sont des bâtiments qui ont été instanciés au cours de la partie
+\item $BuildingManagementService$ gère la logique des bâtiments, c'est à dire le calcul du prix, du bonheur, la gestion des portées d'effets etc. De plus, la classe contient les structures de données contenant les $Building$ qui sont des bâtiments qui ont été instanciés au cours de la partie.
 \item $GameManagementService$ gère la logique "haut niveau" du jeu, donc contient les valeurs sur l'argent, le bonheur et la population, et s'occupe d'instancier le $TickService$ et $AudioService$
-\item $TickService$ recalcule les données du jeu s'il y a eu un bâtiment ajouté/retiré depuis le dernier tick, un tick s’exécutant chaque seconde
-\item $AudioService$ est appelé pour jouer la musique du jeu, et pioche parmi plusieurs sons possibles à chaque fois qu'on construit un bâtiment
+\item $TickService$ recalcule les données du jeu s'il y a eu un bâtiment ajouté ou retiré depuis le dernier tick, un tick s'exécutant chaque seconde
+\item $AudioService$ est appelée pour jouer la musique du jeu, et pioche parmi plusieurs sons possibles à chaque fois qu'on construit un bâtiment
 \end{itemize}
 \subsubsection{Convention de codage}
 La convention de codage utilisée est celle spécifiée sur la forge\footnote{\href{https://forge.ing.he-arc.ch/gitlab/dgr/Ressources/wikis/convention}{\textcolor{blue}{La forge}}}.
@@ -294,7 +304,7 @@ Cette section traite des choix faits sur les possibilités d'interactions de l'u
 \paragraph{}
 De manière générale, nous avons opté pour une interaction simple et intuitive. Il y a deux possibilités : Créer un nouvelle partie et en charger un à partir d'une sauvegarde.
 \paragraph{}
-L'utilisateur doit indiquer l'emplacement de l'exécutable du jeu et l'emplacement du dossier contenant des sauvegardes s'il souhaite en charger une.
+L'utilisateur doit indiquer l'emplacement de l'exécutable du jeu et l'emplacement du dossier contenant des sauvegardes, s'il souhaite en charger une.
 
 \subsection{Client}
 \subsubsection{Esthétique}
@@ -308,7 +318,7 @@ $TopView$ : Vue fixe se trouvant toujours en haut de l'interface et qui contient
 \item Des indicateurs d'argent, de bonheur et de population disponible pour le joueur avec le delta entre chaque seconde
 \item Une $SpinBox$ permettant de régler le niveau d'impôts
 \item Le nom de la carte, pouvant être modifié si on clique dessus
-\item Des $Slider$ pour régler le volume de la musique et des effets
+\item Des $Sliders$ pour régler le volume de la musique et des effets
 \item Des boutons pour charger,sauvegarder et quitter la partie
 \item La valeur de la seed utilisée pour générer la carte
 \end{itemize}
@@ -335,7 +345,7 @@ $GuiView$ : Vue contenant les boutons permettant de:
 \chapter{Développement et réalisation}
 \thispagestyle{headings}
 \section{Fonctionnalités du launcher}
-Le launcher permet de créer une interface entre les paramètres de création de partie ou le chargement de sauvegarde et les argument en ligne de commande du client.
+Le launcher permet de créer une interface entre les paramètres de création de partie ou le chargement de sauvegarde et les arguments en ligne de commande du client.
 \subsection{Création d'une partie}
 Pour la création d'un partie nous avons réfléchi sur quel paramètre nous laissions libre à l'utilisateur et nous avons développé une interface autour de ceux-ci.
 \newline
@@ -354,17 +364,21 @@ Si une sauvegarde est sélectionné et que l'utilisateur appuie sur "Play" le la
 \subsection{Génération des sols}
 Pour la gestion du terrain, nous avons décidé d'avoir deux types de sol : l'eau et l'herbe. Sur l'herbe, il est possible d'ajouter des bâtiments et sur l'eau non.
 
-Pour pouvoir avoir des cartes auto-générée, nous avons décide d'utiliser un algorithme de bruit de Perlin. Nous n'allons pas aller dans les détails du fonctionnement du bruit de Perlin, dans ce rapport. Mais son principe est le suivant: il permet d'avoir des nombres aléatoires qui sont proche les uns de autres en function d'une seed(pour l'aléatoire, initialisé au début) et de 1, 2 ou X dimensions (trois dans celui que nous avons utilisés, mais que 2 utilisés). Vu que les outputs de la function de bruit de Perlin sont les mêmes quand nous utilisons les mêmes inputs. Nous pouvons la considérer comme une fonction à plusieurs variables (qui sont les dimensions et la seed). Changer la seed donne des résultats complètement différent mais changer les autres variables change peu entre chaque valeur.
+Pour pouvoir avoir des cartes générées de façon aléatoire, nous avons décidé d'utiliser un algorithme de bruit de Perlin. Nous n'allons pas aller dans les détails du fonctionnement du bruit de Perlin, dans ce rapport. Mais son principe est le suivant: il permet d'avoir des nombres aléatoires qui sont proche les uns de autres en fonction d'une graine (pour l'aléatoire, initialisée au début) et de 1, 2 ou $n$ dimensions.L'algorithme que nous avons utilisé permet d'en utiliser 3 mais seules 2 nous sont utiles.
+\paragraph{}
+Bien que le contenu de la fonction du bruit de Perlin utilise de l'aléatoire, les résultats sont constants pour une entrée donnée, nous pouvons alors la considérer comme une fonction à plusieurs variables (qui sont les dimensions et la graine).
+Il est donc évident que changer la graine résulte en une carte de nature complètement différente.
+Alors que changer les autres variables (i.e. se déplacer dans l'espace) donne une variation très faible ce qui veut donc dire que la fonction est théoriquement continue (pour un écart de calcul infinitésimal). Ce qui donne donc une impression de dénivelé.
 
-\[bruit = perlin(seed, x, y, z)\]
+\[bruit = perlin(seed, x, y)\]
 
-Les nombres aléatoires que nous récupérons de la function sont des nombres flottant entre 0 et 1.
-Leurs distribution sont sous la forme d'une distribution normal, avec un écart type de 1 et .
+Les nombres aléatoires que nous récupérons de la fonction sont des nombres flottants valant entre 0 et 1.
+Leur distribution sont sous la forme d'une distribution normale, avec un écart type de 1 et une valeur moyenne de 0.5.
 \[y=e^{-x^{2}}\]
 
-Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le fonction de Perlin" d'un certain offset (qui est un multiple des index des cases). \\
-On calcule la le bruit de Perlin sur cette case et si la valeur valeur est entre 0.3 et 0.7 la case est une case d'herbe. Sinon c'est une case d'eau. \\
-Pour pouvoir obtenir un dégradé dans les couleurs de la carte nous somme nous avons converti la tranche du type de case (Eau : 0.0-0.3 ou 0.7-1.0, Herbe : 0.3-0.7) vers les valeurs RGB suivante :
+Pour pouvoir générer la carte, nous parcourons toutes les cases de la carte (selon x et y). Et nous nous "déplaçons" sur la fonction de Perlin d'un certain offset (qui est un multiple des index des cases). \paragraph{}
+On calcule le bruit de Perlin sur cette case et, si la valeur valeur est entre 0.3 et 0.7, la case est une case d'herbe. Sinon c'est une case d'eau. \\
+Pour pouvoir obtenir un dégradé dans les couleurs de la carte nous sommes nous avons converti la tranche du type de case, l'eau recouvre les cases dont le bruit vaut entre 0.0 et 0.3 ou entre 0.7 et 1.0 (il serait donc possible d'assigner l'intervalle $[0.7;1.0]$ à des montagnes par exemple. L'herbe, quant à elle, est assignée aux cases dont le bruit vaut entre 0.3 et 0.7. Ces valeurs RGB, pour les dégradés des surfaces, ont été utilisées :
 \begin{itemize}
 	\item Herbe :
 	\begin{itemize}
@@ -380,71 +394,72 @@ Pour pouvoir obtenir un dégradé dans les couleurs de la carte nous somme nous 
 	\end{itemize}
 \end{itemize}
 \subsection{Gestion des cases de la carte}
-Nous stockons les cases de la carte dans un $QArray$ d'une longueur $nbCases^{2}$
+Nous stockons les cases de la carte dans un $QArray$ d'une taille $nbCases^{2}$
 
-Une case à la coordonnée $X;Y$ dans la grille de cases représentant la carte correspond à l'élément se trouvant à l'indice $X+Y nbCases$ dans le $QArray$
+Une case à la coordonnée $(X;Y)$ dans la grille de cases représentant la carte correspond à l'élément se trouvant à l'indice $X+Y \cdot nbCases$ dans le $QArray$
 
-Une case de la carte est représenté par la classe $MapTile$ dérivé de la classe $QGraphicsRectItem$ et contient les attributs suivants:
+Une case de la carte est représentée par la classe $MapTile$ dérivée de la classe $QGraphicsRectItem$ et contient les attributs suivants:
 \begin{itemize}
-\item bOccupied (boolean): dit si la case est occupée par un bâtiment ou de l'eau ou pas
-\item x (int): coordonnée en x dans la matrice contenant les MapTile
-\item y (int): coordonnée en y dans la matrice contenant les MapTile
-\item bId (int): id du type de bâtiment (tous les hôpitaux ont la même bId p. ex)
-\item unique BId (int): id unique du bâtiment (chaque bâtiment posé aura une id unique différente)
-\item mainTileX (int): coordonnée en X de la case principale (en haut à gauche), utile pour les bâtiments d'une largeur ou hauteur supérieures à 1
-\item mainTileY (int): même chose que mainTileX mais la coordonnée Y
-\item buildingWIdth (int): largeur en nombre de cases d'un bâtiment
-\item buildingHeight (int): hauteur en nombre de cases d'un bâtiment
-\item bPix (boolean): indique si la case a une texture ou pas
-\item buildImage ($QGraphicsPixmapItem*$): Pointeur vers la texture du bâtiment/route qui se trouve sur la case
+\item bOccupied (boolean): contient true, si la case est occupée par un bâtiment ou de l'eau;
+\item x (int): coordonnée en x dans la matrice contenant les MapTile;
+\item y (int): coordonnée en y dans la matrice contenant les MapTile;
+\item bId (int): id du type de bâtiment (tous les hôpitaux ont la même bId p. ex);
+\item unique BId (int): id unique du bâtiment (chaque bâtiment posé aura un id différent);
+\item mainTileX (int): coordonnée en X de la case principale (en haut à gauche), utile pour les bâtiments d'une largeur ou hauteur supérieure à 1;
+\item mainTileY (int): pareil que mainTileX mais la coordonnée Y
+\item buildingWIdth (int): largeur en nombre de cases d'un bâtiment;
+\item buildingHeight (int): hauteur en nombre de cases d'un bâtiment;
+\item bPix (boolean): indique si la case a une texture ou pas;
+\item buildImage ($QGraphicsPixmapItem*$): Pointeur vers la texture du bâtiment/route qui se trouve sur la case;
 \end{itemize}
 \subsection{Routes et bâtiments}
-Pour la gestion des routes et des bâtiments nous sommes parti sur une approche plutôt simple qui est d'avoir divisé en trois classe qui chacune des rôles spécifique. Une qui décrit les caractéristiques propre à chaque bâtiments : les constantes -> ConstantBuilding. Une seconde classe qui décrit une bâtiment spécifique à la partie -> Building. Et une troisième qui sert de gestionnaires de building, 'classe tableau' -> BuildingManager. 
+Pour la gestion des routes et des bâtiments nous sommes partis sur une approche relativement simple qui est d'avoir divisé en trois classes qui chacune a un rôle spécifique. Une qui décrit les caractéristiques propres à chaque bâtiment : $ConstantBuilding$. Une seconde classe qui décrit un bâtiment spécifique à la partie : $Building$. Et une troisième qui sert de gestionnaire de building : $BuildingManager$. 
 
 \subsubsection{Constant Building}
-Constant Building contient une function de construction d'un tableau d'objet de 'soit même'. Chacun de ces objet représente un bâtiment avec toutes ces caractéristiques internes, par exemple : le prix de construction, la liste des bâtiments nécessaires pour sa construction ou encore sa catégorie dans l'affichage de l'HUD.
+$ConstantBuilding$ contient une fonction statique de construction d'un tableau d'instances de $ConstantBuilding$ (elle-même). Ce tableau représente les propriétés internes chaque type de bâtiment (p. ex. le prix de construction, la liste des bâtiments nécessaires pour sa construction ou encore sa catégorie dans l'affichage de l'HUD)
 
-Liste de caractéristique de base de chaque bâtiment :
+Liste des caractéristiques de base de chaque bâtiment :
 \begin{itemize}
 	\item Nom à l'affichage
 	\item Catégorie
 	\item Prix
 	\item Largeur (au sol)
 	\item Hauteur (au sol)
-	\item Une liste de case ignoré (non-implémenté, pour avoir la possibilité d'avoir de bâtiment non rectangulaire)
+	\item Une liste de cases ignorées (non-implémentée, pour avoir la possibilité d'avoir des bâtiments non-rectangulaires)
 	\item Type de pré-requis (Ou / Et)
-	\item Une liste d'identifiant de bâtiment pré-requis.
-	\item La sommes des pré-requis nécessaires. 
+	\item Une liste d'identifiants de bâtiments pré-requis.
+	\item La somme des pré-requis nécessaires. 
 \end{itemize}
 
-Nous avons choisi d'avoir des objets au lieu d'une liste de constante, pour pouvoir avoir la possibilité d'y ajouter des fonctions pour ces objets ce qui nous a permis d'avoir un autre set de valeur basé sur les caractéristiques de base, voir ci-dessous. Cela nous permet ajuster facilement le jeu et d'avoir une sorte de progression linaire du jeu.
 
-Liste des caractéristique dérivé :
+
+Liste des caractéristiques dérivées :
 \begin{itemize}
-  \item Prix/Secondes = \(Prix / 4\)
-  \item Efficacité = \((Prix/10)^{1.4} + 10\) (arrondi au multiple de 25 le plus proche)
-  \item Rayon d'action = \(Log10(PrixParSecondes*Efficacite + 1)\) (Arrondi au multiple de 5 le plus proche)
+  \item $PrixParSeconde$ = \(Prix / 4\)
+  \item $Efficacite$ = \((Prix/10)^{1.4} + 10\) (arrondi au multiple de 25 le plus proche)
+  \item Rayon d'action = \(log_{10}(PrixParSeconde \cdot Efficacite + 1)\) (Arrondi au multiple de 5 le plus proche)
   \item Poids du Bâtiment dans les pré-requis = \(Prix / 10\)
 \end{itemize}
 
-On remarque donc que le prix du bâtiment influe directement sur tous les caractéristique qui définisse si le bâtiment est performant ou non.
+On remarque donc que le prix du bâtiment influe directement sur toutes les caractéristiques qui définissent si le bâtiment est performant ou non.
 
 Fonctionnement des pré-requis :
-Les pré-requis sont un aspect que nous considérons comme l'élément primordiale permettant au jeu d'avoir une progression. Le principe est le suivant.
+Les pré-requis sont un aspect que nous considérons comme l'élément primordial permettant au jeu d'avoir une progression. Le principe est le suivant :
 
-Pour qu'un bâtiment soit accessible à la construction il faut qu'il respect les règles suivantes si son type de pré-requis est 'ou' :
-La somme des poids de tous les bâtiments qui sont actuellement posé qui sont dans la liste des bâtiments en pré-requis du bâtiment désiré doit être supérieur ou égal à la somme des pré-requis nécessaires.
+Pour qu'un bâtiment soit accessible à la construction il faut qu'il respecte les règles suivantes si son type de pré-requis est 'ou' :
+La somme des poids de tous les bâtiments qui sont actuellement posés et dans la liste des bâtiments en pré-requis du bâtiment désiré doit être supérieure ou égal à la somme des pré-requis nécessaires.
 Exemple :
-Pour poser un Laboratoire médical : Il faut au moins une somme de 6.
-La liste des bâtiments pré-requis et des poids pour le laboratoire est la suivante :
+La liste des bâtiments pré-requis et des poids pour le laboratoire médical est la suivante :
 \begin{itemize}
 	\item Clinique : 1
 	\item Hôpital : 5
 \end{itemize}
+Pour poser un laboratoire médical, il faut donc au moins une somme de 6.
+
 Il y a donc au moins trois possibilités pour arriver à remplir cette demande :
 \begin{itemize}
 	\item 6x Clinique
-	\item 1x Clinique et 1x Hôpital (Meilleur solution, au niveau du prix par seconde de le efficacité sur un grand rayon)
+	\item 1x Clinique et 1x Hôpital (Meilleure solution, au niveau du prix par seconde de l'efficacité sur un grand rayon)
 	\item 2x Hôpital
 \end{itemize}
 
@@ -458,93 +473,94 @@ La liste des bâtiments pré-requis et des poids pour le laboratoire est la suiv
 	\item Caserne de pompier : 1.5
 	\item Quartiers généraux : 5
 \end{itemize}
-Il y a donc au moins une possibilité pour arrivé à remplir cette demande, qui est d'avoir une bâtiment de chaque. A noter que dans ce cas, la somme de pré-requis n'influence pas pour ce bâtiment, mais on pourrai imaginer qu'un bâtiment aille une somme plus grande que la somme de chaque bâtiment pré-requis et la la somme aurai une influence.
+Il y a donc au moins une possibilité pour arriver à remplir cette demande, qui est d'avoir un bâtiment de chaque. À noter que dans ce cas, la somme de pré-requis n'a pas d'effet pour ce bâtiment, mais on pourrait imaginer qu'un bâtiment ait une somme minimale plus grande que la somme de chaque bâtiment pré-requis et donc que la construction de plusieurs d'entre eux serait nécessaire.
 
 \subsubsection{Building}
-La classe building décrit un bâtiment posé dans une partie. Il est décris les caractéristiques suivantes :
+La classe building décrit un bâtiment posé dans une partie. Il est décrit par les caractéristiques suivantes :
 \begin{itemize}
 	\item Un identifiant unique
 	\item Un identifiant du type de bâtiment (de ConstantBuilding)
-	\item Une position X/Y
+	\item Une position $(X;Y)$
 	\item Un angle de rotation (De quel côté est posé le bâtiment, non-implémenté)
 	\item Une population
 \end{itemize}
-On peut donc noter que cet objet est rendu assez 'léger' car la plus part de ce qui le décrit est géré par l'identifiant constant building. Nous pouvons donc avoir beaucoup de bâtiment et avoir une emprunte mémoire peu conséquente.
+On peut donc noter que cet objet est rendu assez 'léger' car la plupart de ce qui le décrit est géré par l'identifiant $ConstantBuilding$. Nous pouvons donc avoir beaucoup de bâtiments et avoir une emprunte mémoire peu conséquente.
 
 \subsubsection{Building Manager}
-Cette classe permet de gérer une liste de bâtiment de la classe Building. On peut exécuté les actions suivante :
+Cette classe permet de gérer une liste de bâtiments de la classe $Building$. On peut exécuter les actions suivantes :
 \begin{itemize}
 	\item Ajouter un bâtiment (qui est ajoutable selon les pré-requis)
-	\item Supprimer des bâtiments 
-	\item Récupérer la population total de la ville.
+	\item Supprimer un bâtiment 
+	\item Récupérer la population totale de la ville.
 	\item Récupérer le bonheur moyen de la ville.
 	\item Récupérer la somme des prix par seconde.
 \end{itemize}
 
-Les fonctions de récupération retournent un valeur stocké mais la valeur stock est recalculé si le besoin l'est, par exemple le bonheur moyen ne varie pas selon le temps mais si un nouveau bâtiment est placé on doit donc recalculer le bonheur moyen.
-\subsection{Sélecteur pour poser/détruire route/bâtiment}
-Quand on choisi d'ajouter/détruire une route/bâtiment, la $MapView$ se mets en mode "picker" (sélecteur) pendant lequel les cases de la carte se trouvant sous la souris montre un aperçu de l'action choisie:
+Les fonctions de récupération retournent une valeur stockée qui est recalculée si le besoin est, par exemple le bonheur moyen ne varie pas selon le temps mais si un nouveau bâtiment est placé. On doit donc recalculer le bonheur moyen.
+\subsection{Sélecteur pour poser/détruire une route/bâtiment}
+Quand on choisi d'ajouter/détruire une route/bâtiment, la $MapView$ se met en mode "picker" (sélecteur) pendant cet instant, les cases de la carte qui se trouvent sous la souris montre un aperçu de l'action choisie:
 \begin{itemize}
-\item Quand on a choisi l'ajout d'un bâtiment, les cases sous la souris se colorient de la couleur du futur bâtiment quand le placement sous ces cases est possible, disparaît si ce n'est pas possible (quand on mets la souris par dessus un bâtiment déjà existant par exemple), et quand on fait un clique gauche quand les cases sous la souris sont coloriés (donc quand le placement est possible), le bâtiment est effectivement ajouté et devient persistant sur la carte
-\item Quand on choisi l'ajout d'une route, la case sous la souris devient grise quand le placement est possible, un premier clic commence à "tirer" la route dans n'importe quelle des 4 directions par rapport à la première case, dés qu'on a choisi une 2ème case, cette direction est "bloquée" et on ne peut que continuer de "tirer" la route dans cette direction, après avoir fini de "tirer" la route un clique gauche de la souris ajoute la route de façon définitive
-\item Quand la destruction d'un bâtiment/route est sélectionné, les bâtiments/routes qui se trouvent sous la souris se colorient en noir quand on passe dessus, et un clique gauche dessus supprime le bâtiment/route de la partie
-\item Un clique droite pendant ces 3 actions ci-dessus annule l'action en question
+\item Quand on a choisi l'ajout d'un bâtiment, les cases sous la souris se colorient de la couleur du futur bâtiment quand le placement sous ces cases est possible, disparaît si ce n'est pas possible (quand on met la souris par dessus un bâtiment déjà existant par exemple), et quand on fait un clic-gauche quand les cases sous la souris sont coloriés (donc quand le placement est possible), le bâtiment est effectivement ajouté et devient persistant sur la carte.
+\item Quand on choisi l'ajout d'une route, la case sous la souris devient grise quand le placement est possible, un premier clic commence à "tirer" la route dans n'importe quelle des 4 directions par rapport à la première case, dés qu'on a choisi une deuxième case, cette direction est "bloquée" et on ne peut que continuer de "tirer" la route dans cette direction, après avoir fini de "tirer" la route un clique gauche de la souris ajoute la route de façon définitive
+\item Quand la destruction d'un bâtiment/route est sélectionnée, les bâtiments/routes qui se trouvent sous la souris se colorient en noir quand on passe dessus, et un clic-gauche dessus supprime le bâtiment/route de la partie
+\item Un clic-droit pendant ces trois actions ci-dessus annule l'action en question
 \end{itemize}
 \subsection{Adaptation des textures de routes dynamique}
-Quand on pose une route et que celle-ci a des cases adjacentes avec une route existante, les textures des cases se mettent à jour afin de prendre en compte des éventuelles intersections entre l'ancienne et la nouvelle route (Une case peut devenir un virage, un croisement "en X" ou une intersection "en T")
+Quand on pose une route et que celle-ci a des cases adjacentes à une route existante, les textures des cases se mettent à jour afin de prendre en compte des éventuelles intersections entre l'ancienne et la nouvelle route (Une case peut devenir un virage, un croisement "en X" ou une intersection "en T")
 \subsection{Représentation des bâtiments}
-L'idée initiale était d'avoir une texture différente pour chaque bâtiment, mais n'ayant pas trouvé de textures satisfaisantes nous avons juste un bâtiment et les routes qui sont dotés de textures.
+L'idée initiale était d'avoir une texture différente pour chaque bâtiment, mais n'ayant pas trouvé de textures satisfaisantes nous avons juste un bâtiment (la maison de base) et les routes qui sont dotés de textures.
 \newline
-Les autres bâtiments sont des carrés de couleur, avec une couleur unique par catégorie de bâtiment (de toutes façons pour le calcul de bonheur l'important c'est d'avoir un bâtiment de chaque type et la distance séparant une maison d'un bâtiment à effet)
+Les autres bâtiments sont des carrés de couleur, avec une couleur unique par catégorie de bâtiment (de toute façon, pour le calcul de bonheur, l'important est d'avoir un bâtiment de chaque type et la distance séparant une maison d'un bâtiment à effet)
 \subsection{Déroulement en fonction du temps de la partie}
-Le jeu se déroule en fonction du temps sur divers aspects, cela permet d'avoir une progression. Toute les secondes certain calcules sont effectuer pour donner l'impression au joueur que le temps défile. Voici les trois indicateurs que nous avons choisis de représenté :
+Le jeu se déroule en fonction du temps sur divers aspects, cela permet d'avoir une progression. Toutes les secondes, certains calculs sont effectués pour donner l'impression au joueur que le temps défile. Voici les trois indicateurs que nous avons choisis de représenter :
 \begin{itemize}
 	\item Bonheur : Représente une satisfaction de la population sur la ville construite.
 	\item Argent : Le solde que la ville a à disposition pour faire de modifications.
-	\item Population : Le nombre d'habitant qui réside actuellement dans la ville.
+	\item Population : Le nombre d'habitants qui résident actuellement dans la ville.
 \end{itemize}
 Malgré nos efforts à rendre le jeu jouable. Nous avons parfaitement conscience que le jeu n'est pas très bien équilibré à ce niveau.
 \subsubsection{Temps : Heure et Date}
-Pour pouvoir donner un aspect réaliste au jeu, nous avons choisi de prendre la date du jour comme date du début de jeu. Puis toute les secondes, le temps virtuel augmente de une heure. Nous avons donc pour 60 minutes de jeu effectives correspondent à 150 jours virtuel.
+Pour donner un aspect réaliste au jeu, nous avons choisi de prendre la date du jour comme date du début de jeu. Puis, toutes les secondes, le temps virtuel augmente de une heure. Nous avons donc pour 60 minutes de jeu effectives, 150 jours virtuels.
 
 \subsubsection{Bonheur}
-La jauge de bonheur global est un nombre qui varie entre 0 et 250. Il est basé sur la moyenne du bonheur de toutes la résidence de la ville. 
+La jauge de bonheur global est un nombre qui varie entre 0 et 250. Il est basé sur la moyenne du bonheur de toutes la résidences de la ville. 
 \newline
 Pour chaque résidence, un bonheur résidentiel est calculé.
-Les paramètres suivant influence le bonheur résidentiel :
+Les paramètres suivant influencent le bonheur résidentiel :
 \begin{itemize}
-	\item Les bâtiments public autours de la résidence.
+	\item Les bâtiments publics autour de la résidence.
 	\item La proximité de ce bâtiment public.
 \end{itemize}
-Plus y il a de bâtiment efficace et proche d'un résidence pour le bonheur sera élevé pour cette résidence.
-Les paramètres suivant influence le bonheur global.
+Plus y il a de bâtiments efficaces et proches d'une résidence, plus le bonheur sera élevé pour cette résidence.
+Les paramètres suivants influencent le bonheur global.
 \begin{itemize}
 	\item Le bonheur résidentiel moyen
 	\item Les impôts en vigueur actuellement
 \end{itemize}
-Concernant les impôts nous avons fixé un multiplicateur à 100\% qui est au point neutre des impôts (8.0\%). Et qui peut varier entre 0\%-200\%. Plus le impôts sont bas plus les habitants seront content et à l'inverse plus les impôts sont élevé moins les habitants sont content.
+Concernant les impôts, nous avons fixés un multiplicateur à 100\% qui est au point neutre des impôts (8.0\%). Et qui peut varier entre 0\% et 200\%. Plus les impôts sont bas plus les habitants seront content et à l'inverse, plus les impôts sont élevés moins les habitants sont contents.
 \newline
-Pour ajouter un effet de lissage sur le temps du bonheur, nous avons implémenté un algorithme assez simple qui est le suivant :
-\[bohneur = 20\% ancienBohneur + 80\% bohneurResidentielMoyen\]
-L'ancien bonheur correspond au bonheur qui était en vigueur la seconde précédente.
+Pour ajouter un effet de lissage du bonheur sur le temps, nous avons implémenté un algorithme assez simple qui est le suivant :
+\[bohneur = 0.2 \cdot ancienBohneur + 0.8 \cdot bohneurResidentielMoyen\]
+$ancienBonheur$ correspond au bonheur qui était en vigueur la seconde précédente.
 
 \subsubsection{Population}
-Nous avons actuellement une population fixe mais il avait été prévu d'avoir un accroissement de la population en fonction du bonheur. Ainsi que des logements qui se construisent automatique au bords des routes en conséquence.
+Nous avons actuellement une population fixe mais il avait été prévu d'avoir un accroissement de la population en fonction du bonheur. Ainsi que des logements qui se construisent automatiquement aux bords des routes en conséquence.
 
 \subsubsection{Argent}
-Pour l'argent il y a principalement deux facteurs qui influence les revenus ou non de la ville.
+Pour l'argent il y a principalement deux facteurs qui influencent les revenus de la ville.
 \begin{itemize}
-	\item En négatif : Le prix par seconde des bâtiments public installés
-	\item En positif : Le impôts prélevé aux habitants.
+	\item En négatif : Le prix par seconde des bâtiments publics installés
+	\item En positif : Le impôts prélevés aux habitants.
 \end{itemize}
-Pour les revenus des impôts, nous avons fais une règle un peu fantaisiste qui est que les habitants payent des impôts relatif à leur satisfaction à la ville. Ce qui impose au joueur d'avoir une ville heureuse pour pouvoir avoir de l'argent. Ce qui nous évite permis de contourné le faites que les flux de population ne sont pas géré. Car initialement les revenus n'était pas censé être influencé par le bonheur mais seulement par la population. Ce qui nous apportai une liaison en triangle entre les trois indicateurs.
-Selon ce schéma Bonheur -> Population -> Argent -> Bonheur(Indirectement) et la boucle est fermé.
+Dû au fait que les flux de population ne sont pas gérés, nous avons mis en place une règle un peu fantaisiste : Les habitants payent des impôts proportionnels à leur satisfaction. Ceci impose au joueur d'avoir une ville heureuse pour avoir de l'argent.\\
+Initialement, les revenus n'étaient pas censés être influencés par le bonheur, mais seulement par la population. Ce qui nous apportait une liaison en triangle entre les trois indicateurs.
+Selon ce schéma Bonheur -> Population -> Argent -> Bonheur(indirectement) et la boucle est fermée.
 
-\subsubsection{Dérivée des indicateurs}
-Lors du déroulement en fonction du temps nous avons trouvé intéressant d'avoir d'affiche la variation de chaque indicateurs entre les deux derniers calculs (la dérivée en fonction du temps). Calculé de cette façon. \[deltaValeur = nouvelleValeur - ancienneValeur\]
+\subsubsection{Variation des indicateurs}
+Lors du déroulement de la partie, nous trouvons intéressant d'afficher la variation de chaque indicateurs entre les deux derniers calculs (i.e. la variation des indicateurs en fonction du temps). La variation est calculée de cette façon. \[deltaValeur = nouvelleValeur - ancienneValeur\]
 
 \subsection{Gestion du son}
-Afin de faciliter la gestion du son, nous avons pris l'initiative de créer un classe dédiée à cette tâche, nous l'avons appelée \texttt{AudioService}.
+Afin de faciliter la gestion du son, nous avons pris l'initiative de créer une classe dédiée à cette tâche, nous l'avons appelée $AudioService$.
 \paragraph{}
 En ce qui concerne le contrôle par l'utilisateur, il est possible de gérer le volume via les trois sliders dans le panel supérieur du jeu, gérant respectivement :
 \begin{itemize}
@@ -553,17 +569,17 @@ En ce qui concerne le contrôle par l'utilisateur, il est possible de gérer le 
 \item Le volume global du jeu, le "master"
 \end{itemize}
 \paragraph{}
-La classe est un singleton. Au lancement du client, elle s'occupe de charger les différents bruitages, et créer un objet \texttt{QSoundEffect} pour chacun d'eux. Pour chaque type de bruitage correspond un nom dans un enum (\texttt{sfxID}) et à ces types de bruitages sont affecté des \texttt{QSoundEffect}.Lorsqu'un bruitage est demandé à être joué un \texttt{QSoundEffect} est choisi aléatoirement parmi le type de bruitage demandé. Ce fonctionnement nous a permis pour un action d'avoir facilement plusieurs bruitage aléatoire.
+La classe est un singleton. Au lancement du client, elle s'occupe de charger les différents bruitages, et créer un objet \texttt{QSoundEffect} pour chacun d'eux. Pour chaque type de bruitage correspond un nom dans un enum $sfxID$ et à ces types de bruitages sont affecté des $QSoundEffect$. Lorsqu'un bruitage est demandé à être joué un $QSoundEffect$ est choisi aléatoirement parmi le type de bruitage demandé. Ce fonctionnement nous a permis d'avoir plusieurs bruitage aléatoire pour une action.
 \paragraph{}
-Pour la gestion du mixeur, comme cité ci-dessus nous l'avons séparé en trois. Les trois volume représente une valeur entre 0 et 1 puis pour chaque \texttt{QSoundEffect} le volume est changé pour le produit du master et du volume de la musique ou des bruitages dans la cas échéant.
+Pour la gestion du mixeur, comme cité ci-dessus, nous l'avons séparé en trois. Les trois volumes représentent une valeur flottante entre 0 et 1. Puis, pour chaque $QSoundEffect$, le volume est changé pour le produit du master et du volume de la musique ou des bruitages dans la cas échéant.
 \subsection{Gestion des sauvegardes}
-Pour la sauvegarde des parties, nous avons opté pour un système de enregistrement par fichier JSON. Ce qui nous permet d'avoir les données répartis sous forme hiérarchique et Qt possède toute une palette de fonction pour gérer des fichier JSON. Nous n'avions aucune connaissance de ce format.
+Pour la sauvegarde des parties, nous avons opté pour un système d'enregistrement par fichier JSON. Ce qui nous permet d'avoir les données réparties sous forme hiérarchique et Qt possède toute une palette de fonctions pour gérer des fichiers JSON. Nous n'avions aucune connaissance de ce format.
 \paragraph{}
 Nous avions prévu deux types de fichier de sauvegarde : Un concernant une partie et un autre pour les configurations, celui-ci est le même pour n'importe quelle partie. Nous n'avons malheureusement pas eu le temps d'implémenter la sauvegarde de la configuration.
 \paragraph{}
-Quand aux données à sauvegarder, nous avons essayé de stocker un minimum d'information afin d'éviter toute redondance. Comme par exemple le bonheur de la ville peut être calculé avec nos fonctions. Il n'est donc pas sauvegardé dans le fichier. Un autre exemple assez "puissant" et nous permet d'éviter beaucoup d'information est la topographie de la carte, car en effet vu qu'elle est généré aléatoirement il nous suffi de stocker la graine et nous obtiendrons toujours le même résultat.
+Quand aux données à sauvegarder, nous avons essayé de stocker un minimum d'information afin d'éviter toute redondance. Comme par exemple le bonheur de la ville peut être calculé avec nos fonctions. Il n'est donc pas sauvegardé dans le fichier. Un autre exemple assez "puissant" et nous permet d'éviter beaucoup d'information est la topographie de la carte, car en effet vu qu'elle est générée aléatoirement il nous suffit de stocker la graine et nous obtiendrons toujours le même résultat.
 \paragraph{}
-Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
+Un exemple de fichier de sauvegarde se trouve dans les annexes.
 
 \section{Protocoles de tests}
 \thispagestyle{headings}
@@ -690,7 +706,7 @@ Les installateurs sont séparé en deux packages l'un installe le client (obliga
 Cela permet aux utilisateurs qui n'auraient pas la nécessité d'utiliser l'interface graphique du Launcher de s'en passer dès l'installation du logiciel.
 \newline
 
-La recherche des bibliothèques dynamiques utiles au projet n'a pas été évidente. Malgré l'utilisation de logiciel prévu à cet effet, comme par exemple pour Windows : Dependency Walker. Nous n'avons pas trouvé un moyen exact pour trouver quelle DLLs était nécessaire à notre projet. Nous avons donc plutôt fonctionner de manière empirique pour cette recherche.
+La recherche des bibliothèques dynamiques utiles au projet n'a pas été évidente. Malgré l'utilisation de logiciel prévu à cet effet, comme par exemple pour Windows : Dependency Walker. Nous n'avons pas trouvé un moyen exact pour trouver quelles DLLs étaient nécessaires à notre projet. Nous avons donc plutôt fonctionné de manière empirique pour cette recherche.
 \newline
 
 En revanche sur Linux, ce fût facile grâce à $linuxdeployqt$ qui génère un dossier dans lequel a été copié tous les fichiers $.so$ nécessaires et un fichier $qt.conf$ renvoyant vers ce dossier, il suffit donc de le mettre dans le dossier $data$ avant d'appeler $binarycreator$
@@ -737,6 +753,7 @@ On pourrait alors citer dans cette section quelques spécification bonus qui aur
 \item Pré-visualisation du ficher de sauvegarde dans le launcher :\\
 L'implémentation demande non seulement de visualiser la carte de base, mais également les structures posées dessus, ce qui demande un travail beaucoup plus conséquent qu'une simple régénération de la carte via sa graine;
 \item Le système de quêtes aurait pu être intéressant, car il aurait proposé une forme de tutoriel;
+\item La rotation des bâtiments qui est prévue dans le code mais que nous n'avons pas eu le temps d'implémenter;
 \item Les événements aléatoires;
 \item La possibilités de créer des bâtiments d'autre forme que rectangulaire ou carrée.\\
 Bien que prévue dans le code, n'a pas été implémentée car cela complexifie la gestion des rayons d'effet et l'affichage des potentielles textures ne fonctionnerait pas correctement. Par exemple, si un bâtiment en forme de L serait en partie devant et en partie derrière un autre.
@@ -744,7 +761,7 @@ Bien que prévue dans le code, n'a pas été implémentée car cela complexifie 
 \end{itemize}
 
 \section{Changement de planification}
-
+Nous avons finalement réduit notre nombre de tâches pour remplir au maximum notre cahier des charges dans le temps imparti. Voici un planning "a posteriori" :\\\\
 \includegraphics[width=1.1\textwidth]{img/planning_final.png}
 
 \chapter{Conclusion}
@@ -761,7 +778,7 @@ Nous somme heureux de nos progrès dans tous les domaines qui ont composé ce pr
 \item Et quelques autres encore.
 \end{itemize}
 \paragraph{}
-Nous avons fait notre possible pour être "originaux" et sortir de l'ordinaire des projets scolaires en intégrant des fonctionnalités auxquelles nous n'avions jamais touchées, par exemple la 2.5D, la génération aléatoire d'environnements, l'intégration d'effets sonores, ou encore le principe de Launcher permettant de lancer une application avec une autre en ajoutant des paramètres d'entrée par exemple.
+Nous avons fait notre possible pour être "originaux" et sortir de l'ordinaire des projets scolaires en intégrant des fonctionnalités auxquelles nous n'avions jamais touchées, par exemple la 2.5D, la génération aléatoire d'environnements, l'intégration d'effets sonores, ou encore le principe de Launcher permettant de lancer une application avec une autre en ajoutant des paramètres d'entrée par exemple. De manière globale, nous sommes très satisfaits de cette expérience aussi enrichissante qu'intéressante.
 
 \chapter{Sources}
 \begin{itemize}
@@ -775,4 +792,10 @@ Pour ce qui est de l'algorithme de Perlin (en lui même) utilisé, il a été tr
 
 \chapter{Annexes}
 \thispagestyle{headings}
+\begin{itemize}
+\item Code source;
+\item Présentation;
+\item Installateur Windows;
+\item Installateur Linux.
+\end{itemize}
 \end{document}
