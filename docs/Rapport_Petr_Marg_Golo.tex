@@ -16,6 +16,7 @@
 \usepackage{listings} %Pour le code
 \usepackage{titlepic}
 \usepackage{wrapfig}
+\usepackage{longtable}
 
 \setitemize{topsep=5pt}
 \setlength{\parindent}{1em}
@@ -575,6 +576,12 @@ Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag git
 	\hline
 		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
 		 \\ \hline
+		 Lancement & Le launcher se lance correctement. & OK.
+		 \\ \hline
+		 Interface & L'affichage des composants graphiques se fait correctement & Correct sur Linux, image de fond manquante sur Windows.
+		 \\ \hline
+		 Graine aléatoire & La graîne aléatoire est suffisamment aléatoire. & OK.
+		 \\ \hline
 		Choix de l'exécutable du jeu (Set game file)&
 		L'exécutable peut être choisi à l'aide d'une boîte modale qui a pour contrainte le nom "citybuilder.exe", la casse n'est pas à être respectée. &
 		Choix pris en compte dans l'interface
@@ -587,7 +594,6 @@ Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag git
 		Le bouton play doit s'activer et se désactiver correctement. &
 		Il ne se désactive pas si du text à été saisie pour le nom de la partie puis supprimé ou qu'une partie à été sauvegarde sélectionné puis changement d'onglet.
 		\\ \hline
-	\hline
 	\end{tabular}
 \end{center}
 
@@ -596,12 +602,13 @@ Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag git
 	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
 	\hline
 		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+\\ \hline
+		 Interface & Valeurs maximales et minimales des QSpinBox & Les valeurs maximales et minimales sont respectées.
 		 \\ \hline
-		Choix des paramètres & Est-ce que les paramètres peuvent être changés & Les quartes paramètres peuvent être changé indépendamment les un des autres, en respectent les contraintes.
+		Choix des paramètres & Est-ce que les paramètres peuvent être changés & Les quatres paramètres peuvent être changé indépendamment les un des autres, en respectent les contraintes.
 		\\ \hline
 		Pré-visualisation & Lors de la variation des paramètres de taille et de seed. Mise à jour? & La pré-visualisation de la carte se met à jour correctement lors du changement de seed et de taille de carte.
 		\\ \hline
-	\hline
 	\end{tabular}
 \end{center}
 
@@ -611,22 +618,30 @@ Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag git
 	\hline
 		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
 		 \\ \hline
-		\hline
+		 Interface & Les fichiers de sauvegarde s'affichent correctement dans la liste & OK.
+		 \\ \hline
+		 Lancement & Le fichier de sauvegarde sélectionné dans la liste est pris en compte lors du lancement du client & OK.
+		 \\ \hline
+		 Pré-visualisation & La pré-visualisation de la carte fonctionne pour une sauvegarde & KO ! Non pris en charge.
+		\\ \hline
 	\end{tabular}
 \end{center}
 
 \subsection{Client}
-Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet on avait 2 approches:
+Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet nous avions deux approches:
 \begin{itemize}
-\item Les test "à l'oeil" pour tout ce qui touchait la partie graphique, qui consistait à jouer et créer divers conditions et voir le résultat
+\item Les tests "à l'oeil" pour tout ce qui touchait à la partie graphique, qui consistait à jouer et créer divers conditions afin d'en noter le résultat.
 \
-\item Les test en observant la  valeur d'un indicateur avant et après un test ou alors en affichant la valeur d'une variable dans $qDebug()$ à un moment donné
+\item Les tests en observant la  valeur d'un indicateur avant et après un test ou alors en affichant la valeur d'une variable dans $qDebug()$ à un moment donné.
 
 \end{itemize}
 \begin{center}
-	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
+	\begin{longtable}{| p{0.2\textwidth} | p{0.4\textwidth} | p{0.4\textwidth} |}
 	\hline
 		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
+\\ \hline Lancement & Le client se lance correctement à la création d'une nouvelle partie. & OK.
+\\ \hline Lancement & Le client se lance correctement au chargement d'une sauvegarde. & OK.
+\\ \hline Lancement & Le client se lance correctement lorsqu'on le lance via une ligne de commande pour dans les deux cas ci-dessus. & OK.
 		 \\ \hline Un bâtiment ne peut pas être construit sans route adjacente & Essayer de poser un bâtiment non-adjacent à une route & Le posage est annulé et la case sur laquelle on a essayé de poser clignote en rouge
 		\\ \hline Un bâtiment ne peut être posé sur une case déjà occupé (eau/autre bâtiment) & En mode posage de bâtiment, essayer d'aller avec la souris sur un autre bâtiment/sur de l'eau & La prévisualisation du bâtiment sur la case sous la souris disparaît, on ne peut pas cliquer donc on ne peut pas poser de bâtiment
 		\\ \hline Quand on pose/détruit une maison habitée, l'indicateur de population se mets à jour comme prévu & Poser un bâtiment, regarder l'indicateur de population au prochain tick, détruite ce bâtiment et regarder l'indicateur de population au prochain tick & L'indicateur de population se mets bien à jour comme prévu, poser une maison l'augmente et la détruire le diminue
@@ -634,11 +649,12 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 		\\ \hline La portée d'effet d'un bâtiment affiché doit pas être plus grand que la portée calculée & Poser un bâtiment à effet (clinique p. ex) et poser une maison sur la dernière case de portée affichée et poser une maison sur la case d'après & Le bonheur additionnel est toujours pris en compte avec la plus petite valeur possible pour la maison la plus proche, pas toujours pour la maison qui se trouve une case plus loin
 		\\ \hline Quand on pose un bâtiment, son prix est déduit de l'argent & Poser un bâtiment a un coût et vérifier le delta d'argent au prochain tick & Le delta d'argent correspond bien au prix soustrait au delta d'avant
 		\\ \hline On ne peut pas poser de bâtiment si ses prérequis n'ont pas été atteints & Essayer de poser un crématoire avant un cimetière & Pas possible, le bouton du crématoire est inactif et son texte rouge
-		\\ \hline Dés qu'on a remplis un prérequis pour un bâtiment, celui-ci devient posable & On construit d'abord un cimetière et on essaye de construire un crématoire après & La couleur du texte ne se mets pas toujours à jour par contre le bâtiment devient posable
-		\\ \hline Les routes adaptent une forme cohérente quand on pose une route voisine à une route déjà existante & "Dessinner" un croisement "en X", un virage et une intersection "en T" & Les textures des routes se mettent bien à jour de façon cohérente
+		\\ \hline Dés qu'on a remplis un pré-requis pour un bâtiment, celui-ci devient posable & On construit d'abord un cimetière et on essaye de construire un crématoire après & La couleur du texte ne se mets pas toujours à jour par contre le bâtiment devient posable.
+		\\ \hline 
+		Les routes adaptent une forme cohérente quand on pose une route voisine à une route déjà existante & "Dessinner" un croisement "en X", un virage et une intersection "en T" & Les textures des routes se mettent bien à jour de façon cohérente
 		\\ \hline Le positionnement et taille des textures sont cohérentes pour toutes les tailles de cartes & On commence des parties avec des tailles de cartes différentes et on essaye de poser des routes de différentes intersections possibles & Cohérent pour des cartes 256x256, 16x16 mais pour certaines tailles intermédiaires les textures sont décalés ou ont une mauvaise taille
-	
-	\end{tabular}
+		\\ \hline
+	\end{longtable}
 \end{center}
 
 
