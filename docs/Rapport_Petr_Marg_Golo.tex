@@ -319,10 +319,26 @@ Pour pouvoir avoir des cartes auto-générée, nous avons décide d'utiliser un 
 \[bruit = perlin(seed, x, y, z)\]
 
 Les nombres aléatoires que nous récupérons de la function sont des nombres flottant entre 0 et 1.
-Leurs distribution sont sous la forme d'une distribution normal.
+Leurs distribution sont sous la forme d'une distribution normal, avec un écart type de 1 et .
 \[y=e^{-x^{2}}\]
 
-Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le fonction de Perlin" d'un certain offset (qui est un multiple des index des cases).
+Pour pouvoir générer la carte nous parcourons toutes les cases de la carte (selon x et y). Et "nous déplaçons sur le fonction de Perlin" d'un certain offset (qui est un multiple des index des cases). \\
+On calcule la le bruit de Perlin sur cette case et si la valeur valeur est entre 0.3 et 0.7 la case est une case d'herbe. Sinon c'est une case d'eau. \\
+Pour pouvoir obtenir un dégradé dans les couleurs de la carte nous somme nous avons converti la tranche du type de case (Eau : 0.0-0.3 ou 0.7-1.0, Herbe : 0.3-0.7) vers les valeurs RGB suivante :
+\begin{itemize}
+	\item Herbe :
+	\begin{itemize}
+		\item R : 22 - 39
+		\item G : 102 - 178
+		\item B : 12 - 21
+	\end{itemize}
+	\item Eau :
+	\begin{itemize}
+		\item R : 0 - 0
+		\item G : 0 - 204
+		\item B : 102 - 255
+	\end{itemize}
+\end{itemize}
 \subsection{Gestion des cases de la carte}
 Nous stockons les cases de la carte dans un $QArray$ d'une longueur $nbCases^{2}$
 
@@ -489,8 +505,6 @@ Lors du déroulement en fonction du temps nous avons trouvé intéressant d'avoi
 
 \subsection{Gestion du son}
 Afin de faciliter la gestion du son, nous avons pris l'initiative de créer un classe dédiée à cette tâche, nous l'avons appelée \texttt{AudioService}.
-\paragraph{}
-\textbf{\textcolor{red}{Parler un peu de la classe, qu'est-ce qu'elle fait, les principales fonctions}}
 \paragraph{}
 En ce qui concerne le contrôle par l'utilisateur, il est possible de gérer le volume via les trois sliders dans le panel supérieur du jeu, gérant respectivement :
 \begin{itemize}
