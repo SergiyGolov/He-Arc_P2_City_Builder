@@ -1,0 +1,14 @@
+Raccourcis clavier:
+	F1-F9 : séléction d'une catégorie de bâtiments dans le menu du bas
+	1-0 : séléction d'un bâtiment dans le menu du bas
+	+/molette de souris en avant: zoom de la caméra
+	-/molette de souris en arrière: dezoom de la caméra
+	ASDW/flèches directionnelles: translation de la caméra
+	G: affichage/masquage de la grile sur la carte
+	F: affichage de toutes les portées d'effet des bâtiments
+	Q: séléctionner placement de route
+	R: séléctionner suppression de bâtiment/route
+	Alt+S: sauvegarder partie
+	Alt+L: charger partie
+	Alt+Q: quitter partie
+
