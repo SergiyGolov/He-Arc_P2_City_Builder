@@ -674,6 +674,7 @@ En soit le jeu l'accepte et ne plante pas, donc ce n'est pas un problème majeur
 \item L'affichage dans la $GuiView$ ne passe pas toujours du rouge au noir dés qu'on a rempli une condition pour pouvoir poser un bâtiment (Quand on pose un cimetière, le texte du crématoire dans le menu du bas ne devient pas toujours noir mais le bouton devient actif, c'est un bug d'affichage et pas de logique)
 \item Pour le bâtiment ayant une texture (le 1er de la 1ere catégorie), quand on annule son placement, on change pas de case et qu'on le re-sélectionne, lors du placement c'est pas la texture qui est posé mais la case se colorie en jaune
 \item Si on commence à poser la route sur une seule case adjacente à une autre case déjà occupé, qu'on mets la souris sur la case occupé et qu'on annule le placement avec un clic droit, l'affichage en gris devient persistant sur la case de la route (que pris en compte dans l'affichage, pas dans la logique)
+\item Si on a sélectionné le placement d'un bâtiment ayant plus d'une case de largeur/hauteur et qu'on le sort du terrain de jeu (avant de l'avoir placé définitivement), le jeu crash
 \item Lors du chargement de partie, certains croisement ne s'affichent pas correctement
 \item Dans l'installateur windows il manque une DLL qui nous est pas connu. Elle sert à gérer les arrière-plan et le chargement dynamique des QSoundEffect.
 \item Avec certaines résolutions d'écrans, la tailles des textures ne correspond pas à la taille de la case (avec les routes notamment).
