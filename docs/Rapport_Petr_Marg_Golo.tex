@@ -110,12 +110,10 @@ Voici les spécifications principales\footnote{Par spécifications principales, 
 \item Possibilité de créer une nouvelle partie avec des paramètres personnalisés comme :
 \begin{itemize}
 \item La taille de la carte;
-\item La graine de génération aléatoire;
 \item La difficulté;
 \item Le nom de la partie.
 \end{itemize}
 \item Possibilité de charger une sauvegarde d'une partie
-\item Possibilité de générer une carte aléatoire
 \item Le jeu est en plein écran
 \item Utilisation de contenu audio (musique d'ambiance, événements)
 \item Possibilité de voir toute la carte à la fois ou alors de zoomer puis de se déplacer en haut, en bas, à gauche et à droite
@@ -138,7 +136,12 @@ L'application doit permettre de :
 \subsubsection{Interface utilisateur}
 Le HUD\footnote{\textit{Head Up Display} : Communication graphique des informations avec le joueur} du jeu comporte :
 \begin{itemize}
-\item Un espace d'affichage des données de jeu comme la fortune, la population, le bonheur, le nom de la partie, etc.;
+\item L'affichage de plusieurs indicateurs étroitement liés représentant la ville
+	\begin{itemize}
+		\item L'argent (représente les caisses de la ville)
+		\item Le bonheur (représente la satisfaction des habitants par rapport à la ville)
+		\item La population (représente la quantité d'habitant dans la ville)
+	\end{itemize}
 \item Un menu d'options, sauvegarde, quitter la partie, etc.;
 \item Le carte en elle-même;
 \item Un onglet de construction de bâtiments;
@@ -162,13 +165,35 @@ Le panel de bâtiments doit être relativement complet et toucher à plusieurs d
 \item \textbf{Les monuments : }stade de foot, Tour Eiffel, statues, mémoriaux, fontaines, etc.
 \end{itemize}
 
+\subsubsection{Ressources dans le jeu}
+\begin{itemize}
+\item Argent
+\end{itemize}
 
-\subsection{Spécifications \textcolor{bonus}{bonus}}
+\subsubsection{Bonheur des citoyens}
+Le bonheur des citoyens est généré grâce aux infrastructures et aux services qui leur sont proposés dans une portée donnée, par exemple :
+\begin{itemize}
+\item Un supermarché;
+\item Un hôpital;
+\item Un poste de police;
+\item Une école;
+\item Un arrêt de bus;
+\item Un lieu de loisir;
+\item Un monument.
+\end{itemize}
+Certains éléments peuvent affecter négativement le bonheur comme des impôts trop élevés, avoir un manque d'accès à un hôpital, etc. 
+
+\subsubsection{Croissance de la population}
+La croissance de la population doit avoir un sens et être en accord avec le nombre de bâtiments présents et le bonheur des citoyens. 
+
+
+\subsection{Spécifications bonus}
 Cette section tient d'indication sur quelques idées que nous avions au cas où le temps nous le permettrait.
 
 \subsubsection{Général}
 \begin{itemize}
-\item
+\item Possibilités de générer des cartes aléatoirement avec des lacs, montagnes, etc.
+\item Pré-visualisation de la carte à générer;
 \end{itemize}
 
 \subsubsection{Mécaniques de gameplay}
@@ -182,17 +207,12 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 		\item Récompense : 200 \$ et déblocage d'un bâtiment
 	\end{itemize}
 	\item Gérer plusieurs difficultés
-	\item La gestion de plusieurs indicateur étroitement liés représentant la ville
-	\begin{itemize}
-		\item L'argent (représente les caisses de la ville)
-		\item Le bonheur (représente la satisfaction des habitants par rapport à la ville)
-		\item La population (représente la quantité d'habitant dans la ville)
-	\end{itemize}
+	\item L'évolution de la population en fonction du bonheur et du temps (flux migratoires), par exemple : Le nombre d'habitants au sein d'une habitation augmente au fil du temps.
+	\item Les événements aléatoires.
 \end{itemize}
 
-\subsubsection{Interface graphique}
+\subsubsection{Interface utilisateur}
 \begin{itemize}
-
 \item Une minimap affichable ou non sur laquelle il serait possible de cliquer pour se rendre au bon endroit directement
 \end{itemize}
 
@@ -201,9 +221,20 @@ Cette section tient d'indication sur quelques idées que nous avions au cas où 
 \item Nos propres textures de bâtiments et de routes grâce auxquelles il serait possible de créer un thème comme le futurisme, le western ou même une ville technologiquement évolutive dans le temps
 \item Textures adaptatives des routes, gestion des virages et des croisées
 \item Temps de construction d'un bâtiment, sous forme d'un chantier animé
+\item Animations. Par exemple, bonshommes qui marchent dans la rue et voiture qui roulent sur les routes.
+\item Cycles jour / nuit.
 \end{itemize}
 
+\subsubsection{Bâtiments}
+\begin{itemize}
+\item Les bâtiments peuvent occuper des cases de manière non-rectangulaire (en L par exemple)
+\end{itemize}
 
+\subsubsection{Ressources dans le jeu}
+\begin{itemize}
+\item Électricité
+\item Eau
+\end{itemize}
 
 \section{Exigences non-fonctionnelles}
 \subsection{Codage}
@@ -231,13 +262,13 @@ Voici note planning initial :
 \begin{center}
 \includegraphics[width=1.1\textwidth]{img/planning_initial.png}
 \end{center}
-\section{Architecture logicielle}
-\subsection{Schéma procédural}
+\subsection{Architecture logicielle}
+\subsubsection{Schéma procédural}
 \begin{center}
 \includegraphics[width=\textwidth]{img/schema_proc.png}
 \end{center}
-\subsection{Diagramme de classe}
-\includegraphics[width=\textwidth]{img/hierarchieClasses.png}
+\subsubsection{Diagramme de classe}
+\includegraphics[width=0.9\textwidth]{img/hierarchieClasses.png}
 \begin{itemize}
 \item Le point d'entrée est $LoadSaveService$, qui soit charge une sauvegarde ou soit crée une nouvelle partie à partir des arguments passés au $main$
 \item $GraphicService$ comporte des méthodes généralistes utilisés par toutes les vue comme par exemple la gestion des raccourcis claviers ou la coloration des bâtiments selon leurs catégorie
@@ -250,16 +281,23 @@ Voici note planning initial :
 \item $TickService$ recalcule les données du jeu s'il y a eu un bâtiment ajouté/retiré depuis le dernier tick, un tick s’exécutant chaque seconde
 \item $AudioService$ est appelé pour jouer la musique du jeu, et pioche parmi plusieurs sons possibles à chaque fois qu'on construit un bâtiment
 \end{itemize}
-\subsection{Convention de codage}
-La convention de codage utilisée était celle spécifié sur la forge.
+\subsubsection{Convention de codage}
+La convention de codage utilisée est celle spécifiée sur la forge\footnote{\href{https://forge.ing.he-arc.ch/gitlab/dgr/Ressources/wikis/convention}{\textcolor{blue}{La forge}}}.
 \section{Interface utilisateur}
 Cette section traite des choix faits sur les possibilités d'interactions de l'utilisateur avec l'application. En premier lieu sera présenté le launcher, puis le client. 
 \subsection{Launcher}
+\subsubsection{Esthétique}
 \includegraphics[width=\textwidth]{img/ui_launcher.png}
 \subsubsection{Interactions et raccourcis}
-\subsubsection{Esthétique}
+\paragraph{}
+De manière générale, nous avons opté pour une interaction simple et intuitive. Il y a deux possibilités : Créer un nouvelle partie et en charger un à partir d'une sauvegarde.
+\paragraph{}
+L'utilisateur doit indiquer l'emplacement de l'exécutable du jeu et l'emplacement du dossier contenant des sauvegardes s'il souhaite en charger une.
+
 \subsection{Client}
+\subsubsection{Esthétique}
 \includegraphics[width=\textwidth]{img/ui_client.png}
+\subsubsection{Interactions et raccourcis}
 \paragraph{}
 L'interface graphique se divise en 3 parties:\\\\
 $TopView$ : Vue fixe se trouvant toujours en haut de l'interface et qui contient:
@@ -287,9 +325,9 @@ $GuiView$ : Vue contenant les boutons permettant de:
 \item Un bouton pour poser des routes disponibles dans toutes les catégories (Raccourci: Q)
 \item Un bouton pour supprimer un bâtiment/route disponible dans toutes les catégories (Raccourci: R)
 \end{itemize}
-\subsubsection{Interactions et raccourcis}
 
-\subsubsection{Esthétique}
+
+
 
 
 \chapter{Développement et réalisation}
@@ -385,7 +423,7 @@ La liste des bâtiments pré-requis et des poids pour le laboratoire est la suiv
 	\item Clinique : 1
 	\item Hôpital : 5
 \end{itemize}
-Il y a donc au moins trois possibilités pour arrivé à remplir cette demande :
+Il y a donc au moins trois possibilités pour arriver à remplir cette demande :
 \begin{itemize}
 	\item 6x Clinique
 	\item 1x Clinique et 1x Hôpital (Meilleur solution, au niveau du prix par seconde de le efficacité sur un grand rayon)
@@ -490,39 +528,39 @@ Lors du déroulement en fonction du temps nous avons trouvé intéressant d'avoi
 \subsection{Gestion du son}
 Afin de faciliter la gestion du son, nous avons pris l'initiative de créer un classe dédiée à cette tâche, nous l'avons appelée \texttt{AudioService}.
 \paragraph{}
-\textbf{\textcolor{red}{Parler un peu de la classe, qu'est-ce qu'elle fait, les principales fonctions}}
-\paragraph{}
 En ce qui concerne le contrôle par l'utilisateur, il est possible de gérer le volume via les trois sliders dans le panel supérieur du jeu, gérant respectivement :
 \begin{itemize}
 \item Le volume de la musique
 \item Le volume des effets sonores
 \item Le volume global du jeu, le "master"
 \end{itemize}
+\paragraph{}
 La classe est un singleton. Au lancement du client, elle s'occupe de charger les différents bruitages, et créer un objet \texttt{QSoundEffect} pour chacun d'eux. Pour chaque type de bruitage correspond un nom dans un enum (\texttt{sfxID}) et à ces types de bruitages sont affecté des \texttt{QSoundEffect}.Lorsqu'un bruitage est demandé à être joué un \texttt{QSoundEffect} est choisi aléatoirement parmi le type de bruitage demandé. Ce fonctionnement nous a permis pour un action d'avoir facilement plusieurs bruitage aléatoire.
-\newline
+\paragraph{}
 Pour la gestion du mixeur, comme cité ci-dessus nous l'avons séparé en trois. Les trois volume représente une valeur entre 0 et 1 puis pour chaque \texttt{QSoundEffect} le volume est changé pour le produit du master et du volume de la musique ou des bruitages dans la cas échéant.
 \subsection{Gestion des sauvegardes}
 Pour la sauvegarde des parties, nous avons opté pour un système de enregistrement par fichier JSON. Ce qui nous permet d'avoir les données répartis sous forme hiérarchique et Qt possède toute une palette de fonction pour gérer des fichier JSON. Nous n'avions aucune connaissance de ce format.
-\newline
-Nous avions prévu deux types de fichier de sauvegarde : Un concernant une partie et un autre pour les configurations, celui-ci est le même pour n'importe quelles parties. Nous n'avons malheureusement pas eu le temps d'implémenter la sauvegarde de la configuration.
-\newline
-Quand aux données à sauvegarder, nous avons essayer de stocker un minimum d'information, pour éviter toute redondance. Comme par exemple le bonheur de la ville peut-être calculé avec nos fonctions. Il n'est donc pas sauvegarder dans le fichier. Un autre exemple qui est assez 'puissant' et nous permet d'éviter beaucoup d'information est la topographie de la carte, car en effet vu qu'elle est généré aléatoirement il nous suffi de stocker la seed et nous aurons toujours le même résultat.
-\newline
+\paragraph{}
+Nous avions prévu deux types de fichier de sauvegarde : Un concernant une partie et un autre pour les configurations, celui-ci est le même pour n'importe quelle partie. Nous n'avons malheureusement pas eu le temps d'implémenter la sauvegarde de la configuration.
+\paragraph{}
+Quand aux données à sauvegarder, nous avons essayé de stocker un minimum d'information afin d'éviter toute redondance. Comme par exemple le bonheur de la ville peut être calculé avec nos fonctions. Il n'est donc pas sauvegardé dans le fichier. Un autre exemple assez "puissant" et nous permet d'éviter beaucoup d'information est la topographie de la carte, car en effet vu qu'elle est généré aléatoirement il nous suffi de stocker la graine et nous obtiendrons toujours le même résultat.
+\paragraph{}
 Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 
-\section{Tests}
+\section{Protocoles de tests}
 \thispagestyle{headings}
-\subsection{Protocoles de tests}Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag gitlab).
-\subsubsection{Launcher}
+\paragraph{}
+Tous les tests réalisés ci-dessous sont de la version 1.0 du jeu (voir tag gitlab).
+\subsection{Launcher}
 
-\paragraph{Général}
+\subsubsection{Général}
 \begin{center}
 	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
 	\hline
 		 \textbf{Test} & \textbf{Protocole} & \textbf{Résultat Obtenu}
 		 \\ \hline
 		Choix de l'exécutable du jeu (Set game file)&
-		L'exécutable peut être choisi à l'aide d'une boîte modal qui a pour contrainte le nom suivante CityBuilder.exe, la casse n'est pas à être respecté. &
+		L'exécutable peut être choisi à l'aide d'une boîte modale qui a pour contrainte le nom "citybuilder.exe", la casse n'est pas à être respectée. &
 		Choix pris en compte dans l'interface
 		\\ \hline
 		Choix du dossier de sauvegarde (Set save folder) &
@@ -537,7 +575,7 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 	\end{tabular}
 \end{center}
 
-\paragraph{Création de partie (onglet New)}
+\subsubsection{Création de partie (onglet New)}
 \begin{center}
 	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
 	\hline
@@ -551,7 +589,7 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 	\end{tabular}
 \end{center}
 
-\paragraph{Chargement de partie (onglet Load)}
+\subsubsection{Chargement de partie (onglet Load)}
 \begin{center}
 	\begin{tabular}{| p{3cm} | p{6cm} | p{6cm} |}
 	\hline
@@ -561,7 +599,7 @@ Vous pouvez trouver un exemple de fichier de sauvegarde dans les annexes.
 	\end{tabular}
 \end{center}
 
-\subsubsection{Client}
+\subsection{Client}
 Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet on avait 2 approches:
 \begin{itemize}
 \item Les test "à l'oeil" pour tout ce qui touchait la partie graphique, qui consistait à jouer et créer divers conditions et voir le résultat
@@ -588,11 +626,13 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 \end{center}
 
 
-\subsection{Bugs persistants}
+\section{Bugs persistants}
 \begin{itemize}
+\item Le nom de la partie paraît obligatoire, mais en réalité il ne l'est pas car si on entre quelque chose dans le QLineEdit et qu'on le supprime ensuite, le bouton Play reste actif. Ce détournement est également possible si on ne rentre rien dans le QLineEdit mais qu'on décide d'aller sélectionner un fichier de sauvegarde et qu'ensuite on retourne au menu Nouvelle Partie.
+En soit le jeu l'accepte et ne plante pas, donc ce n'est pas un problème majeur, surtout que ce bug est simple à corriger mais il n'a pas été remarqué à temps.
 \item Le premier bâtiment sélectionné de la partie disposant d'un rayon d'effet a l'affichage du rayon d'effet qui est faux si on le sélectionne avec un raccourci clavier et qu'on ne change pas de case, l'affichage du rayon d'effet devient juste dés qu'on change de case.
 \item Quand on attend pas la fin du clignotement rouge quand on fait une fausse action (essayer de poser un bâtiment sans route p. ex) et qu'on en refait une, les cadres rouges restent
-\item Le manque d'équilibrage du jeu peut entraîner le joueur se trouver en dette et à ne plus pouvoir placer de bâtiment qui augmente le bonheur et qui donc permet au joueur d'amasser de l'argent. La partie est donc plus jouable.
+\item Le manque d'équilibrage du jeu peut entraîner le joueur se trouver en dette et à ne plus pouvoir placer de bâtiment qui augmente le bonheur et qui donc permet au joueur d'amasser de l'argent. La partie n'est donc plus jouable.
 \item Il n'y a pas de limitation pour la taille de la carte en création de partie par ligne de commande. Peut causer des crashes si les tailles sont disproportionnées.
 \item Des fois quand une route est ajouté au jeu ou qu'on la charge depuis une sauvegarde, un bug fait en sorte qu'une case de route supplémentaire soit affiché dans le coin supérieur de la carte alors que dans la logique de jeu cette route n'existe pas
 \item Après avoir chargé une partie, les routes "perdent" leurs hauteur et largeur ce qui fait que quand on veut l'effacer après il faut le faire case par case
@@ -600,22 +640,23 @@ Afin de tester les divers fonctionnalités qu'on implémentait au fil du projet 
 \item La portée d'effet affichée est centrée sur la case du coin supérieur du bâtiment s'il se compose de plusieurs cases
 \item L'affichage dans la $GuiView$ ne passe pas toujours du rouge au noir dés qu'on a rempli une condition pour pouvoir poser un bâtiment (Quand on pose un cimetière, le texte du crématoire dans le menu du bas ne devient pas toujours noir mais le bouton devient actif, c'est un bug d'affichage et pas de logique)
 \item Dans l'installateur windows il manque une DLL qui nous est pas connu. Elle sert à gérer les arrière-plan et le chargement dynamique des QSoundEffect.
+\item Avec certaines résolutions d'écrans, la tailles des textures ne correspond pas à la taille de la case (avec les routes notamment).
 \end{itemize}
 
 
 \section{Déploiement}
-Pour le déploiement, nous avons choisi de créer un installeur pour permettre aux utilisateurs de pouvoir installer  facilement et rapidement notre jeu. Durant l'année scolaire lors du cours C++ avec Qt (2241 - Langages et Frameworks) nous avons découvert Qt Installer Framework qui permet de générer des installateur. Nous avons donc intuitivement utilisé cet outil.
+Pour le déploiement, nous avons choisi de créer un installeur pour permettre aux utilisateurs de pouvoir installer  facilement et rapidement notre jeu. Durant l'année scolaire lors du cours C++ avec Qt (2241 - Langages et Frameworks) nous avons découvert Qt Installer Framework qui permet de générer des installateurs. Nous avons donc intuitivement utilisé cet outil.
 \newline
 
-Étant donnée la portabilité Qt, nous avions la possibilité de compiler notre jeu pour Microsoft Windows et pour les OS à noyau Linux. Nous avons donc compilés notre jeu avec les paramètres de release des compilateur et avons crée deux installer que vous pouvez trouver dans les annexes du rapport.
-Les installateurs sont séparé en deux packages l'un installe le client (obligatoire) avec toute les bibliothèques dynamiques (DLLs) nécessaire et l'autre installe uniquement le Launcher et crée un raccourci sur le bureau pour celui-ci.
+Étant donnée la portabilité Qt, nous avons la possibilité de compiler notre jeu pour Microsoft Windows et pour les OS à noyau Linux. Nous avons donc compilé notre jeu avec les paramètres de release des compilateur et avons crée deux installer que vous pouvez trouver dans les annexes du rapport.
+Les installateurs sont séparé en deux packages l'un installe le client (obligatoire) avec toutes les bibliothèques dynamiques (DLLs) nécessaires et l'autre installe uniquement le Launcher et crée un raccourci sur le bureau pour celui-ci.
 Cela permet aux utilisateurs qui n'auraient pas la nécessité d'utiliser l'interface graphique du Launcher de s'en passer dès l'installation du logiciel.
 \newline
 
 La recherche des bibliothèques dynamiques utiles au projet n'a pas été évidente. Malgré l'utilisation de logiciel prévu à cet effet, comme par exemple pour Windows : Dependency Walker. Nous n'avons pas trouvé un moyen exact pour trouver quelle DLLs était nécessaire à notre projet. Nous avons donc plutôt fonctionner de manière empirique pour cette recherche.
 \newline
 
-Par contre sur Linux, cela était facile grâce à $linuxdeployqt$ qui nous générait un dossier dans lesquels ont été copiés tous les fichiers $.so$ nécessaires et un fichier $qt.conf$ renvoyant vers ces dossiers, il suffisait de le mettre dans le dossier $data$ avant d'appeler $binarycreator$
+En revanche sur Linux, ce fût facile grâce à $linuxdeployqt$ qui génère un dossier dans lequel a été copié tous les fichiers $.so$ nécessaires et un fichier $qt.conf$ renvoyant vers ce dossier, il suffit donc de le mettre dans le dossier $data$ avant d'appeler $binarycreator$
 
 
 
@@ -623,14 +664,46 @@ Par contre sur Linux, cela était facile grâce à $linuxdeployqt$ qui nous gén
 \thispagestyle{headings}
 \section{État final du projet}
 \subsection{Spécifications implémentées}
+\subsubsection{Général}
+\paragraph{}
+Toutes les spécifications générales ont été implémentées.
+De plus, nous avons implémenté la génération aléatoire de la carte via le bruit de Perlin, et la pré-visualisation dans le cas de la création d'une nouvelle partie.
+\subsubsection{Mécaniques de gameplay}
+\paragraph{}
+Toutes les mécaniques de gameplay prévues dans les spécifications ont été implémentées.
+De plus, il est impossible de construire un bâtiment sans route qui le borde et le jeu gère plusieurs difficultés.
+
+\subsubsection{Interface utilisateur}
+Toutes les spécifications concernant l'interface utilisateur ont été implémentées.
+
+\subsubsection{Rendu graphique}
+Toutes les spécifications concernant le rendu graphique ont été implémentées. Effectivement, malgré que le jeu ne possède presque aucune texture, les types de bâtiments sont différentiables via un panel de différentes couleurs.
+
+\subsubsection{Bâtiments}
+Un large panel de bâtiments a été implémenté, assez large pour garantir une diversité intéressante.
+
+\subsubsection{Ressources dans le jeu}
+La ressource principale du jeu qui est l'argent a évidemment été implémentée. L'utilisation de ressources additionnelles comme l'eau et l'électricité représente un travail très conséquent car chaque structure aurait des besoins particuliers et il faudrait implémenter un moyen de distribuer l'eau depuis les lacs et l'électricité via des centrales électriques ou des éoliennes. À priori une telle implémentation n'était pas possible dans le temps imparti. 
+
+\subsubsection{Bonheur des citoyens}
+Comme prévu dans les spécifications, le bonheur des citoyens est affecté positivement (par la présence de structures à effet positif) et négativement (par une augmentation d'impôts). 
+
+\subsubsection{Croissance de la population}
+La croissance de la population est implémentée de manière "simplifiée" et directe. Le nombre d'habitants augmente lorsqu'on construit une habitation. On admet donc que la maison est immédiatement peuplée et le nombre de citoyens qui la peuple n'augmente pas au fil de temps.
+Notre but premier était le suivant :
+\paragraph{}
+Lorsqu'une maison est construite, elle est provisoirement vide. Si la population actuelle est heureuse, alors de nouveau habitant vont s'y installer au bout d'un court instant. Avec le temps, les habitants peuvent se multiplier jusqu'à un maximum d'habitants pouvant vivre dans le bâtiment.
 \subsection{Spécifications non-implémentées}
-Voici une listes des spécifications non-implémentée pour cause technique, par manque de temps ou simplement car elle n'était pas adaptée. \\
-Liste des fonctionnalité non-implémentées qui aurait pu être intéressante :
+Mise à part la croissance temporelle de la population, toutes les spécifications "obligatoire" ont été correctement implémentées.
+On pourrait alors citer dans cette section quelques spécification bonus qui auraient pu être intéressantes :
 \begin{itemize}
-	\item L'évolution de la population en fonction du bonheur et du temps (flux migratoires)
-	\item Cycles jour nuit affichage visuel.
-	\item Pré-visualisation du ficher de sauvegarde dans le launcher.
-	\item Les événements aléatoires.
+\item Pré-visualisation du ficher de sauvegarde dans le launcher :\\
+L'implémentation demande non seulement de visualiser la carte de base, mais également les structures posées dessus, ce qui demande un travail beaucoup plus conséquent qu'une simple régénération de la carte via sa graine;
+\item Le système de quêtes aurait pu être intéressant, car il aurait proposé une forme de tutoriel;
+\item Les événements aléatoires;
+\item La possibilités de créer des bâtiments d'autre forme que rectangulaire ou carrée.\\
+Bien que prévue dans le code, n'a pas été implémentée car cela complexifie la gestion des rayons d'effet et l'affichage des potentielles textures ne fonctionnerait pas correctement. Par exemple, si un bâtiment en forme de L serait en partie devant et en partie derrière un autre.
+	
 \end{itemize}
 
 \section{Changement de planification}
@@ -640,7 +713,7 @@ Liste des fonctionnalité non-implémentées qui aurait pu être intéressante :
 \thispagestyle{headings}
 Il est important de mentionner que notre but avant tout était de nous faire plaisir, ce pourquoi nous avons profité de la liberté de choisir notre projet en réalisant un jeu vidéo. Bien sûr, aucun de nous n'y jouera dans l'état dans lequel il est actuellement (il faut être honnête), mais nous sommes fiers de tout ce que nous avons appris sur le tas, et de la maturité que ce projet nous a apporté. En effet, nous avons désormais une bien meilleure idée de l'importance qu'a une bonne planification et une répartition des tâches intelligente.
 \paragraph{}
-L'organisation au seins d'un projet de groupe comme le P2 n'est pas une tâche facile car nous avons d'autres cours en parallèle dans des domaines totalement différents et sur lesquels nous avons l'obligation de travailler. Cela accentué par le fait que les personnes au seins d'un même groupe n'ont souvent pas la même façon de s'organiser face au reste des tâches scolaires et c'est précisément pour cela que la rigueur et la discipline que demande le travail en équipe nous a appris l'importance d'une bonne communication.
+L'organisation au sein d'un projet de groupe comme le P2 n'est pas une tâche facile car nous avons d'autres cours en parallèle dans des domaines totalement différents et sur lesquels nous avons l'obligation de travailler. Cela accentué par le fait que les personnes au sein d'un même groupe n'ont souvent pas la même façon de s'organiser face au reste des tâches scolaires et c'est précisément pour cela que la rigueur et la discipline que demande le travail en équipe nous a appris l'importance d'une bonne communication.
 \paragraph{}
 Nous somme heureux de nos progrès dans tous les domaines qui ont composé ce projet, en programmation bien sûr, mais pas seulement. Notre but a aussi été de profiter de l'occasion pour en apprendre plus sur des outils comme :
 \begin{itemize}
@@ -664,5 +737,4 @@ Pour ce qui est de l'algorithme de Perlin (en lui même) utilisé, il a été tr
 
 \chapter{Annexes}
 \thispagestyle{headings}
-
 \end{document}
